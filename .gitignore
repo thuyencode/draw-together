@@ -26,3 +26,9 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
+
+*storybook.log
+storybook-static
+
+# IDE settings
+.settings/zed.json
