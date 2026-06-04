@@ -1,6 +1,15 @@
 {
-  "name": "example-with-tailwindcss",
+  "name": "draw-together",
   "type": "module",
+  "license": "GPL-3.0-only",
+  "author": {
+    "name": "Thuyen Code",
+    "url": "https://thuyencode.com",
+    "email": "thuyencode@proton.me"
+  },
+  "bugs": {
+    "url": "https://github.com/thuyencode/draw-together/issues"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
