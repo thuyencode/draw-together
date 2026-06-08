@@ -7,6 +7,6 @@
   "language_servers": ["!biome", "!typescript-language-server", "..."],
   "code_actions_on_format": {
     "source.fixAll.eslint": true,
-    "source.organizeImports": true,
-  },
+    "source.organizeImports": true
+  }
 }
