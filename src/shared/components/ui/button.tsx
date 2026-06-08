@@ -4,7 +4,7 @@ import { splitProps, type ComponentProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { cn } from "~/shared/utils/cn";
 
-export const buttonVariants = cva(
+export const buttonStyles = cva(
   "flex items-center justify-center gap-3 rounded-lg font-medium transition focus:ring-3 disabled:pointer-events-none [&>svg]:text-current! outline-none",
   {
     variants: {
@@ -136,7 +136,7 @@ export const buttonVariants = cva(
 type BaseButtonProps<T extends ValidComponent> = {
   as?: T;
   class?: string | undefined;
-} & VariantProps<typeof buttonVariants>;
+} & VariantProps<typeof buttonStyles>;
 
 export type ButtonProps<T extends ValidComponent> = BaseButtonProps<T> &
   Omit<ComponentProps<T>, keyof BaseButtonProps<T>>;
@@ -158,7 +158,7 @@ export function Button<T extends ValidComponent = "button">(
       component={props.as ?? "button"}
       type="button"
       class={cn(
-        buttonVariants({
+        buttonStyles({
           variant: props.variant,
           appearance: props.appearance,
           iconOnly: props.iconOnly,

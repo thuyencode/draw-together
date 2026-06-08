@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { splitProps, type ParentProps } from "solid-js";
 import { cn } from "~/shared/utils/cn";
 
-export const linkVariants = cva(
+export const linkStyles = cva(
   "inline-flex items-center font-medium transition [&>svg]:size-4 [&>svg]:text-current!",
   {
     variants: {
@@ -23,7 +23,7 @@ export const linkVariants = cva(
   },
 );
 
-type LinkVariantProps = VariantProps<typeof linkVariants>;
+type LinkVariantProps = VariantProps<typeof linkStyles>;
 
 export type LinkProps = ParentProps<
   LinkVariantProps & Omit<AnchorProps, keyof LinkVariantProps>
@@ -35,7 +35,7 @@ export function Link(_props: LinkProps) {
   return (
     <A
       class={cn(
-        linkVariants({ variant: props.variant, size: props.size }),
+        linkStyles({ variant: props.variant, size: props.size }),
         props.class,
       )}
       {...rest}
