@@ -17,6 +17,10 @@ export default [
         ts.configs.strict,
         ts.configs.stylistic,
       ],
+      rules: {
+        "no-unassigned-vars": "off",
+        "@typescript-eslint/consistent-type-imports": "error",
+      },
     },
     globalIgnores(["storybook-static/**/*", ".storybook/**/*"]),
   ]),
