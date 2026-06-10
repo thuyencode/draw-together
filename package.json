@@ -25,12 +25,9 @@
     "@solidjs/router": "^0.16.1",
     "@solidjs/start": "2.0.0-alpha.2",
     "@solidjs/vite-plugin-nitro-2": "^0.1.0",
-    "@tiptap/core": "^3.25.0",
-    "@tiptap/extensions": "^3.25.0",
-    "@tiptap/pm": "^3.25.0",
+    "konva": "^10.3.0",
     "lucide-solid": "^1.17.0",
     "solid-js": "^1.9.13",
-    "solid-tiptap": "^0.8.0",
     "vite": "^8.0.14"
   },
   "devDependencies": {
