@@ -46,6 +46,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(dirname, "./src"),
+      "solid-konva": path.resolve(dirname, "./solid-konva/lib/index.ts"),
     },
   },
 });

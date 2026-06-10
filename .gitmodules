@@ -1,0 +1,3 @@
+[submodule "solid-konva"]
+	path = solid-konva
+	url = git@github.com:thuyencode/solid-konva.git
