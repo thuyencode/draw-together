@@ -37,13 +37,62 @@ type Story = StoryObj;
 
 export const Default: Story = {
   render: () => (
-    <FloatingPanel defaultOpen>
+    <FloatingPanel>
       <FloatingPanelTrigger>Toggle Panel</FloatingPanelTrigger>
       <Portal>
         <FloatingPanelPositioner>
           <FloatingPanelContent>
             <FloatingPanelDragTrigger>
               <FloatingPanelHeader>
+                <FloatingPanelTitle>
+                  <GripVerticalIcon />
+                  Floating Panel
+                </FloatingPanelTitle>
+                <FloatingPanelControl>
+                  <FloatingPanelStageTrigger stage="minimized">
+                    <Minus />
+                  </FloatingPanelStageTrigger>
+                  <FloatingPanelStageTrigger stage="maximized">
+                    <Maximize2 />
+                  </FloatingPanelStageTrigger>
+                  <FloatingPanelStageTrigger stage="default">
+                    <ArrowDownLeft />
+                  </FloatingPanelStageTrigger>
+                  <FloatingPanelCloseTrigger>
+                    <XIcon />
+                  </FloatingPanelCloseTrigger>
+                </FloatingPanelControl>
+              </FloatingPanelHeader>
+            </FloatingPanelDragTrigger>
+
+            <FloatingPanelBody>
+              <p>Some content</p>
+            </FloatingPanelBody>
+
+            <FloatingPanelResizeTrigger axis="n" />
+            <FloatingPanelResizeTrigger axis="e" />
+            <FloatingPanelResizeTrigger axis="w" />
+            <FloatingPanelResizeTrigger axis="s" />
+            <FloatingPanelResizeTrigger axis="ne" />
+            <FloatingPanelResizeTrigger axis="se" />
+            <FloatingPanelResizeTrigger axis="sw" />
+            <FloatingPanelResizeTrigger axis="nw" />
+          </FloatingPanelContent>
+        </FloatingPanelPositioner>
+      </Portal>
+    </FloatingPanel>
+  ),
+};
+
+export const VerticalHeader: Story = {
+  render: () => (
+    <FloatingPanel>
+      <FloatingPanelTrigger>Toggle Panel</FloatingPanelTrigger>
+      <Portal>
+        <FloatingPanelPositioner>
+          <FloatingPanelContent>
+            <FloatingPanelDragTrigger>
+              <FloatingPanelHeader vertical>
                 <FloatingPanelTitle>
                   <GripVerticalIcon />
                   Floating Panel

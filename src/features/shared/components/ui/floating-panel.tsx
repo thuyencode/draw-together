@@ -1,4 +1,7 @@
-import type { FloatingPanelTriggerProps } from "@ark-ui/solid";
+import type {
+  FloatingPanelHeaderProps as BaseFloatingPanelHeaderProps,
+  FloatingPanelTriggerProps,
+} from "@ark-ui/solid";
 import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
@@ -42,15 +45,19 @@ export const FloatingPanelContent: typeof BaseFloatingPanel.Content = (
   );
 };
 
-export const FloatingPanelHeader: typeof BaseFloatingPanel.Header = (
-  _props,
-) => {
-  const [props, rest] = splitProps(_props, ["class"]);
+type FloatingPanelHeaderProps = BaseFloatingPanelHeaderProps & {
+  vertical?: boolean;
+};
+
+export const FloatingPanelHeader = (_props: FloatingPanelHeaderProps) => {
+  const [props, rest] = splitProps(_props, ["class", "vertical"]);
 
   return (
     <BaseFloatingPanel.Header
+      data-vertical={props.vertical ? "" : undefined}
       class={cn(
-        "py-2 px-4 bg-alert-default-background border-b border-alert-default-border flex justify-between items-center rounded-t-lg cursor-grab active:cursor-grabbing",
+        "group py-2 px-4 bg-alert-default-background border-b border-alert-default-border flex items-center rounded-t-lg cursor-grab active:cursor-grabbing gap-1",
+        props.vertical ? "flex-col" : "justify-between",
         props.class,
       )}
       {...rest}
@@ -64,7 +71,7 @@ export const FloatingPanelTitle: typeof BaseFloatingPanel.Title = (_props) => {
   return (
     <BaseFloatingPanel.Title
       class={cn(
-        "font-medium text-sm text-alert-default-title flex items-center gap-2 [&_svg]:size-4 [&_svg]:text-alert-default-close-icon",
+        "font-medium text-sm text-alert-default-title flex items-center gap-1 [&_svg]:size-4 [&_svg]:text-alert-default-close-icon group-data-vertical:flex-col text-center group-data-vertical:[&_svg]:rotate-90",
         props.class,
       )}
       {...rest}
@@ -79,7 +86,10 @@ export const FloatingPanelControl: typeof BaseFloatingPanel.Control = (
 
   return (
     <BaseFloatingPanel.Control
-      class={cn("flex items-center gap-1", props.class)}
+      class={cn(
+        "flex items-center gap-1 group-data-vertical:flex-col",
+        props.class,
+      )}
       {...rest}
     />
   );
@@ -91,7 +101,7 @@ export const FloatingPanelBody: typeof BaseFloatingPanel.Body = (_props) => {
   return (
     <BaseFloatingPanel.Body
       class={cn(
-        "flex flex-col gap-4 p-4 overflow-auto flex-1 text-sm text-alert-default-description",
+        "flex flex-col p-1 gap-1 overflow-auto flex-1 text-sm text-alert-default-description",
         props.class,
       )}
       {...rest}
