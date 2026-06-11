@@ -167,6 +167,7 @@ export default function Alert(_props: AlertProps) {
               <Show when={actions.primary} keyed>
                 {(primary) => (
                   <Button
+                    type="button"
                     size="xs"
                     class={cn(
                       "px-4.5",
@@ -182,7 +183,12 @@ export default function Alert(_props: AlertProps) {
 
               <Show when={actions.secondary} keyed>
                 {(secondary) => (
-                  <Button size="xs" appearance="outline" onClick={handleClose}>
+                  <Button
+                    type="button"
+                    size="xs"
+                    appearance="outline"
+                    onClick={handleClose}
+                  >
                     {secondary.label}
                   </Button>
                 )}

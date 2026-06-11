@@ -156,7 +156,6 @@ export function Button<T extends ValidComponent = "button">(
   return (
     <Dynamic
       component={props.as ?? "button"}
-      type="button"
       class={cn(
         buttonStyles({
           variant: props.variant,

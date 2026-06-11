@@ -36,6 +36,7 @@ const meta: Meta<typeof Button> = {
     appearance: "fill",
     iconOnly: false,
     size: "md",
+    type: "button",
   },
 };
 
@@ -59,7 +60,13 @@ const variants = [
 export const Variants: Story = {
   render: () => (
     <div class="flex flex-wrap gap-4">
-      <For each={variants}>{(v) => <Button variant={v}>{v}</Button>}</For>
+      <For each={variants}>
+        {(v) => (
+          <Button type="button" variant={v}>
+            {v}
+          </Button>
+        )}
+      </For>
     </div>
   ),
 };
@@ -78,7 +85,11 @@ export const Appearances: Story = {
             <div class="flex flex-wrap gap-4">
               <For each={variants}>
                 {(variant) => (
-                  <Button variant={variant} appearance={appearance}>
+                  <Button
+                    type="button"
+                    variant={variant}
+                    appearance={appearance}
+                  >
                     {variant}
                   </Button>
                 )}
@@ -100,7 +111,7 @@ export const Sizes: Story = {
     <div class="flex flex-wrap gap-4 items-center">
       <For each={sizes}>
         {(size) => (
-          <Button size={size} variant="primary" appearance="fill">
+          <Button type="button" size={size} variant="primary" appearance="fill">
             {size}
           </Button>
         )}
@@ -112,11 +123,11 @@ export const Sizes: Story = {
 export const WithIcons: Story = {
   render: () => (
     <div class="flex flex-wrap items-center gap-4">
-      <Button>
+      <Button type="button">
         <XIcon />
         Add Item
       </Button>
-      <Button iconOnly>
+      <Button type="button" iconOnly>
         <XIcon />
       </Button>
     </div>
@@ -124,5 +135,9 @@ export const WithIcons: Story = {
 };
 
 export const Disabled: Story = {
-  render: () => <Button disabled>Disabled</Button>,
+  render: () => (
+    <Button type="button" disabled>
+      Disabled
+    </Button>
+  ),
 };
