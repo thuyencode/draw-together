@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
 import { createSignal, mergeProps, Show, type JSX } from "solid-js";
-import { cn } from "~/shared/utils/cn";
+import { cn } from "../../utils/cn";
 import { Button } from "./button";
 
 const wrapperStyles = cva(

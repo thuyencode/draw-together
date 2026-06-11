@@ -1,7 +1,7 @@
 import { A, type AnchorProps } from "@solidjs/router";
 import { cva, type VariantProps } from "class-variance-authority";
 import { splitProps, type ParentProps } from "solid-js";
-import { cn } from "~/shared/utils/cn";
+import { cn } from "../../utils/cn";
 
 export const linkStyles = cva(
   "inline-flex items-center font-medium transition [&>svg]:size-4 [&>svg]:text-current!",

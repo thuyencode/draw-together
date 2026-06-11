@@ -2,7 +2,7 @@ import type { AnchorProps } from "@solidjs/router";
 import { A } from "@solidjs/router";
 import { cva, type VariantProps } from "class-variance-authority";
 import { splitProps } from "solid-js";
-import { cn } from "~/shared/utils/cn";
+import { cn } from "../../utils/cn";
 
 export const navLinkStyles = cva(
   "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors no-underline outline-none text-foreground-soft-500 hover:bg-background-soft-100 hover:text-foreground-soft-200 aria-[current=page]:bg-primary-500/10 aria-[current=page]:text-primary-600",
