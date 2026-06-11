@@ -1,7 +1,4 @@
-import type {
-  FloatingPanelHeaderProps as BaseFloatingPanelHeaderProps,
-  FloatingPanelTriggerProps,
-} from "@ark-ui/solid";
+import type { FloatingPanelHeaderProps as BaseFloatingPanelHeaderProps } from "@ark-ui/solid";
 import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
@@ -10,8 +7,10 @@ import { Button } from "./button";
 
 export const FloatingPanel = BaseFloatingPanel.Root;
 
-type FloatingPanelTrigger = FloatingPanelTriggerProps &
-  Omit<ButtonProps<typeof BaseFloatingPanel.Trigger>, "as">;
+type FloatingPanelTrigger = Omit<
+  ButtonProps<typeof BaseFloatingPanel.Trigger>,
+  "as"
+>;
 
 export const FloatingPanelTrigger: typeof BaseFloatingPanel.Trigger = (
   props,
