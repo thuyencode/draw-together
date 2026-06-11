@@ -6,7 +6,7 @@ import {
 import DrawingBoard from "./_drawing-board";
 
 const decorator = createJSXDecorator((Story) => (
-  <div class="size-dvw">
+  <div class="h-dvh">
     <Story />
   </div>
 ));

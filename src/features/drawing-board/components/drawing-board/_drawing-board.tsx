@@ -1,65 +1,49 @@
-import { FloatingPanel } from "@ark-ui/solid";
 import type Konva from "konva";
-import { GripVerticalIcon, MinusIcon, XIcon } from "lucide-solid";
 import { createEffect, For, onCleanup } from "solid-js";
+import type { SetStoreFunction } from "solid-js/store";
 import { createStore } from "solid-js/store";
-import { Portal } from "solid-js/web";
 import { Layer, Line, Stage, useStage } from "solid-konva";
+import { ToolsPanel } from "./tools-panel";
+import type { SetToolFunc, Tool } from "./types";
 
-export default function _DrawingBoard() {
-  return (
-    <div class="relative size-full">
-      <FloatingPanel.Root defaultOpen>
-        <Portal>
-          <FloatingPanel.Positioner>
-            <FloatingPanel.Content>
-              <FloatingPanel.DragTrigger>
-                <FloatingPanel.Header>
-                  <FloatingPanel.Title>
-                    <GripVerticalIcon />
-                    Tool
-                  </FloatingPanel.Title>
-
-                  <FloatingPanel.Control>
-                    <FloatingPanel.StageTrigger stage="minimized">
-                      <MinusIcon />
-                    </FloatingPanel.StageTrigger>
-
-                    <FloatingPanel.CloseTrigger>
-                      <XIcon />
-                    </FloatingPanel.CloseTrigger>
-                  </FloatingPanel.Control>
-                </FloatingPanel.Header>
-              </FloatingPanel.DragTrigger>
-
-              <FloatingPanel.Body>
-                <p>Some content</p>
-              </FloatingPanel.Body>
-            </FloatingPanel.Content>
-          </FloatingPanel.Positioner>
-        </Portal>
-      </FloatingPanel.Root>
-
-      <Stage class="size-full">
-        <Layer>
-          <LineArt />
-        </Layer>
-      </Stage>
-    </div>
-  );
+interface DrawingState {
+  isPainting: boolean;
+  tool: Tool;
 }
-
-type Tool = "brush" | "eraser";
 
 interface LineInfo {
   tool: Tool;
   points: number[];
 }
 
-function LineArt() {
-  let isPainting = false;
-  const tool: Tool = "brush";
+export default function _DrawingBoard() {
+  const [drawingState, setDrawingState] = createStore<DrawingState>({
+    isPainting: false,
+    tool: "brush",
+  });
 
+  const setTool: SetToolFunc = (tool) => setDrawingState("tool", tool);
+
+  return (
+    <div class="relative h-full">
+      <ToolsPanel tool={drawingState.tool} setTool={setTool} />
+
+      <Stage class="h-full">
+        <Layer>
+          <LineArt
+            drawingState={drawingState}
+            setDrawingState={setDrawingState}
+          />
+        </Layer>
+      </Stage>
+    </div>
+  );
+}
+
+function LineArt(props: {
+  drawingState: DrawingState;
+  setDrawingState: SetStoreFunction<DrawingState>;
+}) {
   const [lines, setLines] = createStore<LineInfo[]>([]);
   const stage = useStage();
 
@@ -68,23 +52,26 @@ function LineArt() {
     if (!currentStage) return;
 
     const onMouseDown = () => {
-      isPainting = true;
+      props.setDrawingState("isPainting", true);
 
       const pos = currentStage.getPointerPosition();
       if (!pos) return;
 
       setLines((prev) => [
         ...prev,
-        { tool, points: [pos.x, pos.y, pos.x, pos.y] },
+        {
+          tool: props.drawingState.tool,
+          points: [pos.x, pos.y, pos.x, pos.y],
+        },
       ]);
     };
 
     const onMouseUp = () => {
-      isPainting = false;
+      props.setDrawingState("isPainting", false);
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-      if (!isPainting) return;
+      if (!props.drawingState.isPainting) return;
 
       e.evt.preventDefault();
 

@@ -7,15 +7,10 @@ import type {
 import { Tooltip as BaseTooltip } from "@ark-ui/solid";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
-import { Button, type ButtonProps } from "./button";
 
 export const Tooltip = BaseTooltip.Root;
 
-type TooltipTriggerProps = Omit<ButtonProps<typeof BaseTooltip.Trigger>, "as">;
-
-export const TooltipTrigger = (props: TooltipTriggerProps) => {
-  return <Button as={BaseTooltip.Trigger} appearance="outline" {...props} />;
-};
+export const TooltipTrigger = BaseTooltip.Trigger;
 
 export const TooltipPositioner = (_props: TooltipPositionerProps) => {
   const [props, rest] = splitProps(_props, ["class"]);
