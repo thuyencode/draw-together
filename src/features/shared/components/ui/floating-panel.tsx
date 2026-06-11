@@ -15,7 +15,9 @@ type FloatingPanelTrigger = Omit<
 export const FloatingPanelTrigger: typeof BaseFloatingPanel.Trigger = (
   props,
 ) => {
-  return <Button as={BaseFloatingPanel.Trigger} {...props} />;
+  return (
+    <Button as={BaseFloatingPanel.Trigger} appearance="outline" {...props} />
+  );
 };
 
 export const FloatingPanelPositioner: typeof BaseFloatingPanel.Positioner = (
