@@ -59,7 +59,7 @@ const messageStyles = cva("text-sm", {
 });
 
 const closeButtonStyles = cva(
-  "absolute top-3 right-3 flex items-center justify-center p-1",
+  "absolute top-3.5 right-3 flex items-center justify-center p-1",
   {
     variants: {
       variant: {
@@ -111,7 +111,10 @@ function getVariant(variant: AlertProps["variant"]) {
 }
 
 export default function Alert(_props: AlertProps) {
-  const props = mergeProps({ variant: "success" as const }, _props);
+  const props = mergeProps(
+    { variant: "success" } satisfies Partial<AlertProps>,
+    _props,
+  );
   const isOpen = () => props.open ?? true;
   const [visible, setVisible] = createSignal(isOpen());
 
@@ -125,6 +128,7 @@ export default function Alert(_props: AlertProps) {
     <Show when={visible()}>
       <div class={cn(wrapperStyles({ variant: props.variant }), props.class)}>
         <button
+          type="button"
           onClick={handleClose}
           class={closeButtonStyles({ variant: props.variant })}
           aria-label="Close alert"
