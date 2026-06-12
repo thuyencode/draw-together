@@ -1,4 +1,4 @@
-import type { Point, Size } from "@zag-js/rect-utils";
+import type { Size } from "@zag-js/rect-utils";
 import type { LucideIcon } from "lucide-solid";
 import { BrushIcon, EraserIcon, GripVerticalIcon, XIcon } from "lucide-solid";
 import { createSignal, Index } from "solid-js";
@@ -15,7 +15,6 @@ import type {
   SetToolFunc,
   Tool,
 } from "./types";
-import { getInitialPosition } from "./utils";
 
 interface ToolItem {
   tool: Tool;
@@ -36,18 +35,13 @@ type ToolsPanelProps = PropsWithTool &
 
 export function ToolsPanel(props: ToolsPanelProps) {
   const [size, setSize] = createSignal<Size>({ width: 55, height: 240 });
-  const [position, setPosition] = createSignal<Point>();
+  const [position, setPosition] = createPosition(
+    props.defaultPosition,
+    () => props.containerRef,
+    size,
+  );
 
   const shouldBeVertical = () => size().width <= 100;
-
-  onMount(() => {
-    const pos = getInitialPosition(
-      props.defaultPosition,
-      props.containerRef,
-      size(),
-    );
-    if (pos) setPosition(pos);
-  });
 
   return (
     <FloatingPanel.Root

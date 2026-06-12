@@ -1,4 +1,4 @@
-import type { Point, Size } from "@zag-js/rect-utils";
+import type { Size } from "@zag-js/rect-utils";
 import { GripVerticalIcon, XIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 import { FloatingPanel } from "~/features/shared/components/ui/floating-panel";
@@ -8,7 +8,6 @@ import type {
   PropsWithDefaultPosition,
   PropsWithTool,
 } from "./types";
-import { getInitialPosition } from "./utils";
 
 type ToolSettingsPanelsProps = PropsWithTool &
   PropsWithContainerRef &
@@ -16,16 +15,11 @@ type ToolSettingsPanelsProps = PropsWithTool &
 
 export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
   const [size, setSize] = createSignal<Size>({ width: 300, height: 240 });
-  const [position, setPosition] = createSignal<Point>();
-
-  onMount(() => {
-    const pos = getInitialPosition(
-      props.defaultPosition,
-      props.containerRef,
-      size(),
-    );
-    if (pos) setPosition(pos);
-  });
+  const [position, setPosition] = createPosition(
+    props.defaultPosition,
+    () => props.containerRef,
+    size,
+  );
 
   return (
     <FloatingPanel.Root
