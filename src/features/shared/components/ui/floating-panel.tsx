@@ -1,38 +1,16 @@
-import type { FloatingPanelHeaderProps as BaseFloatingPanelHeaderProps } from "@ark-ui/solid";
 import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
-import type { ButtonProps } from "./button";
-import { Button } from "./button";
 
-export const FloatingPanel = BaseFloatingPanel.Root;
-
-type FloatingPanelTrigger = Omit<
-  ButtonProps<typeof BaseFloatingPanel.Trigger>,
-  "as"
->;
-
-export const FloatingPanelTrigger: typeof BaseFloatingPanel.Trigger = (
-  props,
-) => {
-  return (
-    <Button as={BaseFloatingPanel.Trigger} appearance="outline" {...props} />
-  );
-};
-
-export const FloatingPanelPositioner: typeof BaseFloatingPanel.Positioner = (
-  _props,
-) => {
+function FloatingPanelPositioner(_props: BaseFloatingPanel.PositionerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
     <BaseFloatingPanel.Positioner class={cn("z-50", props.class)} {...rest} />
   );
-};
+}
 
-export const FloatingPanelContent: typeof BaseFloatingPanel.Content = (
-  _props,
-) => {
+function FloatingPanelContent(_props: BaseFloatingPanel.ContentProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -44,13 +22,13 @@ export const FloatingPanelContent: typeof BaseFloatingPanel.Content = (
       {...rest}
     />
   );
-};
+}
 
-type FloatingPanelHeaderProps = BaseFloatingPanelHeaderProps & {
+type FloatingPanelHeaderProps = BaseFloatingPanel.HeaderProps & {
   vertical?: boolean;
 };
 
-export const FloatingPanelHeader = (_props: FloatingPanelHeaderProps) => {
+function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
   const [props, rest] = splitProps(_props, ["class", "vertical"]);
 
   return (
@@ -64,9 +42,9 @@ export const FloatingPanelHeader = (_props: FloatingPanelHeaderProps) => {
       {...rest}
     />
   );
-};
+}
 
-export const FloatingPanelTitle: typeof BaseFloatingPanel.Title = (_props) => {
+function FloatingPanelTitle(_props: BaseFloatingPanel.TitleProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -78,11 +56,9 @@ export const FloatingPanelTitle: typeof BaseFloatingPanel.Title = (_props) => {
       {...rest}
     />
   );
-};
+}
 
-export const FloatingPanelControl: typeof BaseFloatingPanel.Control = (
-  _props,
-) => {
+function FloatingPanelControl(_props: BaseFloatingPanel.ControlProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -94,9 +70,9 @@ export const FloatingPanelControl: typeof BaseFloatingPanel.Control = (
       {...rest}
     />
   );
-};
+}
 
-export const FloatingPanelBody: typeof BaseFloatingPanel.Body = (_props) => {
+function FloatingPanelBody(_props: BaseFloatingPanel.BodyProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -108,41 +84,41 @@ export const FloatingPanelBody: typeof BaseFloatingPanel.Body = (_props) => {
       {...rest}
     />
   );
-};
+}
 
-export const FloatingPanelResizeTrigger: typeof BaseFloatingPanel.ResizeTrigger =
-  (_props) => {
-    const [props, rest] = splitProps(_props, ["class"]);
+function FloatingPanelResizeTrigger(
+  _props: BaseFloatingPanel.ResizeTriggerProps,
+) {
+  const [props, rest] = splitProps(_props, ["class"]);
 
-    return (
-      <BaseFloatingPanel.ResizeTrigger
-        class={cn(
-          "data-[axis='n']:h-1.5 data-[axis='s']:h-1.5 data-[axis='n']:max-w-[90%] data-[axis='s']:max-w-[90%] data-[axis='e']:w-1.5 data-[axis='w']:w-1.5 data-[axis='e']:max-h-[90%] data-[axis='w']:max-h-[90%] data-[axis='ne']:size-2.5 data-[axis='nw']:size-2.5 data-[axis='se']:size-2.5 data-[axis='sw']:size-2.5",
-          props.class,
-        )}
-        {...rest}
-      />
-    );
-  };
+  return (
+    <BaseFloatingPanel.ResizeTrigger
+      class={cn(
+        "data-[axis='n']:h-1.5 data-[axis='s']:h-1.5 data-[axis='n']:max-w-[90%] data-[axis='s']:max-w-[90%] data-[axis='e']:w-1.5 data-[axis='w']:w-1.5 data-[axis='e']:max-h-[90%] data-[axis='w']:max-h-[90%] data-[axis='ne']:size-2.5 data-[axis='nw']:size-2.5 data-[axis='se']:size-2.5 data-[axis='sw']:size-2.5",
+        props.class,
+      )}
+      {...rest}
+    />
+  );
+}
 
-export const FloatingPanelCloseTrigger: typeof BaseFloatingPanel.CloseTrigger =
-  (_props) => {
-    const [props, rest] = splitProps(_props, ["class"]);
+function FloatingPanelCloseTrigger(
+  _props: BaseFloatingPanel.CloseTriggerProps,
+) {
+  const [props, rest] = splitProps(_props, ["class"]);
 
-    return (
-      <BaseFloatingPanel.CloseTrigger
-        class={cn(
-          "size-6 inline-flex items-center justify-center p-0 border border-alert-default-border rounded bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background [&_svg]:size-3.5 hover:text-pricing-icon-background",
-          props.class,
-        )}
-        {...rest}
-      />
-    );
-  };
+  return (
+    <BaseFloatingPanel.CloseTrigger
+      class={cn(
+        "size-6 inline-flex items-center justify-center p-0 border border-alert-default-border rounded bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background [&_svg]:size-3.5 hover:text-pricing-icon-background",
+        props.class,
+      )}
+      {...rest}
+    />
+  );
+}
 
-export const FloatingPanelDragTrigger: typeof BaseFloatingPanel.DragTrigger = (
-  _props,
-) => {
+function FloatingPanelDragTrigger(_props: BaseFloatingPanel.DragTriggerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -151,19 +127,35 @@ export const FloatingPanelDragTrigger: typeof BaseFloatingPanel.DragTrigger = (
       {...rest}
     />
   );
+}
+
+function FloatingPanelStageTrigger(
+  _props: BaseFloatingPanel.StageTriggerProps,
+) {
+  const [props, rest] = splitProps(_props, ["class"]);
+
+  return (
+    <BaseFloatingPanel.StageTrigger
+      class={cn(
+        "size-6 inline-flex items-center justify-center p-0 border border-alert-default-border rounded bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background [&_svg]:size-3.5  hover:text-background-50",
+        props.class,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export const FloatingPanel = {
+  Root: BaseFloatingPanel.Root,
+  Trigger: BaseFloatingPanel.Trigger,
+  Positioner: FloatingPanelPositioner,
+  Content: FloatingPanelContent,
+  Header: FloatingPanelHeader,
+  Title: FloatingPanelTitle,
+  Control: FloatingPanelControl,
+  Body: FloatingPanelBody,
+  ResizeTrigger: FloatingPanelResizeTrigger,
+  CloseTrigger: FloatingPanelCloseTrigger,
+  DragTrigger: FloatingPanelDragTrigger,
+  StageTrigger: FloatingPanelStageTrigger,
 };
-
-export const FloatingPanelStageTrigger: typeof BaseFloatingPanel.StageTrigger =
-  (_props) => {
-    const [props, rest] = splitProps(_props, ["class"]);
-
-    return (
-      <BaseFloatingPanel.StageTrigger
-        class={cn(
-          "size-6 inline-flex items-center justify-center p-0 border border-alert-default-border rounded bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background [&_svg]:size-3.5  hover:text-background-50",
-          props.class,
-        )}
-        {...rest}
-      />
-    );
-  };

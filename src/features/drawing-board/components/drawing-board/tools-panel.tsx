@@ -1,28 +1,12 @@
 import type { Point, Size } from "@zag-js/rect-utils";
 import type { LucideIcon } from "lucide-solid";
 import { BrushIcon, EraserIcon, GripVerticalIcon, XIcon } from "lucide-solid";
-import { createSignal, Index, onMount } from "solid-js";
+import { createSignal, Index } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import {
-  FloatingPanel,
-  FloatingPanelBody,
-  FloatingPanelCloseTrigger,
-  FloatingPanelContent,
-  FloatingPanelControl,
-  FloatingPanelDragTrigger,
-  FloatingPanelHeader,
-  FloatingPanelPositioner,
-  FloatingPanelResizeTrigger,
-  FloatingPanelTitle,
-} from "~/features/shared/components/ui/floating-panel";
-import {
-  Tooltip,
-  TooltipArrow,
-  TooltipArrowTip,
-  TooltipContent,
-  TooltipPositioner,
-  TooltipTrigger,
-} from "~/features/shared/components/ui/tooltip";
+import { FloatingPanel } from "~/features/shared/components/ui/floating-panel";
+import { Tooltip } from "~/features/shared/components/ui/tooltip";
+import { createPosition } from "./hooks";
+
 import { ToolButton } from "./tool-button";
 import type {
   PropsWithContainerRef,
@@ -66,7 +50,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
   });
 
   return (
-    <FloatingPanel
+    <FloatingPanel.Root
       defaultOpen
       strategy="absolute"
       position={position()}
@@ -80,27 +64,27 @@ export function ToolsPanel(props: ToolsPanelProps) {
         }
       }}
     >
-      <FloatingPanelPositioner>
-        <FloatingPanelContent>
-          <FloatingPanelDragTrigger>
-            <FloatingPanelHeader vertical={shouldBeVertical()}>
-              <FloatingPanelTitle>
+      <FloatingPanel.Positioner>
+        <FloatingPanel.Content>
+          <FloatingPanel.DragTrigger>
+            <FloatingPanel.Header vertical={shouldBeVertical()}>
+              <FloatingPanel.Title>
                 <GripVerticalIcon />
                 <span classList={{ "sr-only": shouldBeVertical() }}>Tool</span>
-              </FloatingPanelTitle>
+              </FloatingPanel.Title>
 
-              <FloatingPanelControl>
-                <FloatingPanelCloseTrigger>
+              <FloatingPanel.Control>
+                <FloatingPanel.CloseTrigger>
                   <XIcon />
-                </FloatingPanelCloseTrigger>
-              </FloatingPanelControl>
-            </FloatingPanelHeader>
-          </FloatingPanelDragTrigger>
+                </FloatingPanel.CloseTrigger>
+              </FloatingPanel.Control>
+            </FloatingPanel.Header>
+          </FloatingPanel.DragTrigger>
 
-          <FloatingPanelBody class="flex-row flex-wrap flex-none">
+          <FloatingPanel.Body class="flex-row flex-wrap flex-none">
             <Index each={tools}>
               {(t) => (
-                <Tooltip
+                <Tooltip.Root
                   positioning={{
                     placement: shouldBeVertical() ? "right" : "top",
                   }}
@@ -110,31 +94,31 @@ export function ToolsPanel(props: ToolsPanelProps) {
                     type="button"
                     data-current-tool={t().tool === props.tool}
                     onClick={() => props.setTool(t().tool)}
-                    as={TooltipTrigger}
+                    as={Tooltip.Trigger}
                   >
                     <Dynamic component={t().icon} />
                   </ToolButton>
-                  <TooltipPositioner>
-                    <TooltipArrow>
-                      <TooltipArrowTip />
-                    </TooltipArrow>
-                    <TooltipContent>{t().label}</TooltipContent>
-                  </TooltipPositioner>
-                </Tooltip>
+                  <Tooltip.Positioner>
+                    <Tooltip.Arrow>
+                      <Tooltip.ArrowTip />
+                    </Tooltip.Arrow>
+                    <Tooltip.Content>{t().label}</Tooltip.Content>
+                  </Tooltip.Positioner>
+                </Tooltip.Root>
               )}
             </Index>
-          </FloatingPanelBody>
+          </FloatingPanel.Body>
 
-          <FloatingPanelResizeTrigger axis="n" />
-          <FloatingPanelResizeTrigger axis="e" />
-          <FloatingPanelResizeTrigger axis="w" />
-          <FloatingPanelResizeTrigger axis="s" />
-          <FloatingPanelResizeTrigger axis="ne" />
-          <FloatingPanelResizeTrigger axis="se" />
-          <FloatingPanelResizeTrigger axis="sw" />
-          <FloatingPanelResizeTrigger axis="nw" />
-        </FloatingPanelContent>
-      </FloatingPanelPositioner>
-    </FloatingPanel>
+          <FloatingPanel.ResizeTrigger axis="n" />
+          <FloatingPanel.ResizeTrigger axis="e" />
+          <FloatingPanel.ResizeTrigger axis="w" />
+          <FloatingPanel.ResizeTrigger axis="s" />
+          <FloatingPanel.ResizeTrigger axis="ne" />
+          <FloatingPanel.ResizeTrigger axis="se" />
+          <FloatingPanel.ResizeTrigger axis="sw" />
+          <FloatingPanel.ResizeTrigger axis="nw" />
+        </FloatingPanel.Content>
+      </FloatingPanel.Positioner>
+    </FloatingPanel.Root>
   );
 }

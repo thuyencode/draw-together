@@ -1,13 +1,6 @@
 import { For } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import {
-  Tooltip,
-  TooltipArrow,
-  TooltipArrowTip,
-  TooltipContent,
-  TooltipPositioner,
-  TooltipTrigger,
-} from "./tooltip";
+import { Tooltip } from "./tooltip";
 
 const meta: Meta<typeof Tooltip> = {
   title: "Actions/Tooltip",
@@ -24,15 +17,15 @@ type Story = StoryObj<typeof Tooltip>;
 
 export const Default: Story = {
   render: () => (
-    <Tooltip>
-      <TooltipTrigger>Hover me</TooltipTrigger>
-      <TooltipPositioner>
-        <TooltipArrow>
-          <TooltipArrowTip />
-        </TooltipArrow>
-        <TooltipContent>Hello from tooltip!</TooltipContent>
-      </TooltipPositioner>
-    </Tooltip>
+    <Tooltip.Root>
+      <Tooltip.Trigger>Hover me</Tooltip.Trigger>
+      <Tooltip.Positioner>
+        <Tooltip.Arrow>
+          <Tooltip.ArrowTip />
+        </Tooltip.Arrow>
+        <Tooltip.Content>Hello from tooltip!</Tooltip.Content>
+      </Tooltip.Positioner>
+    </Tooltip.Root>
   ),
 };
 
@@ -56,20 +49,20 @@ export const Positioning: Story = {
     <div class="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 md:p-12 max-w-3xl">
       <For each={placements}>
         {(placement) => (
-          <Tooltip
+          <Tooltip.Root
             positioning={{
               placement,
               offset: { mainAxis: 8 },
             }}
           >
-            <TooltipTrigger>{placement}</TooltipTrigger>
-            <TooltipPositioner>
-              <TooltipArrow>
-                <TooltipArrowTip />
-              </TooltipArrow>
-              <TooltipContent>{placement}</TooltipContent>
-            </TooltipPositioner>
-          </Tooltip>
+            <Tooltip.Trigger>{placement}</Tooltip.Trigger>
+            <Tooltip.Positioner>
+              <Tooltip.Arrow>
+                <Tooltip.ArrowTip />
+              </Tooltip.Arrow>
+              <Tooltip.Content>{placement}</Tooltip.Content>
+            </Tooltip.Positioner>
+          </Tooltip.Root>
         )}
       </For>
     </div>

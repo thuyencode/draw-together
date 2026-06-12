@@ -6,20 +6,7 @@ import {
   XIcon,
 } from "lucide-solid";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import {
-  FloatingPanel,
-  FloatingPanelBody,
-  FloatingPanelCloseTrigger,
-  FloatingPanelContent,
-  FloatingPanelControl,
-  FloatingPanelDragTrigger,
-  FloatingPanelHeader,
-  FloatingPanelPositioner,
-  FloatingPanelResizeTrigger,
-  FloatingPanelStageTrigger,
-  FloatingPanelTitle,
-  FloatingPanelTrigger,
-} from "./floating-panel";
+import { FloatingPanel } from "./floating-panel";
 
 const meta: Meta = {
   title: "Overlay/FloatingPanel",
@@ -36,94 +23,94 @@ type Story = StoryObj;
 
 export const Default: Story = {
   render: () => (
-    <FloatingPanel>
-      <FloatingPanelTrigger>Toggle Panel</FloatingPanelTrigger>
-      <FloatingPanelPositioner>
-        <FloatingPanelContent>
-          <FloatingPanelDragTrigger>
-            <FloatingPanelHeader>
-              <FloatingPanelTitle>
+    <FloatingPanel.Root>
+      <FloatingPanel.Trigger>Toggle Panel</FloatingPanel.Trigger>
+      <FloatingPanel.Positioner>
+        <FloatingPanel.Content>
+          <FloatingPanel.DragTrigger>
+            <FloatingPanel.Header>
+              <FloatingPanel.Title>
                 <GripVerticalIcon />
                 Floating Panel
-              </FloatingPanelTitle>
-              <FloatingPanelControl>
-                <FloatingPanelStageTrigger stage="minimized">
+              </FloatingPanel.Title>
+              <FloatingPanel.Control>
+                <FloatingPanel.StageTrigger stage="minimized">
                   <Minus />
-                </FloatingPanelStageTrigger>
-                <FloatingPanelStageTrigger stage="maximized">
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.StageTrigger stage="maximized">
                   <Maximize2 />
-                </FloatingPanelStageTrigger>
-                <FloatingPanelStageTrigger stage="default">
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.StageTrigger stage="default">
                   <ArrowDownLeft />
-                </FloatingPanelStageTrigger>
-                <FloatingPanelCloseTrigger>
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.CloseTrigger>
                   <XIcon />
-                </FloatingPanelCloseTrigger>
-              </FloatingPanelControl>
-            </FloatingPanelHeader>
-          </FloatingPanelDragTrigger>
+                </FloatingPanel.CloseTrigger>
+              </FloatingPanel.Control>
+            </FloatingPanel.Header>
+          </FloatingPanel.DragTrigger>
 
-          <FloatingPanelBody>
+          <FloatingPanel.Body>
             <p>Some content</p>
-          </FloatingPanelBody>
+          </FloatingPanel.Body>
 
-          <FloatingPanelResizeTrigger axis="n" />
-          <FloatingPanelResizeTrigger axis="e" />
-          <FloatingPanelResizeTrigger axis="w" />
-          <FloatingPanelResizeTrigger axis="s" />
-          <FloatingPanelResizeTrigger axis="ne" />
-          <FloatingPanelResizeTrigger axis="se" />
-          <FloatingPanelResizeTrigger axis="sw" />
-          <FloatingPanelResizeTrigger axis="nw" />
-        </FloatingPanelContent>
-      </FloatingPanelPositioner>
-    </FloatingPanel>
+          <FloatingPanel.ResizeTrigger axis="n" />
+          <FloatingPanel.ResizeTrigger axis="e" />
+          <FloatingPanel.ResizeTrigger axis="w" />
+          <FloatingPanel.ResizeTrigger axis="s" />
+          <FloatingPanel.ResizeTrigger axis="ne" />
+          <FloatingPanel.ResizeTrigger axis="se" />
+          <FloatingPanel.ResizeTrigger axis="sw" />
+          <FloatingPanel.ResizeTrigger axis="nw" />
+        </FloatingPanel.Content>
+      </FloatingPanel.Positioner>
+    </FloatingPanel.Root>
   ),
 };
 
 export const VerticalHeader: Story = {
   render: () => (
-    <FloatingPanel>
-      <FloatingPanelTrigger>Toggle Panel</FloatingPanelTrigger>
-      <FloatingPanelPositioner>
-        <FloatingPanelContent>
-          <FloatingPanelDragTrigger>
-            <FloatingPanelHeader vertical>
-              <FloatingPanelTitle>
+    <FloatingPanel.Root>
+      <FloatingPanel.Trigger>Toggle Panel</FloatingPanel.Trigger>
+      <FloatingPanel.Positioner>
+        <FloatingPanel.Content>
+          <FloatingPanel.DragTrigger>
+            <FloatingPanel.Header vertical>
+              <FloatingPanel.Title>
                 <GripVerticalIcon />
                 Floating Panel
-              </FloatingPanelTitle>
-              <FloatingPanelControl>
-                <FloatingPanelStageTrigger stage="minimized">
+              </FloatingPanel.Title>
+              <FloatingPanel.Control>
+                <FloatingPanel.StageTrigger stage="minimized">
                   <Minus />
-                </FloatingPanelStageTrigger>
-                <FloatingPanelStageTrigger stage="maximized">
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.StageTrigger stage="maximized">
                   <Maximize2 />
-                </FloatingPanelStageTrigger>
-                <FloatingPanelStageTrigger stage="default">
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.StageTrigger stage="default">
                   <ArrowDownLeft />
-                </FloatingPanelStageTrigger>
-                <FloatingPanelCloseTrigger>
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.CloseTrigger>
                   <XIcon />
-                </FloatingPanelCloseTrigger>
-              </FloatingPanelControl>
-            </FloatingPanelHeader>
-          </FloatingPanelDragTrigger>
+                </FloatingPanel.CloseTrigger>
+              </FloatingPanel.Control>
+            </FloatingPanel.Header>
+          </FloatingPanel.DragTrigger>
 
-          <FloatingPanelBody>
+          <FloatingPanel.Body>
             <p>Some content</p>
-          </FloatingPanelBody>
+          </FloatingPanel.Body>
 
-          <FloatingPanelResizeTrigger axis="n" />
-          <FloatingPanelResizeTrigger axis="e" />
-          <FloatingPanelResizeTrigger axis="w" />
-          <FloatingPanelResizeTrigger axis="s" />
-          <FloatingPanelResizeTrigger axis="ne" />
-          <FloatingPanelResizeTrigger axis="se" />
-          <FloatingPanelResizeTrigger axis="sw" />
-          <FloatingPanelResizeTrigger axis="nw" />
-        </FloatingPanelContent>
-      </FloatingPanelPositioner>
-    </FloatingPanel>
+          <FloatingPanel.ResizeTrigger axis="n" />
+          <FloatingPanel.ResizeTrigger axis="e" />
+          <FloatingPanel.ResizeTrigger axis="w" />
+          <FloatingPanel.ResizeTrigger axis="s" />
+          <FloatingPanel.ResizeTrigger axis="ne" />
+          <FloatingPanel.ResizeTrigger axis="se" />
+          <FloatingPanel.ResizeTrigger axis="sw" />
+          <FloatingPanel.ResizeTrigger axis="nw" />
+        </FloatingPanel.Content>
+      </FloatingPanel.Positioner>
+    </FloatingPanel.Root>
   ),
 };

@@ -1,24 +1,14 @@
-import type {
-  TooltipArrowProps,
-  TooltipArrowTipProps,
-  TooltipContentProps,
-  TooltipPositionerProps,
-} from "@ark-ui/solid";
 import { Tooltip as BaseTooltip } from "@ark-ui/solid";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 
-export const Tooltip = BaseTooltip.Root;
-
-export const TooltipTrigger = BaseTooltip.Trigger;
-
-export const TooltipPositioner = (_props: TooltipPositionerProps) => {
+function TooltipPositioner(_props: BaseTooltip.PositionerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return <BaseTooltip.Positioner class={cn("z-50", props.class)} {...rest} />;
-};
+}
 
-export const TooltipArrow = (_props: TooltipArrowProps) => {
+function TooltipArrow(_props: BaseTooltip.ArrowProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -30,9 +20,9 @@ export const TooltipArrow = (_props: TooltipArrowProps) => {
       {...rest}
     />
   );
-};
+}
 
-export const TooltipArrowTip = (_props: TooltipArrowTipProps) => {
+function TooltipArrowTip(_props: BaseTooltip.ArrowTipProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -41,9 +31,9 @@ export const TooltipArrowTip = (_props: TooltipArrowTipProps) => {
       {...rest}
     />
   );
-};
+}
 
-export const TooltipContent = (_props: TooltipContentProps) => {
+function TooltipContent(_props: BaseTooltip.ContentProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -55,4 +45,13 @@ export const TooltipContent = (_props: TooltipContentProps) => {
       {...rest}
     />
   );
+}
+
+export const Tooltip = {
+  Root: BaseTooltip.Root,
+  Trigger: BaseTooltip.Trigger,
+  Positioner: TooltipPositioner,
+  Arrow: TooltipArrow,
+  ArrowTip: TooltipArrowTip,
+  Content: TooltipContent,
 };

@@ -1,18 +1,8 @@
 import type { Point, Size } from "@zag-js/rect-utils";
 import { GripVerticalIcon, XIcon } from "lucide-solid";
-import { createSignal, onMount } from "solid-js";
-import {
-  FloatingPanel,
-  FloatingPanelBody,
-  FloatingPanelCloseTrigger,
-  FloatingPanelContent,
-  FloatingPanelControl,
-  FloatingPanelDragTrigger,
-  FloatingPanelHeader,
-  FloatingPanelPositioner,
-  FloatingPanelResizeTrigger,
-  FloatingPanelTitle,
-} from "~/features/shared/components/ui/floating-panel";
+import { createSignal } from "solid-js";
+import { FloatingPanel } from "~/features/shared/components/ui/floating-panel";
+import { createPosition } from "./hooks";
 import type {
   PropsWithContainerRef,
   PropsWithDefaultPosition,
@@ -38,7 +28,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
   });
 
   return (
-    <FloatingPanel
+    <FloatingPanel.Root
       defaultOpen
       strategy="absolute"
       position={position()}
@@ -52,35 +42,35 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
         }
       }}
     >
-      <FloatingPanelPositioner>
-        <FloatingPanelContent>
-          <FloatingPanelDragTrigger>
-            <FloatingPanelHeader>
-              <FloatingPanelTitle class="capitalize">
+      <FloatingPanel.Positioner>
+        <FloatingPanel.Content>
+          <FloatingPanel.DragTrigger>
+            <FloatingPanel.Header>
+              <FloatingPanel.Title class="capitalize">
                 <GripVerticalIcon />
                 {props.tool} Settings
-              </FloatingPanelTitle>
+              </FloatingPanel.Title>
 
-              <FloatingPanelControl>
-                <FloatingPanelCloseTrigger>
+              <FloatingPanel.Control>
+                <FloatingPanel.CloseTrigger>
                   <XIcon />
-                </FloatingPanelCloseTrigger>
-              </FloatingPanelControl>
-            </FloatingPanelHeader>
-          </FloatingPanelDragTrigger>
+                </FloatingPanel.CloseTrigger>
+              </FloatingPanel.Control>
+            </FloatingPanel.Header>
+          </FloatingPanel.DragTrigger>
 
-          <FloatingPanelBody class="flex-row flex-wrap flex-none" />
+          <FloatingPanel.Body class="flex-row flex-wrap flex-none" />
 
-          <FloatingPanelResizeTrigger axis="n" />
-          <FloatingPanelResizeTrigger axis="e" />
-          <FloatingPanelResizeTrigger axis="w" />
-          <FloatingPanelResizeTrigger axis="s" />
-          <FloatingPanelResizeTrigger axis="ne" />
-          <FloatingPanelResizeTrigger axis="se" />
-          <FloatingPanelResizeTrigger axis="sw" />
-          <FloatingPanelResizeTrigger axis="nw" />
-        </FloatingPanelContent>
-      </FloatingPanelPositioner>
-    </FloatingPanel>
+          <FloatingPanel.ResizeTrigger axis="n" />
+          <FloatingPanel.ResizeTrigger axis="e" />
+          <FloatingPanel.ResizeTrigger axis="w" />
+          <FloatingPanel.ResizeTrigger axis="s" />
+          <FloatingPanel.ResizeTrigger axis="ne" />
+          <FloatingPanel.ResizeTrigger axis="se" />
+          <FloatingPanel.ResizeTrigger axis="sw" />
+          <FloatingPanel.ResizeTrigger axis="nw" />
+        </FloatingPanel.Content>
+      </FloatingPanel.Positioner>
+    </FloatingPanel.Root>
   );
 }
