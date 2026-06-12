@@ -78,10 +78,14 @@ export function ToolsPanel(props: ToolsPanelProps) {
               </FloatingPanelHeader>
             </FloatingPanelDragTrigger>
 
-            <FloatingPanelBody class="gap-0.5 bg-background-50">
+            <FloatingPanelBody class="flex-row flex-wrap flex-none">
               <Index each={tools}>
                 {(t) => (
-                  <Tooltip positioning={{ placement: "right" }}>
+                  <Tooltip
+                    positioning={{
+                      placement: shouldBeVertical() ? "right" : "top",
+                    }}
+                  >
                     <ToolButton
                       iconOnly
                       type="button"
