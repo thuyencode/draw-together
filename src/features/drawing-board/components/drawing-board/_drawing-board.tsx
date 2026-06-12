@@ -3,6 +3,7 @@ import { createEffect, For, onCleanup } from "solid-js";
 import type { SetStoreFunction } from "solid-js/store";
 import { createStore } from "solid-js/store";
 import { Layer, Line, Stage, useStage } from "solid-konva";
+import { ToolSettingsPanels } from "./tool-settings-panel";
 import { ToolsPanel } from "./tools-panel";
 import type { SetToolFunc, Tool } from "./types";
 
@@ -17,6 +18,8 @@ interface LineInfo {
 }
 
 export default function _DrawingBoard() {
+  let containerRef!: HTMLDivElement;
+
   const [drawingState, setDrawingState] = createStore<DrawingState>({
     isPainting: false,
     tool: "brush",
@@ -25,8 +28,18 @@ export default function _DrawingBoard() {
   const setTool: SetToolFunc = (tool) => setDrawingState("tool", tool);
 
   return (
-    <div class="relative h-full">
-      <ToolsPanel tool={drawingState.tool} setTool={setTool} />
+    <div class="relative h-full" ref={containerRef}>
+      <ToolsPanel
+        tool={drawingState.tool}
+        setTool={setTool}
+        containerRef={containerRef}
+        defaultPosition="top-left"
+      />
+      <ToolSettingsPanels
+        tool={drawingState.tool}
+        containerRef={containerRef}
+        defaultPosition="bottom-right"
+      />
 
       <Stage class="h-full">
         <Layer>

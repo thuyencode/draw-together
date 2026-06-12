@@ -1,7 +1,8 @@
+import type { Point, Size } from "@zag-js/rect-utils";
 import type { LucideIcon } from "lucide-solid";
 import { BrushIcon, EraserIcon, GripVerticalIcon, XIcon } from "lucide-solid";
-import { createSignal, Index } from "solid-js";
-import { Dynamic, Portal } from "solid-js/web";
+import { createSignal, Index, onMount } from "solid-js";
+import { Dynamic } from "solid-js/web";
 import {
   FloatingPanel,
   FloatingPanelBody,
@@ -23,7 +24,14 @@ import {
   TooltipTrigger,
 } from "~/features/shared/components/ui/tooltip";
 import { ToolButton } from "./tool-button";
-import type { SetToolFunc, Tool } from "./types";
+import type {
+  PropsWithContainerRef,
+  PropsWithDefaultPosition,
+  PropsWithTool,
+  SetToolFunc,
+  Tool,
+} from "./types";
+import { getInitialPosition } from "./utils";
 
 interface ToolItem {
   tool: Tool;
@@ -36,19 +44,33 @@ const tools: ToolItem[] = [
   { tool: "eraser", label: "Eraser", icon: EraserIcon },
 ];
 
-interface ToolsPanelProps {
-  tool: Tool;
-  setTool: SetToolFunc;
-}
+type ToolsPanelProps = PropsWithTool &
+  PropsWithContainerRef &
+  PropsWithDefaultPosition & {
+    setTool: SetToolFunc;
+  };
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal({ width: 55, height: 240 });
+  const [size, setSize] = createSignal<Size>({ width: 55, height: 240 });
+  const [position, setPosition] = createSignal<Point>();
 
   const shouldBeVertical = () => size().width <= 100;
+
+  onMount(() => {
+    const pos = getInitialPosition(
+      props.defaultPosition,
+      props.containerRef,
+      size(),
+    );
+    if (pos) setPosition(pos);
+  });
 
   return (
     <FloatingPanel
       defaultOpen
+      strategy="absolute"
+      position={position()}
+      onPositionChange={(p) => setPosition(p.position)}
       size={size()}
       onSizeChange={(e) => {
         if (e.size.width <= 100) {
@@ -58,65 +80,61 @@ export function ToolsPanel(props: ToolsPanelProps) {
         }
       }}
     >
-      <Portal>
-        <FloatingPanelPositioner>
-          <FloatingPanelContent>
-            <FloatingPanelDragTrigger>
-              <FloatingPanelHeader vertical={shouldBeVertical()}>
-                <FloatingPanelTitle>
-                  <GripVerticalIcon />
-                  <span classList={{ "sr-only": shouldBeVertical() }}>
-                    Tool
-                  </span>
-                </FloatingPanelTitle>
+      <FloatingPanelPositioner>
+        <FloatingPanelContent>
+          <FloatingPanelDragTrigger>
+            <FloatingPanelHeader vertical={shouldBeVertical()}>
+              <FloatingPanelTitle>
+                <GripVerticalIcon />
+                <span classList={{ "sr-only": shouldBeVertical() }}>Tool</span>
+              </FloatingPanelTitle>
 
-                <FloatingPanelControl>
-                  <FloatingPanelCloseTrigger>
-                    <XIcon />
-                  </FloatingPanelCloseTrigger>
-                </FloatingPanelControl>
-              </FloatingPanelHeader>
-            </FloatingPanelDragTrigger>
+              <FloatingPanelControl>
+                <FloatingPanelCloseTrigger>
+                  <XIcon />
+                </FloatingPanelCloseTrigger>
+              </FloatingPanelControl>
+            </FloatingPanelHeader>
+          </FloatingPanelDragTrigger>
 
-            <FloatingPanelBody class="flex-row flex-wrap flex-none">
-              <Index each={tools}>
-                {(t) => (
-                  <Tooltip
-                    positioning={{
-                      placement: shouldBeVertical() ? "right" : "top",
-                    }}
+          <FloatingPanelBody class="flex-row flex-wrap flex-none">
+            <Index each={tools}>
+              {(t) => (
+                <Tooltip
+                  positioning={{
+                    placement: shouldBeVertical() ? "right" : "top",
+                  }}
+                >
+                  <ToolButton
+                    iconOnly
+                    type="button"
+                    data-current-tool={t().tool === props.tool}
+                    onClick={() => props.setTool(t().tool)}
+                    as={TooltipTrigger}
                   >
-                    <ToolButton
-                      iconOnly
-                      type="button"
-                      data-current-tool={t().tool === props.tool}
-                      onClick={() => props.setTool(t().tool)}
-                      as={TooltipTrigger}
-                    >
-                      <Dynamic component={t().icon} />
-                    </ToolButton>
-                    <TooltipPositioner>
-                      <TooltipArrow>
-                        <TooltipArrowTip />
-                      </TooltipArrow>
-                      <TooltipContent>{t().label}</TooltipContent>
-                    </TooltipPositioner>
-                  </Tooltip>
-                )}
-              </Index>
-            </FloatingPanelBody>
+                    <Dynamic component={t().icon} />
+                  </ToolButton>
+                  <TooltipPositioner>
+                    <TooltipArrow>
+                      <TooltipArrowTip />
+                    </TooltipArrow>
+                    <TooltipContent>{t().label}</TooltipContent>
+                  </TooltipPositioner>
+                </Tooltip>
+              )}
+            </Index>
+          </FloatingPanelBody>
 
-            <FloatingPanelResizeTrigger axis="n" />
-            <FloatingPanelResizeTrigger axis="e" />
-            <FloatingPanelResizeTrigger axis="w" />
-            <FloatingPanelResizeTrigger axis="s" />
-            <FloatingPanelResizeTrigger axis="ne" />
-            <FloatingPanelResizeTrigger axis="se" />
-            <FloatingPanelResizeTrigger axis="sw" />
-            <FloatingPanelResizeTrigger axis="nw" />
-          </FloatingPanelContent>
-        </FloatingPanelPositioner>
-      </Portal>
+          <FloatingPanelResizeTrigger axis="n" />
+          <FloatingPanelResizeTrigger axis="e" />
+          <FloatingPanelResizeTrigger axis="w" />
+          <FloatingPanelResizeTrigger axis="s" />
+          <FloatingPanelResizeTrigger axis="ne" />
+          <FloatingPanelResizeTrigger axis="se" />
+          <FloatingPanelResizeTrigger axis="sw" />
+          <FloatingPanelResizeTrigger axis="nw" />
+        </FloatingPanelContent>
+      </FloatingPanelPositioner>
     </FloatingPanel>
   );
 }
