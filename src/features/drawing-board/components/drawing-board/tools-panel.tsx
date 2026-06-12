@@ -3,8 +3,7 @@ import type { LucideIcon } from "lucide-solid";
 import { BrushIcon, EraserIcon, GripVerticalIcon, XIcon } from "lucide-solid";
 import { createSignal, Index } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { FloatingPanel } from "~/features/shared/components/ui/floating-panel";
-import { Tooltip } from "~/features/shared/components/ui/tooltip";
+import { FloatingPanel, Tooltip } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 
 import { ToolButton } from "./tool-button";

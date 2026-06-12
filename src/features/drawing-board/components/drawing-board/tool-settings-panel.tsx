@@ -1,7 +1,7 @@
 import type { Size } from "@zag-js/rect-utils";
 import { GripVerticalIcon, XIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
-import { FloatingPanel } from "~/features/shared/components/ui/floating-panel";
+import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
   PropsWithContainerRef,
