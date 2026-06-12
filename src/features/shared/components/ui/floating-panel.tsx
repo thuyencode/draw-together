@@ -102,7 +102,7 @@ export const FloatingPanelBody: typeof BaseFloatingPanel.Body = (_props) => {
   return (
     <BaseFloatingPanel.Body
       class={cn(
-        "flex flex-col p-1 gap-1 overflow-auto flex-1 text-sm text-alert-default-description",
+        "flex flex-col p-1 gap-1 overflow-auto flex-1 text-sm text-alert-default-description bg-background-50",
         props.class,
       )}
       {...rest}
