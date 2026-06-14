@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { ValidComponent } from "solid-js";
 import { splitProps, type ComponentProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import type { PropsWithAs } from "../../types/props";
 import { cn } from "../../utils/cn";
 
 export const buttonStyles = cva(
@@ -134,9 +135,9 @@ export const buttonStyles = cva(
 );
 
 type BaseButtonProps<T extends ValidComponent> = {
-  as?: T;
   class?: string | undefined;
-} & VariantProps<typeof buttonStyles>;
+} & VariantProps<typeof buttonStyles> &
+  PropsWithAs<T>;
 
 export type ButtonProps<T extends ValidComponent> = BaseButtonProps<T> &
   Omit<ComponentProps<T>, keyof BaseButtonProps<T>>;
