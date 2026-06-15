@@ -1,4 +1,6 @@
-export type Tool = "brush" | "eraser";
+export type Shape = "circle" | "rectangle" | "oval";
+
+export type Tool = "brush" | "eraser" | Shape;
 
 export type DrawingAction =
   | { type: "set_tool"; tool: Tool }

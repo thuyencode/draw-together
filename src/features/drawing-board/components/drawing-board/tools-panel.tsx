@@ -10,9 +10,9 @@ import {
 } from "lucide-solid";
 import { createSignal, Index } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { FloatingPanel, Tooltip } from "~/features/shared/components/ui";
+import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
-
+import { ShapeToolsMenu } from "./shape-tools-menu";
 import { ToolButton } from "./tool-button";
 import type {
   PropsWithContainerRef,
@@ -39,7 +39,7 @@ type ToolsPanelProps = PropsWithTool &
   PropsWithDispatch;
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal<Size>({ width: 55, height: 240 });
+  const [size, setSize] = createSignal<Size>({ width: 54, height: 240 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
@@ -57,7 +57,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
       size={size()}
       onSizeChange={(e) => {
         if (e.size.width <= 100) {
-          setSize({ ...e.size, width: 55 });
+          setSize({ ...e.size, width: 54 });
         } else {
           setSize(e.size);
         }
@@ -89,34 +89,28 @@ export function ToolsPanel(props: ToolsPanelProps) {
           <FloatingPanel.Body class="flex-row flex-wrap flex-none">
             <Index each={tools}>
               {(t) => (
-                <Tooltip.Root
-                  positioning={{
-                    placement: shouldBeVertical() ? "right" : "top",
-                  }}
+                <ToolButton
+                  iconOnly
+                  type="button"
+                  data-current-tool={t().tool === props.tool}
+                  onClick={() =>
+                    props.dispatch({
+                      type: "set_tool",
+                      tool: t().tool,
+                    })
+                  }
                 >
-                  <ToolButton
-                    iconOnly
-                    type="button"
-                    data-current-tool={t().tool === props.tool}
-                    onClick={() =>
-                      props.dispatch({
-                        type: "set_tool",
-                        tool: t().tool,
-                      })
-                    }
-                    as={Tooltip.Trigger}
-                  >
-                    <Dynamic component={t().icon} />
-                  </ToolButton>
-                  <Tooltip.Positioner>
-                    <Tooltip.Arrow>
-                      <Tooltip.ArrowTip />
-                    </Tooltip.Arrow>
-                    <Tooltip.Content>{t().label}</Tooltip.Content>
-                  </Tooltip.Positioner>
-                </Tooltip.Root>
+                  <Dynamic component={t().icon} />
+                  <span class="sr-only">{t().label}</span>
+                </ToolButton>
               )}
             </Index>
+
+            <ShapeToolsMenu
+              tool={props.tool}
+              dispatch={props.dispatch}
+              isParentPanelVertical={shouldBeVertical()}
+            />
           </FloatingPanel.Body>
 
           <FloatingPanel.ResizeTrigger axis="n" />
