@@ -4,7 +4,7 @@ import { ColorSettingsPanels } from "./color-settings-panel";
 import { DrawingCanvas } from "./drawing-canvas";
 import { ToolSettingsPanels } from "./tool-settings-panel";
 import { ToolsPanel } from "./tools-panel";
-import type { DrawingState, SetToolFunc } from "./types";
+import type { DrawingAction, DrawingState } from "./types";
 
 export default function _DrawingBoard() {
   let containerRef!: HTMLDivElement;
@@ -20,34 +20,46 @@ export default function _DrawingBoard() {
     console.log(drawingState.strokeWidth);
   });
 
-  const setTool: SetToolFunc = (tool) => setDrawingState("tool", tool);
+  const dispatch = (action: DrawingAction) => {
+    switch (action.type) {
+      case "set_tool":
+        setDrawingState("tool", action.tool);
+        break;
+      case "set_stroke_width":
+        setDrawingState("strokeWidth", action.strokeWidth);
+        break;
+      case "set_color":
+        setDrawingState("color", action.color);
+        break;
+      case "set_is_painting":
+        setDrawingState("isPainting", action.isPainting);
+        break;
+    }
+  };
 
   return (
     <div class="relative h-full" ref={containerRef}>
       <ToolsPanel
         tool={drawingState.tool}
-        setTool={setTool}
+        dispatch={dispatch}
         containerRef={containerRef}
         defaultPosition="top-left"
       />
       <ToolSettingsPanels
         tool={drawingState.tool}
+        dispatch={dispatch}
         containerRef={containerRef}
         defaultPosition="bottom-right"
         drawingState={drawingState}
-        setDrawingState={setDrawingState}
       />
       <ColorSettingsPanels
+        dispatch={dispatch}
         containerRef={containerRef}
         defaultPosition="top-right"
         drawingState={drawingState}
-        setDrawingState={setDrawingState}
       />
 
-      <DrawingCanvas
-        drawingState={drawingState}
-        setDrawingState={setDrawingState}
-      />
+      <DrawingCanvas drawingState={drawingState} dispatch={dispatch} />
     </div>
   );
 }

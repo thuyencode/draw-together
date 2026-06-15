@@ -7,19 +7,19 @@ import {
 } from "lucide-solid";
 import { SketchPicker } from "solid-color";
 import { createSignal } from "solid-js";
-import type { SetStoreFunction } from "solid-js/store";
 import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
   DrawingState,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
+  PropsWithDispatch,
 } from "./types";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
-  PropsWithDefaultPosition & {
+  PropsWithDefaultPosition &
+  PropsWithDispatch & {
     drawingState: DrawingState;
-    setDrawingState: SetStoreFunction<DrawingState>;
   };
 
 export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
@@ -90,7 +90,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
               width={sketchPickerWidth()}
               color={props.drawingState.color}
               onChange={(result) => {
-                props.setDrawingState("color", result.hex);
+                props.dispatch({ type: "set_color", color: result.hex });
               }}
             />
           </FloatingPanel.Body>

@@ -17,8 +17,8 @@ import { ToolButton } from "./tool-button";
 import type {
   PropsWithContainerRef,
   PropsWithDefaultPosition,
+  PropsWithDispatch,
   PropsWithTool,
-  SetToolFunc,
   Tool,
 } from "./types";
 
@@ -35,9 +35,8 @@ const tools: ToolItem[] = [
 
 type ToolsPanelProps = PropsWithTool &
   PropsWithContainerRef &
-  PropsWithDefaultPosition & {
-    setTool: SetToolFunc;
-  };
+  PropsWithDefaultPosition &
+  PropsWithDispatch;
 
 export function ToolsPanel(props: ToolsPanelProps) {
   const [size, setSize] = createSignal<Size>({ width: 55, height: 240 });
@@ -99,7 +98,12 @@ export function ToolsPanel(props: ToolsPanelProps) {
                     iconOnly
                     type="button"
                     data-current-tool={t().tool === props.tool}
-                    onClick={() => props.setTool(t().tool)}
+                    onClick={() =>
+                      props.dispatch({
+                        type: "set_tool",
+                        tool: t().tool,
+                      })
+                    }
                     as={Tooltip.Trigger}
                   >
                     <Dynamic component={t().icon} />

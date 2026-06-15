@@ -1,23 +1,18 @@
 import type Konva from "konva";
 import { createEffect, For, onCleanup } from "solid-js";
-import type { SetStoreFunction } from "solid-js/store";
 import { createStore } from "solid-js/store";
 import { Layer, Line, Stage, useStage } from "solid-konva";
-import type { DrawingState, LineInfo } from "./types";
+import type { DrawingState, LineInfo, PropsWithDispatch } from "./types";
 
-interface DrawingCanvasProps {
+interface DrawingCanvasProps extends PropsWithDispatch {
   drawingState: DrawingState;
-  setDrawingState: SetStoreFunction<DrawingState>;
 }
 
 export function DrawingCanvas(props: DrawingCanvasProps) {
   return (
     <Stage class="h-full">
       <Layer>
-        <LineArt
-          drawingState={props.drawingState}
-          setDrawingState={props.setDrawingState}
-        />
+        <LineArt drawingState={props.drawingState} dispatch={props.dispatch} />
       </Layer>
     </Stage>
   );
@@ -32,7 +27,7 @@ function LineArt(props: DrawingCanvasProps) {
     if (!currentStage) return;
 
     const onMouseDown = () => {
-      props.setDrawingState("isPainting", true);
+      props.dispatch({ type: "set_is_painting", isPainting: true });
 
       const pos = currentStage.getPointerPosition();
       if (!pos) return;
@@ -49,7 +44,7 @@ function LineArt(props: DrawingCanvasProps) {
     };
 
     const onMouseUp = () => {
-      props.setDrawingState("isPainting", false);
+      props.dispatch({ type: "set_is_painting", isPainting: false });
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {

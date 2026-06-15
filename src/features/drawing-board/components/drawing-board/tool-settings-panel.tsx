@@ -6,21 +6,21 @@ import {
   XIcon,
 } from "lucide-solid";
 import { createSignal } from "solid-js";
-import type { SetStoreFunction } from "solid-js/store";
 import { Field, FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
   DrawingState,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
+  PropsWithDispatch,
   PropsWithTool,
 } from "./types";
 
 type ToolSettingsPanelsProps = PropsWithTool &
   PropsWithContainerRef &
-  PropsWithDefaultPosition & {
+  PropsWithDefaultPosition &
+  PropsWithDispatch & {
     drawingState: DrawingState;
-    setDrawingState: SetStoreFunction<DrawingState>;
   };
 
 export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
@@ -79,10 +79,10 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
                 step="1"
                 value={props.drawingState.strokeWidth}
                 onInput={(e) => {
-                  props.setDrawingState(
-                    "strokeWidth",
-                    Number.parseInt(e.target.value, 10),
-                  );
+                  props.dispatch({
+                    type: "set_stroke_width",
+                    strokeWidth: Number.parseInt(e.target.value, 10),
+                  });
                 }}
               />
             </Field.Root>
