@@ -11,7 +11,7 @@ import { Button } from "./button";
 import { FloatingPanel } from "./floating-panel";
 
 const meta: Meta = {
-  title: "Overlay/FloatingPanel",
+  title: "Overlays/FloatingPanel",
   component: FloatingPanel,
   parameters: {
     layout: "centered",
