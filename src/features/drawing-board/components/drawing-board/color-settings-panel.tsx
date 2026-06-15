@@ -18,9 +18,8 @@ import type {
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
-  PropsWithDispatch & {
-    drawingState: DrawingState;
-  };
+  PropsWithDispatch &
+  Pick<DrawingState, "color">;
 
 export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
   const [size, setSize] = createSignal<Size>({ width: 250, height: 380 });
@@ -88,7 +87,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
           >
             <SketchPicker
               width={sketchPickerWidth()}
-              color={props.drawingState.color}
+              color={props.color}
               onChange={(result) => {
                 props.dispatch({ type: "set_color", color: result.hex });
               }}

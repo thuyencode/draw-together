@@ -56,7 +56,7 @@ export default function _DrawingBoard() {
         dispatch={dispatch}
         containerRef={containerRef}
         defaultPosition="top-right"
-        drawingState={drawingState}
+        color={drawingState.color}
       />
 
       <DrawingCanvas drawingState={drawingState} dispatch={dispatch} />
