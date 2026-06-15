@@ -3,6 +3,19 @@ import { splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
 import { cn } from "../../utils/cn";
 
+function MenuIndicator(_props: BaseMenu.IndicatorProps) {
+  const [props, rest] = splitProps(_props, ["class"]);
+  return (
+    <BaseMenu.Indicator
+      class={cn(
+        "inline-flex items-center justify-center [&_svg]:size-4",
+        props.class,
+      )}
+      {...rest}
+    />
+  );
+}
+
 function MenuPositioner(_props: BaseMenu.PositionerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
@@ -20,7 +33,7 @@ function MenuContent(_props: BaseMenu.ContentProps) {
   return (
     <BaseMenu.Content
       class={cn(
-        "relative flex flex-col p-1 min-w-[max(var(--reference-width),10rem)] max-h-[min(var(--available-height,300px),300px)] bg-dropdown-background border border-neutral-300 rounded-lg shadow-md z-[calc(var(--popover-z-index)+var(--layer-index,0))] outline-none origin-(--transform-origin) data-[state=open]:animate-[scale-fade-in_0.15s_ease-out] data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in]",
+        "relative flex flex-col p-1 min-w-[max(var(--reference-width),10rem)] max-h-[min(var(--available-height,300px),300px)] bg-dropdown-background border border-neutral-300 rounded-lg shadow-md z-[calc(var(--z-index)+var(--layer-index,0))] outline-none origin-(--transform-origin) data-[state=open]:animate-[scale-fade-in_0.15s_ease-out] data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in]",
         props.class,
       )}
       {...rest}
@@ -82,7 +95,7 @@ function MenuCheckboxItem(_props: BaseMenu.CheckboxItemProps) {
   return (
     <BaseMenu.CheckboxItem
       class={cn(
-        "flex items-center gap-2 p-2 text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-error-500 data-disabled:text-text-100 data-disabled:opacity-50",
+        "flex items-center gap-2 p-2 text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-primary-500 data-disabled:text-text-100 data-disabled:opacity-50",
         props.class,
       )}
       {...rest}
@@ -105,7 +118,7 @@ function MenuRadioItem(_props: BaseMenu.RadioItemProps) {
   return (
     <BaseMenu.RadioItem
       class={cn(
-        "flex items-center gap-2 p-2 text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-error-500 data-disabled:text-text-100 data-disabled:opacity-50",
+        "flex items-center gap-2 p-2 text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-primary-500 data-disabled:text-text-100 data-disabled:opacity-50",
         props.class,
       )}
       {...rest}
@@ -141,7 +154,7 @@ function MenuItemIndicator(_props: BaseMenu.ItemIndicatorProps) {
   return (
     <BaseMenu.ItemIndicator
       class={cn(
-        "flex items-center justify-center text-error-500 shrink-0 size-4 [&_svg]:size-3.5",
+        "flex items-center justify-center text-primary-500 shrink-0 size-4 [&_svg]:size-3.5",
         props.class,
       )}
       {...rest}
@@ -176,6 +189,7 @@ export const Menu = {
   Root: BaseMenu.Root,
   Trigger: BaseMenu.Trigger,
   ContextTrigger: BaseMenu.ContextTrigger,
+  Indicator: MenuIndicator,
   Positioner: MenuPositioner,
   Content: MenuContent,
   Item: MenuItem,
