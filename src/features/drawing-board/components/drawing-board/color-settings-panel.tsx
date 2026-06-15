@@ -5,31 +5,37 @@ import {
   MinusIcon,
   XIcon,
 } from "lucide-solid";
+import { SketchPicker } from "solid-color";
 import { createSignal } from "solid-js";
 import type { SetStoreFunction } from "solid-js/store";
-import { Field, FloatingPanel } from "~/features/shared/components/ui";
+import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
   DrawingState,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
-  PropsWithTool,
 } from "./types";
 
-type ToolSettingsPanelsProps = PropsWithTool &
-  PropsWithContainerRef &
+type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition & {
     drawingState: DrawingState;
     setDrawingState: SetStoreFunction<DrawingState>;
   };
 
-export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
-  const [size, setSize] = createSignal<Size>({ width: 300, height: 240 });
+export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
+  const [size, setSize] = createSignal<Size>({ width: 250, height: 380 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
     size,
   );
+
+  let floatingPanelHeaderRef!: HTMLDivElement;
+  let sketchPickerRef!: HTMLDivElement;
+
+  // SketchPicker has horizontal padding of 10px on each side
+  // 2px is total horizontal border width
+  const sketchPickerWidth = () => size().width - 20 - 2;
 
   return (
     <FloatingPanel.Root
@@ -39,20 +45,25 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
       onPositionChange={(p) => setPosition(p.position)}
       size={size()}
       onSizeChange={(e) => {
-        if (e.size.width <= 300) {
-          setSize({ ...e.size, width: 300 });
+        const height =
+          floatingPanelHeaderRef.offsetHeight +
+          sketchPickerRef.offsetHeight +
+          5;
+
+        if (e.size.width <= 250) {
+          setSize({ ...e.size, width: 250, height });
         } else {
-          setSize(e.size);
+          setSize({ ...e.size, height });
         }
       }}
     >
       <FloatingPanel.Positioner>
         <FloatingPanel.Content>
           <FloatingPanel.DragTrigger>
-            <FloatingPanel.Header>
+            <FloatingPanel.Header ref={floatingPanelHeaderRef}>
               <FloatingPanel.Title class="capitalize">
                 <GripVerticalIcon />
-                {props.tool} Settings
+                Color Settings
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
@@ -69,29 +80,23 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
             </FloatingPanel.Header>
           </FloatingPanel.DragTrigger>
 
-          <FloatingPanel.Body class="p-2">
-            <Field.Root>
-              <Field.Label>Stroke size</Field.Label>
-              <Field.Input
-                class="py-1 rounded"
-                type="number"
-                min="1"
-                step="1"
-                value={props.drawingState.strokeWidth}
-                onInput={(e) => {
-                  props.setDrawingState(
-                    "strokeWidth",
-                    Number.parseInt(e.target.value, 10),
-                  );
-                }}
-              />
-            </Field.Root>
+          <FloatingPanel.Body
+            class="p-0"
+            ref={(el) => {
+              sketchPickerRef = el.children.item(0) as HTMLDivElement;
+            }}
+          >
+            <SketchPicker
+              width={sketchPickerWidth()}
+              color={props.drawingState.color}
+              onChange={(result) => {
+                props.setDrawingState("color", result.hex);
+              }}
+            />
           </FloatingPanel.Body>
 
-          <FloatingPanel.ResizeTrigger axis="n" />
           <FloatingPanel.ResizeTrigger axis="e" />
           <FloatingPanel.ResizeTrigger axis="w" />
-          <FloatingPanel.ResizeTrigger axis="s" />
           <FloatingPanel.ResizeTrigger axis="ne" />
           <FloatingPanel.ResizeTrigger axis="se" />
           <FloatingPanel.ResizeTrigger axis="sw" />

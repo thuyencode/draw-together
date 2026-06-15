@@ -2,6 +2,20 @@ export type Tool = "brush" | "eraser";
 
 export type SetToolFunc = (tool: Tool) => void;
 
+export interface DrawingState {
+  isPainting: boolean;
+  tool: Tool;
+  strokeWidth: number;
+  color: string;
+}
+
+export interface LineInfo {
+  tool: Tool;
+  points: number[];
+  strokeWidth: number;
+  color: string;
+}
+
 type CenteredPosition = "center";
 type HorizontalPosition = "left" | "right";
 type VerticalPosition = "top" | "bottom";

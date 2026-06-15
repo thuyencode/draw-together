@@ -1,6 +1,13 @@
 import type { Size } from "@zag-js/rect-utils";
 import type { LucideIcon } from "lucide-solid";
-import { BrushIcon, EraserIcon, GripVerticalIcon, XIcon } from "lucide-solid";
+import {
+  ArrowDownLeftIcon,
+  BrushIcon,
+  EraserIcon,
+  GripVerticalIcon,
+  MinusIcon,
+  XIcon,
+} from "lucide-solid";
 import { createSignal, Index } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { FloatingPanel, Tooltip } from "~/features/shared/components/ui";
@@ -67,6 +74,12 @@ export function ToolsPanel(props: ToolsPanelProps) {
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
+                <FloatingPanel.StageTrigger stage="minimized">
+                  <MinusIcon />
+                </FloatingPanel.StageTrigger>
+                <FloatingPanel.StageTrigger stage="default">
+                  <ArrowDownLeftIcon />
+                </FloatingPanel.StageTrigger>
                 <FloatingPanel.CloseTrigger>
                   <XIcon />
                 </FloatingPanel.CloseTrigger>
