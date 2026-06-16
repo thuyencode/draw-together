@@ -8,16 +8,26 @@ export type DrawingAction =
   | { type: "set_tool"; tool: Tool }
   | { type: "set_stroke_width"; strokeWidth: number }
   | { type: "set_color"; color: string }
-  | { type: "set_is_painting"; isPainting: boolean };
+  | { type: "set_is_painting"; isPainting: boolean }
+  | { type: "add_freeform_line"; line: FreeformInfo }
+  | { type: "append_freeform_point"; point: [number, number] }
+  | { type: "add_shape"; shape: ShapeInfo }
+  | { type: "add_straight_line"; line: StraightLineInfo };
 
 export interface StrokeConfig {
   strokeWidth: number;
   color: string;
 }
 
-export interface DrawingState extends StrokeConfig {
+export interface DrawingSettings extends StrokeConfig {
   isPainting: boolean;
   tool: Tool;
+}
+
+export interface DrawingElements {
+  freeformLines: FreeformInfo[];
+  shapes: ShapeInfo[];
+  straightLines: StraightLineInfo[];
 }
 
 export interface FreeformInfo extends StrokeConfig {

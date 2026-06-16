@@ -7,7 +7,6 @@ import type { Drag, Shape, ShapeInfo } from "./types";
 import { normalizeBbox } from "./utils";
 
 export function ShapeInput(props: DrawingCanvasProps) {
-  const [shapes, setShapes] = createStore<ShapeInfo[]>([]);
   const [drag, setDrag] = createStore<Drag>({
     anchor: null,
     livePointer: null,
@@ -19,7 +18,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
     const currentStage = stage?.stage();
     if (!currentStage) return;
 
-    const tool = props.drawingState.tool;
+    const tool = props.settings.tool;
     const isShapeTool =
       tool === "circle" || tool === "rectangle" || tool === "ellipse";
     if (!isShapeTool) return;
@@ -44,11 +43,14 @@ export function ShapeInput(props: DrawingCanvasProps) {
         const bbox = normalizeBbox(a, cur);
 
         if (bbox.width > 1 || bbox.height > 1) {
-          setShapes(shapes.length, {
-            tool: tool as Shape,
-            ...bbox,
-            strokeWidth: props.drawingState.strokeWidth,
-            color: props.drawingState.color,
+          props.dispatch({
+            type: "add_shape",
+            shape: {
+              tool: tool as Shape,
+              ...bbox,
+              strokeWidth: props.settings.strokeWidth,
+              color: props.settings.color,
+            },
           });
         }
       }
@@ -63,7 +65,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
 
       setDrag("livePointer", { x: pos.x, y: pos.y });
 
-      if (!props.drawingState.isPainting) return;
+      if (!props.settings.isPainting) return;
       e.evt.preventDefault();
     };
 
@@ -89,16 +91,16 @@ export function ShapeInput(props: DrawingCanvasProps) {
     if (bbox.width < 1 && bbox.height < 1) return null;
 
     return {
-      tool: props.drawingState.tool as Shape,
+      tool: props.settings.tool as Shape,
       ...bbox,
-      strokeWidth: props.drawingState.strokeWidth,
-      color: props.drawingState.color,
+      strokeWidth: props.settings.strokeWidth,
+      color: props.settings.color,
     };
   };
 
   return (
     <>
-      <For each={shapes}>{(s) => <ShapeNode info={s} />}</For>
+      <For each={props.elements.shapes}>{(s) => <ShapeNode info={s} />}</For>
       <Show when={preview()}>{(p) => <ShapeNode info={p()} isPreview />}</Show>
     </>
   );

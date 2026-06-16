@@ -6,7 +6,6 @@ import type { DrawingCanvasProps } from "./drawing-canvas";
 import type { Drag, StraightLineInfo } from "./types";
 
 export function StraightLineInput(props: DrawingCanvasProps) {
-  const [lines, setLines] = createStore<StraightLineInfo[]>([]);
   const [drag, setDrag] = createStore<Drag>({
     anchor: null,
     livePointer: null,
@@ -17,7 +16,7 @@ export function StraightLineInput(props: DrawingCanvasProps) {
     const currentStage = stage?.stage();
     if (!currentStage) return;
 
-    const tool = props.drawingState.tool;
+    const tool = props.settings.tool;
     if (tool !== "straight-line") return;
 
     const onMouseDown = () => {
@@ -37,11 +36,14 @@ export function StraightLineInput(props: DrawingCanvasProps) {
       const cur = drag.livePointer;
 
       if (a && cur) {
-        setLines(lines.length, {
-          tool: "straight-line",
-          points: [a.x, a.y, cur.x, cur.y],
-          strokeWidth: props.drawingState.strokeWidth,
-          color: props.drawingState.color,
+        props.dispatch({
+          type: "add_straight_line",
+          line: {
+            tool: "straight-line",
+            points: [a.x, a.y, cur.x, cur.y],
+            strokeWidth: props.settings.strokeWidth,
+            color: props.settings.color,
+          },
         });
       }
 
@@ -55,7 +57,7 @@ export function StraightLineInput(props: DrawingCanvasProps) {
 
       setDrag("livePointer", { x: pos.x, y: pos.y });
 
-      if (!props.drawingState.isPainting) return;
+      if (!props.settings.isPainting) return;
       e.evt.preventDefault();
     };
 
@@ -81,14 +83,16 @@ export function StraightLineInput(props: DrawingCanvasProps) {
     return {
       tool: "straight-line",
       points: [a.x, a.y, cur.x, cur.y],
-      color: props.drawingState.color,
-      strokeWidth: props.drawingState.strokeWidth,
+      color: props.settings.color,
+      strokeWidth: props.settings.strokeWidth,
     };
   };
 
   return (
     <>
-      <For each={lines}>{(line) => <StraightLineNode info={line} />}</For>
+      <For each={props.elements.straightLines}>
+        {(line) => <StraightLineNode info={line} />}
+      </For>
       <Show when={preview()}>
         {(p) => <StraightLineNode info={p()} isPreview />}
       </Show>

@@ -9,7 +9,7 @@ import { createSignal } from "solid-js";
 import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
-  DrawingState,
+  DrawingSettings,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
   PropsWithDispatch,
@@ -19,7 +19,7 @@ import type {
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
   PropsWithDispatch &
-  Pick<DrawingState, "color">;
+  Pick<DrawingSettings, "color">;
 
 export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
   const [size, setSize] = createSignal<Size>({ width: 250, height: 380 });

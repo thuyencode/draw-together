@@ -8,7 +8,7 @@ import { createSignal } from "solid-js";
 import { Field, FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
-  DrawingState,
+  DrawingSettings,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
   PropsWithDispatch,
@@ -20,7 +20,7 @@ type ToolSettingsPanelsProps = PropsWithTool &
   PropsWithContainerRef &
   PropsWithDefaultPosition &
   PropsWithDispatch & {
-    drawingState: DrawingState;
+    settings: DrawingSettings;
   };
 
 export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
@@ -77,7 +77,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
                 type="number"
                 min="1"
                 step="1"
-                value={props.drawingState.strokeWidth}
+                value={props.settings.strokeWidth}
                 onInput={(e) => {
                   props.dispatch({
                     type: "set_stroke_width",

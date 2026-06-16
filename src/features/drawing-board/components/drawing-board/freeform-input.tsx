@@ -1,19 +1,16 @@
 import type Konva from "konva";
 import { createEffect, For, onCleanup } from "solid-js";
-import { createStore } from "solid-js/store";
 import { Line, useStage } from "solid-konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
-import type { FreeformInfo } from "./types";
 
 export function FreeformInput(props: DrawingCanvasProps) {
-  const [lines, setLines] = createStore<FreeformInfo[]>([]);
   const stage = useStage();
 
   createEffect(() => {
     const currentStage = stage?.stage();
     if (!currentStage) return;
 
-    const tool = props.drawingState.tool;
+    const tool = props.settings.tool;
     if (tool !== "brush" && tool !== "eraser") return;
 
     const onMouseDown = () => {
@@ -22,11 +19,14 @@ export function FreeformInput(props: DrawingCanvasProps) {
       const pos = currentStage.getPointerPosition();
       if (!pos) return;
 
-      setLines(lines.length, {
-        tool,
-        points: [pos.x, pos.y, pos.x, pos.y],
-        strokeWidth: props.drawingState.strokeWidth,
-        color: props.drawingState.color,
+      props.dispatch({
+        type: "add_freeform_line",
+        line: {
+          tool,
+          points: [pos.x, pos.y, pos.x, pos.y],
+          strokeWidth: props.settings.strokeWidth,
+          color: props.settings.color,
+        },
       });
     };
 
@@ -35,16 +35,16 @@ export function FreeformInput(props: DrawingCanvasProps) {
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-      if (!props.drawingState.isPainting) return;
+      if (!props.settings.isPainting) return;
       e.evt.preventDefault();
 
       const pos = currentStage.getPointerPosition();
       if (!pos) return;
 
-      const lastLineIdx = lines.length - 1;
-      if (lastLineIdx === -1) return;
-
-      setLines(lastLineIdx, "points", (prev) => [...prev, pos.x, pos.y]);
+      props.dispatch({
+        type: "append_freeform_point",
+        point: [pos.x, pos.y],
+      });
     };
 
     currentStage
@@ -61,7 +61,7 @@ export function FreeformInput(props: DrawingCanvasProps) {
   });
 
   return (
-    <For each={lines}>
+    <For each={props.elements.freeformLines}>
       {(line) => (
         <Line
           points={line.points}

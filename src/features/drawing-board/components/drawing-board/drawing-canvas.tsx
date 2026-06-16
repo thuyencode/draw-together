@@ -2,10 +2,15 @@ import { Layer, Stage } from "solid-konva";
 import { FreeformInput } from "./freeform-input";
 import { ShapeInput } from "./shape-input";
 import { StraightLineInput } from "./straight-line-input";
-import type { DrawingState, PropsWithDispatch } from "./types";
+import type {
+  DrawingElements,
+  DrawingSettings,
+  PropsWithDispatch,
+} from "./types";
 
 export interface DrawingCanvasProps extends PropsWithDispatch {
-  drawingState: DrawingState;
+  settings: DrawingSettings;
+  elements: DrawingElements;
 }
 
 export function DrawingCanvas(props: DrawingCanvasProps) {
@@ -13,15 +18,18 @@ export function DrawingCanvas(props: DrawingCanvasProps) {
     <Stage class="h-full">
       <Layer>
         <FreeformInput
-          drawingState={props.drawingState}
+          settings={props.settings}
+          elements={props.elements}
           dispatch={props.dispatch}
         />
         <ShapeInput
-          drawingState={props.drawingState}
+          settings={props.settings}
+          elements={props.elements}
           dispatch={props.dispatch}
         />
         <StraightLineInput
-          drawingState={props.drawingState}
+          settings={props.settings}
+          elements={props.elements}
           dispatch={props.dispatch}
         />
       </Layer>
