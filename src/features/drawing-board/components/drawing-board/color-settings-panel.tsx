@@ -55,7 +55,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
       });
     };
 
-    colorPicker.on(["input:end", "color:change"], onColorChange);
+    colorPicker.on("input:end", onColorChange);
   });
 
   const handleSizeChange = (e: FloatingPanelSizeChangeDetails) => {
