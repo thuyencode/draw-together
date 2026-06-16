@@ -9,7 +9,7 @@ import type { PropsWithDispatch, PropsWithTool, Shape } from "./types";
 const shapeIconMap: Record<Shape, LucideIcon> = {
   circle: CircleIcon,
   rectangle: SquareIcon,
-  oval: EllipseIcon,
+  ellipse: EllipseIcon,
 };
 
 type ShapeToolsMenuProps = PropsWithDispatch &

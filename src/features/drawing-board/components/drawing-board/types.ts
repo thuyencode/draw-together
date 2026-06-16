@@ -1,6 +1,6 @@
-export type Shape = "circle" | "rectangle" | "oval";
-
-export type Tool = "brush" | "eraser" | Shape;
+export type Shape = "circle" | "rectangle" | "ellipse";
+export type Freeform = "brush" | "eraser";
+export type Tool = Freeform | Shape;
 
 export type DrawingAction =
   | { type: "set_tool"; tool: Tool }
@@ -16,8 +16,18 @@ export interface DrawingState {
 }
 
 export interface LineInfo {
-  tool: Tool;
+  tool: Freeform;
   points: number[];
+  strokeWidth: number;
+  color: string;
+}
+
+export interface ShapeInfo {
+  tool: Shape;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
   strokeWidth: number;
   color: string;
 }

@@ -60,3 +60,15 @@ export function getInitialPosition(
       return undefined;
   }
 }
+
+export function normalizeBbox(
+  a: { x: number; y: number },
+  b: { x: number; y: number },
+) {
+  return {
+    x: Math.min(a.x, b.x),
+    y: Math.min(a.y, b.y),
+    width: Math.abs(b.x - a.x),
+    height: Math.abs(b.y - a.y),
+  };
+}
