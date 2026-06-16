@@ -13,7 +13,7 @@ export default function _DrawingBoard() {
     isPainting: false,
     tool: "brush",
     strokeWidth: 5,
-    color: "#df4b26",
+    color: "#098bfa",
   });
 
   createEffect(() => {
