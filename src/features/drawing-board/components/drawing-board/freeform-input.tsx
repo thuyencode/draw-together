@@ -22,15 +22,12 @@ export function FreeformInput(props: DrawingCanvasProps) {
       const pos = currentStage.getPointerPosition();
       if (!pos) return;
 
-      setLines((prev) => [
-        ...prev,
-        {
-          tool,
-          points: [pos.x, pos.y, pos.x, pos.y],
-          strokeWidth: props.drawingState.strokeWidth,
-          color: props.drawingState.color,
-        },
-      ]);
+      setLines(lines.length, {
+        tool,
+        points: [pos.x, pos.y, pos.x, pos.y],
+        strokeWidth: props.drawingState.strokeWidth,
+        color: props.drawingState.color,
+      });
     };
 
     const onMouseUp = () => {

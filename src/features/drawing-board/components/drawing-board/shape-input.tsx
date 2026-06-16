@@ -1,16 +1,10 @@
 import type Konva from "konva";
-import { createEffect, For, onCleanup, Show } from "solid-js";
+import { createEffect, For, Match, onCleanup, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
-import { useStage } from "solid-konva";
+import { Circle, Ellipse, Rect, useStage } from "solid-konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
-import { ShapeNode } from "./drawing-canvas";
-import type { Point, Shape, ShapeInfo } from "./types";
+import type { Drag, Shape, ShapeInfo } from "./types";
 import { normalizeBbox } from "./utils";
-
-interface Drag {
-  anchor: Point | null;
-  livePointer: Point | null;
-}
 
 export function ShapeInput(props: DrawingCanvasProps) {
   const [shapes, setShapes] = createStore<ShapeInfo[]>([]);
@@ -45,19 +39,17 @@ export function ShapeInput(props: DrawingCanvasProps) {
     const onMouseUp = () => {
       const a = drag.anchor;
       const cur = drag.livePointer;
+
       if (a && cur) {
         const bbox = normalizeBbox(a, cur);
 
         if (bbox.width > 1 || bbox.height > 1) {
-          setShapes((prev) => [
-            ...prev,
-            {
-              tool: tool as Shape,
-              ...bbox,
-              strokeWidth: props.drawingState.strokeWidth,
-              color: props.drawingState.color,
-            },
-          ]);
+          setShapes(shapes.length, {
+            tool: tool as Shape,
+            ...bbox,
+            strokeWidth: props.drawingState.strokeWidth,
+            color: props.drawingState.color,
+          });
         }
       }
 
@@ -109,5 +101,51 @@ export function ShapeInput(props: DrawingCanvasProps) {
       <For each={shapes}>{(s) => <ShapeNode info={s} />}</For>
       <Show when={preview()}>{(p) => <ShapeNode info={p()} isPreview />}</Show>
     </>
+  );
+}
+
+interface ShapeNodeProps {
+  info: ShapeInfo;
+  isPreview?: boolean;
+}
+
+function ShapeNode(props: ShapeNodeProps) {
+  const s = () => props.info;
+
+  return (
+    <Switch>
+      <Match when={s().tool === "rectangle"}>
+        <Rect
+          x={s().x}
+          y={s().y}
+          width={s().width}
+          height={s().height}
+          stroke={s().color}
+          strokeWidth={s().strokeWidth}
+          dash={props.isPreview ? [5, 5] : undefined}
+        />
+      </Match>
+      <Match when={s().tool === "circle"}>
+        <Circle
+          x={s().x + s().width / 2}
+          y={s().y + s().height / 2}
+          radius={Math.min(s().width, s().height) / 2}
+          stroke={s().color}
+          strokeWidth={s().strokeWidth}
+          dash={props.isPreview ? [5, 5] : undefined}
+        />
+      </Match>
+      <Match when={s().tool === "ellipse"}>
+        <Ellipse
+          x={s().x + s().width / 2}
+          y={s().y + s().height / 2}
+          radiusX={s().width / 2}
+          radiusY={s().height / 2}
+          stroke={s().color}
+          strokeWidth={s().strokeWidth}
+          dash={props.isPreview ? [5, 5] : undefined}
+        />
+      </Match>
+    </Switch>
   );
 }

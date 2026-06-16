@@ -5,6 +5,7 @@ import {
   EraserIcon,
   GripVerticalIcon,
   MinusIcon,
+  SlashIcon,
   XIcon,
 } from "lucide-solid";
 import { createSignal, Index } from "solid-js";
@@ -31,6 +32,7 @@ interface ToolItem {
 const tools: ToolItem[] = [
   { tool: "brush", label: "Brush", icon: BrushIcon },
   { tool: "eraser", label: "Eraser", icon: EraserIcon },
+  { tool: "straight-line", label: "Straight line", icon: SlashIcon },
 ];
 
 type ToolsPanelProps = PropsWithTool &

@@ -2,7 +2,7 @@ import type { Point, Size } from "@zag-js/rect-utils";
 
 export type Shape = "circle" | "rectangle" | "ellipse";
 export type Freeform = "brush" | "eraser";
-export type Tool = Freeform | Shape;
+export type Tool = Freeform | Shape | "straight-line";
 
 export type DrawingAction =
   | { type: "set_tool"; tool: Tool }
@@ -33,6 +33,11 @@ export interface ShapeInfo extends StrokeConfig {
   height: number;
 }
 
+export interface StraightLineInfo extends StrokeConfig {
+  tool: Extract<Tool, "straight-line">;
+  points: [number, number, number, number];
+}
+
 type CenteredPosition = "center";
 type HorizontalPosition = "left" | "right";
 type VerticalPosition = "top" | "bottom";
@@ -40,6 +45,11 @@ export type Position =
   | CenteredPosition
   | `${VerticalPosition}-${HorizontalPosition}`
   | `${VerticalPosition}-${CenteredPosition}`;
+
+export interface Drag {
+  anchor: Point | null;
+  livePointer: Point | null;
+}
 
 export type PropsWithTool<P = unknown> = P & { tool: Tool };
 

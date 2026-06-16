@@ -11,7 +11,7 @@ export default function _DrawingBoard() {
 
   const [drawingState, setDrawingState] = createStore<DrawingState>({
     isPainting: false,
-    tool: "brush",
+    tool: "straight-line",
     strokeWidth: 5,
     color: "#098bfa",
   });
