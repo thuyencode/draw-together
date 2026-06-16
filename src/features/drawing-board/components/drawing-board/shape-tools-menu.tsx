@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-solid";
-import { CircleIcon, EllipseIcon, ShapesIcon, SquareIcon } from "lucide-solid";
+import { CircleIcon, ShapesIcon, SquareIcon } from "lucide-solid";
 import { Index, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { Menu } from "~/features/shared/components/ui";
@@ -9,7 +9,6 @@ import type { PropsWithDispatch, PropsWithTool, Shape } from "./types";
 const shapeIconMap: Record<Shape, LucideIcon> = {
   circle: CircleIcon,
   rectangle: SquareIcon,
-  ellipse: EllipseIcon,
 };
 
 type ShapeToolsMenuProps = PropsWithDispatch &

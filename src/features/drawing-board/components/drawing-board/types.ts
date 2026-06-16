@@ -1,6 +1,6 @@
 import type { Point, Size } from "@zag-js/rect-utils";
 
-export type Shape = "circle" | "rectangle" | "ellipse";
+export type Shape = "circle" | "rectangle";
 export type Freeform = "brush" | "eraser";
 export type Tool = Freeform | Shape | "straight-line";
 

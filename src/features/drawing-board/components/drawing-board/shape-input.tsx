@@ -1,7 +1,7 @@
 import type Konva from "konva";
 import { createEffect, For, Match, onCleanup, Show, Switch } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Circle, Ellipse, Rect, useStage } from "solid-konva";
+import { Circle, Rect, useStage } from "solid-konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
 import type { Drag, Shape, ShapeInfo } from "./types";
 import { normalizeBbox } from "./utils";
@@ -19,8 +19,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
     if (!currentStage) return;
 
     const tool = props.settings.tool;
-    const isShapeTool =
-      tool === "circle" || tool === "rectangle" || tool === "ellipse";
+    const isShapeTool = tool === "circle" || tool === "rectangle";
     if (!isShapeTool) return;
 
     const onMouseDown = () => {
@@ -132,17 +131,6 @@ function ShapeNode(props: ShapeNodeProps) {
           x={s().x + s().width / 2}
           y={s().y + s().height / 2}
           radius={Math.min(s().width, s().height) / 2}
-          stroke={s().color}
-          strokeWidth={s().strokeWidth}
-          dash={props.isPreview ? [5, 5] : undefined}
-        />
-      </Match>
-      <Match when={s().tool === "ellipse"}>
-        <Ellipse
-          x={s().x + s().width / 2}
-          y={s().y + s().height / 2}
-          radiusX={s().width / 2}
-          radiusY={s().height / 2}
           stroke={s().color}
           strokeWidth={s().strokeWidth}
           dash={props.isPreview ? [5, 5] : undefined}
