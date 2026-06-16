@@ -113,6 +113,12 @@ interface ShapeNodeProps {
 function ShapeNode(props: ShapeNodeProps) {
   const s = () => props.info;
 
+  const getDashSize = () => {
+    return props.isPreview
+      ? [s().strokeWidth * 2, s().strokeWidth * 4]
+      : undefined;
+  };
+
   return (
     <Switch>
       <Match when={s().tool === "rectangle"}>
@@ -123,7 +129,7 @@ function ShapeNode(props: ShapeNodeProps) {
           height={s().height}
           stroke={s().color}
           strokeWidth={s().strokeWidth}
-          dash={props.isPreview ? [5, 5] : undefined}
+          dash={getDashSize()}
         />
       </Match>
       <Match when={s().tool === "circle"}>
@@ -133,7 +139,7 @@ function ShapeNode(props: ShapeNodeProps) {
           radius={Math.min(s().width, s().height) / 2}
           stroke={s().color}
           strokeWidth={s().strokeWidth}
-          dash={props.isPreview ? [5, 5] : undefined}
+          dash={getDashSize()}
         />
       </Match>
     </Switch>

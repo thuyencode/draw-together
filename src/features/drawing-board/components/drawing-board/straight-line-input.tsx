@@ -114,7 +114,11 @@ function StraightLineNode(props: StraightLineNodeProps) {
       tension={0}
       lineCap="round"
       lineJoin="round"
-      dash={props.isPreview ? [10, 10] : undefined}
+      dash={
+        props.isPreview
+          ? [props.info.strokeWidth * 2, props.info.strokeWidth * 4]
+          : undefined
+      }
     />
   );
 }
