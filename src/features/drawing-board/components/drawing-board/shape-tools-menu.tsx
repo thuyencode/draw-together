@@ -6,8 +6,7 @@ import { Menu } from "~/features/shared/components/ui";
 import { ToolButton } from "./tool-button";
 import type { PropsWithDispatch, PropsWithTool, Shape } from "./types";
 
-const shapes: Shape[] = ["circle", "rectangle", "oval"];
-const icons: Record<Shape, LucideIcon> = {
+const shapeIconMap: Record<Shape, LucideIcon> = {
   circle: CircleIcon,
   rectangle: SquareIcon,
   oval: EllipseIcon,
@@ -19,19 +18,18 @@ type ShapeToolsMenuProps = PropsWithDispatch &
   };
 
 export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
+  const selected = () => Object.hasOwn(shapeIconMap, props.tool);
+  const shapes = Object.keys(shapeIconMap) as Shape[];
+
   return (
     <Menu.Root
       positioning={{
         placement: props.isParentPanelVertical ? "right" : "bottom",
       }}
     >
-      <ToolButton
-        iconOnly
-        data-current-tool={shapes.includes(props.tool as Shape)}
-        as={Menu.Trigger}
-      >
-        <Show when={Object.hasOwn(icons, props.tool)} fallback={<ShapesIcon />}>
-          <Dynamic component={icons[props.tool as Shape]} />
+      <ToolButton iconOnly data-current-tool={selected()} as={Menu.Trigger}>
+        <Show when={selected()} fallback={<ShapesIcon />}>
+          <Dynamic component={shapeIconMap[props.tool as Shape]} />
         </Show>
         <span class="sr-only">Shapes</span>
       </ToolButton>
@@ -53,7 +51,7 @@ export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
                   props.dispatch({ type: "set_tool", tool: shape() })
                 }
               >
-                <Dynamic component={icons[shape()]} />
+                <Dynamic component={shapeIconMap[shape()]} />
                 <span class="sr-only">{shape()}</span>
               </ToolButton>
             )}
