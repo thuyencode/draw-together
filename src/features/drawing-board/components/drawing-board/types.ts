@@ -1,3 +1,5 @@
+import type { Point, Size } from "@zag-js/rect-utils";
+
 export type Shape = "circle" | "rectangle" | "ellipse";
 export type Freeform = "brush" | "eraser";
 export type Tool = Freeform | Shape;
@@ -8,28 +10,27 @@ export type DrawingAction =
   | { type: "set_color"; color: string }
   | { type: "set_is_painting"; isPainting: boolean };
 
-export interface DrawingState {
+export interface StrokeConfig {
+  strokeWidth: number;
+  color: string;
+}
+
+export interface DrawingState extends StrokeConfig {
   isPainting: boolean;
   tool: Tool;
-  strokeWidth: number;
-  color: string;
 }
 
-export interface LineInfo {
+export interface FreeformInfo extends StrokeConfig {
   tool: Freeform;
   points: number[];
-  strokeWidth: number;
-  color: string;
 }
 
-export interface ShapeInfo {
+export interface ShapeInfo extends StrokeConfig {
   tool: Shape;
   x: number;
   y: number;
   width: number;
   height: number;
-  strokeWidth: number;
-  color: string;
 }
 
 type CenteredPosition = "center";
@@ -53,3 +54,5 @@ export type PropsWithDefaultPosition<P = unknown> = P & {
 export type PropsWithDispatch<P = unknown> = P & {
   dispatch: (action: DrawingAction) => void;
 };
+
+export type { Point, Size };

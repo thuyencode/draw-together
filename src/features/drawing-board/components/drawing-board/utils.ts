@@ -1,5 +1,4 @@
-import type { Point, Size } from "@zag-js/rect-utils";
-import type { Position } from "./types";
+import type { Point, Position, Size } from "./types";
 
 const GAP = 20;
 

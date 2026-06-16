@@ -1,4 +1,3 @@
-import type { Size } from "@zag-js/rect-utils";
 import type { LucideIcon } from "lucide-solid";
 import {
   ArrowDownLeftIcon,
@@ -19,6 +18,7 @@ import type {
   PropsWithDefaultPosition,
   PropsWithDispatch,
   PropsWithTool,
+  Size,
   Tool,
 } from "./types";
 

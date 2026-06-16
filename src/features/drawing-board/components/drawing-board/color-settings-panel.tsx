@@ -1,4 +1,3 @@
-import type { Size } from "@zag-js/rect-utils";
 import {
   ArrowDownLeftIcon,
   GripVerticalIcon,
@@ -14,6 +13,7 @@ import type {
   PropsWithContainerRef,
   PropsWithDefaultPosition,
   PropsWithDispatch,
+  Size,
 } from "./types";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
