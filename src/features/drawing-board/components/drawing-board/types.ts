@@ -1,3 +1,4 @@
+import type { RgbColor } from "@irojs/iro-core";
 import type { Point, Size } from "@zag-js/rect-utils";
 
 export type Shape = "circle" | "rectangle";
@@ -7,7 +8,7 @@ export type Tool = Freeform | Shape | "straight-line";
 export type DrawingAction =
   | { type: "set_tool"; tool: Tool }
   | { type: "set_stroke_width"; strokeWidth: number }
-  | { type: "set_color"; color: string }
+  | { type: "set_color"; color: RgbColor }
   | { type: "set_is_painting"; isPainting: boolean }
   | { type: "add_freeform_line"; line: FreeformInfo }
   | { type: "append_freeform_point"; point: [number, number] }
@@ -16,7 +17,7 @@ export type DrawingAction =
 
 export interface StrokeConfig {
   strokeWidth: number;
-  color: string;
+  color: RgbColor;
 }
 
 export interface DrawingSettings extends StrokeConfig {

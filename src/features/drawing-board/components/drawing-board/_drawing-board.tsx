@@ -1,3 +1,4 @@
+import { createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { ColorSettingsPanels } from "./color-settings-panel";
 import { DrawingCanvas } from "./drawing-canvas";
@@ -12,13 +13,17 @@ export default function _DrawingBoard() {
     isPainting: false,
     tool: "straight-line",
     strokeWidth: 5,
-    color: "#098bfa",
+    color: { r: 9, g: 139, b: 250 },
   });
 
   const [elements, setElements] = createStore<DrawingElements>({
     freeformLines: [],
     shapes: [],
     straightLines: [],
+  });
+
+  createEffect(() => {
+    console.log(settings.color);
   });
 
   const dispatch = (action: DrawingAction) => {

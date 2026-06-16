@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store";
 import { Circle, Rect, useStage } from "solid-konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
 import type { Drag, Shape, ShapeInfo } from "./types";
-import { normalizeBbox } from "./utils";
+import { normalizeBbox, rgbaToString } from "./utils";
 
 export function ShapeInput(props: DrawingCanvasProps) {
   const [drag, setDrag] = createStore<Drag>({
@@ -48,7 +48,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
               tool: tool as Shape,
               ...bbox,
               strokeWidth: props.settings.strokeWidth,
-              color: props.settings.color,
+              color: { ...props.settings.color },
             },
           });
         }
@@ -93,7 +93,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
       tool: props.settings.tool as Shape,
       ...bbox,
       strokeWidth: props.settings.strokeWidth,
-      color: props.settings.color,
+      color: { ...props.settings.color },
     };
   };
 
@@ -127,7 +127,7 @@ function ShapeNode(props: ShapeNodeProps) {
           y={s().y}
           width={s().width}
           height={s().height}
-          stroke={s().color}
+          stroke={rgbaToString(s().color)}
           strokeWidth={s().strokeWidth}
           dash={getDashSize()}
         />
@@ -137,7 +137,7 @@ function ShapeNode(props: ShapeNodeProps) {
           x={s().x + s().width / 2}
           y={s().y + s().height / 2}
           radius={Math.min(s().width, s().height) / 2}
-          stroke={s().color}
+          stroke={rgbaToString(s().color)}
           strokeWidth={s().strokeWidth}
           dash={getDashSize()}
         />

@@ -1,3 +1,4 @@
+import type { RgbColor } from "@irojs/iro-core";
 import type { Point, Position, Size } from "./types";
 
 const GAP = 20;
@@ -71,3 +72,6 @@ export function normalizeBbox(
     height: Math.abs(b.y - a.y),
   };
 }
+
+export const rgbaToString = ({ r, g, b, a = 1 }: RgbColor) =>
+  a < 1 ? `rgba(${r}, ${g}, ${b}, ${a})` : `rgb(${r}, ${g}, ${b})`;

@@ -4,6 +4,7 @@ import { createStore } from "solid-js/store";
 import { Line, useStage } from "solid-konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
 import type { Drag, StraightLineInfo } from "./types";
+import { rgbaToString } from "./utils";
 
 export function StraightLineInput(props: DrawingCanvasProps) {
   const [drag, setDrag] = createStore<Drag>({
@@ -42,7 +43,7 @@ export function StraightLineInput(props: DrawingCanvasProps) {
             tool: "straight-line",
             points: [a.x, a.y, cur.x, cur.y],
             strokeWidth: props.settings.strokeWidth,
-            color: props.settings.color,
+            color: { ...props.settings.color },
           },
         });
       }
@@ -83,7 +84,7 @@ export function StraightLineInput(props: DrawingCanvasProps) {
     return {
       tool: "straight-line",
       points: [a.x, a.y, cur.x, cur.y],
-      color: props.settings.color,
+      color: { ...props.settings.color },
       strokeWidth: props.settings.strokeWidth,
     };
   };
@@ -109,7 +110,7 @@ function StraightLineNode(props: StraightLineNodeProps) {
   return (
     <Line
       points={props.info.points}
-      stroke={props.info.color}
+      stroke={rgbaToString(props.info.color)}
       strokeWidth={props.info.strokeWidth}
       tension={0}
       lineCap="round"

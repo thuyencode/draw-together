@@ -1,11 +1,12 @@
+import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid";
+import iro from "@jaames/iro";
 import {
   ArrowDownLeftIcon,
   GripVerticalIcon,
   MinusIcon,
   XIcon,
 } from "lucide-solid";
-import { SketchPicker } from "solid-color";
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
@@ -22,19 +23,55 @@ type ColorSettingsPanelsProps = PropsWithContainerRef &
   Pick<DrawingSettings, "color">;
 
 export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
-  const [size, setSize] = createSignal<Size>({ width: 250, height: 380 });
+  const [size, setSize] = createSignal<Size>({ width: 225, height: 350 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
     size,
   );
 
+  let floatingPanelBodyRef!: HTMLDivElement;
   let floatingPanelHeaderRef!: HTMLDivElement;
-  let sketchPickerRef!: HTMLDivElement;
+  let colorPicker: iro.ColorPicker;
 
-  // SketchPicker has horizontal padding of 10px on each side
-  // 2px is total horizontal border width
-  const sketchPickerWidth = () => size().width - 20 - 2;
+  onMount(() => {
+    colorPicker = iro.ColorPicker(floatingPanelBodyRef, {
+      color: props.color,
+      width: size().width - 8 - 1,
+      layout: [
+        { component: iro.ui.Wheel },
+        { component: iro.ui.Slider },
+        {
+          component: iro.ui.Slider,
+          options: { sliderType: "alpha" },
+        },
+      ],
+    });
+
+    const onColorChange = (color: iro.Color) => {
+      props.dispatch({
+        type: "set_color",
+        color: color.rgba,
+      });
+    };
+
+    colorPicker.on(["input:end", "color:change"], onColorChange);
+  });
+
+  const handleSizeChange = (e: FloatingPanelSizeChangeDetails) => {
+    const height =
+      floatingPanelHeaderRef.offsetHeight +
+      (colorPicker.base as HTMLDivElement).offsetHeight +
+      12;
+
+    const width = e.size.width <= 225 ? 225 : e.size.width;
+
+    setSize({ width, height });
+
+    // Total value of horizontal padding of floating panel body is 8px
+    // That 1px is to prevent overflow
+    colorPicker.resize(width - 8 - 1);
+  };
 
   return (
     <FloatingPanel.Root
@@ -43,18 +80,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
       position={position()}
       onPositionChange={(p) => setPosition(p.position)}
       size={size()}
-      onSizeChange={(e) => {
-        const height =
-          floatingPanelHeaderRef.offsetHeight +
-          sketchPickerRef.offsetHeight +
-          5;
-
-        if (e.size.width <= 250) {
-          setSize({ ...e.size, width: 250, height });
-        } else {
-          setSize({ ...e.size, height });
-        }
-      }}
+      onSizeChange={handleSizeChange}
     >
       <FloatingPanel.Positioner>
         <FloatingPanel.Content>
@@ -79,20 +105,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
             </FloatingPanel.Header>
           </FloatingPanel.DragTrigger>
 
-          <FloatingPanel.Body
-            class="p-0"
-            ref={(el) => {
-              sketchPickerRef = el.children.item(0) as HTMLDivElement;
-            }}
-          >
-            <SketchPicker
-              width={sketchPickerWidth()}
-              color={props.color}
-              onChange={(result) => {
-                props.dispatch({ type: "set_color", color: result.hex });
-              }}
-            />
-          </FloatingPanel.Body>
+          <FloatingPanel.Body ref={floatingPanelBodyRef} />
 
           <FloatingPanel.ResizeTrigger axis="e" />
           <FloatingPanel.ResizeTrigger axis="w" />

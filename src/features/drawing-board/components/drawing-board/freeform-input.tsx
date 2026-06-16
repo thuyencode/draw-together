@@ -2,6 +2,7 @@ import type Konva from "konva";
 import { createEffect, For, onCleanup } from "solid-js";
 import { Line, useStage } from "solid-konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
+import { rgbaToString } from "./utils";
 
 export function FreeformInput(props: DrawingCanvasProps) {
   const stage = useStage();
@@ -25,7 +26,7 @@ export function FreeformInput(props: DrawingCanvasProps) {
           tool,
           points: [pos.x, pos.y, pos.x, pos.y],
           strokeWidth: props.settings.strokeWidth,
-          color: props.settings.color,
+          color: { ...props.settings.color },
         },
       });
     };
@@ -65,7 +66,9 @@ export function FreeformInput(props: DrawingCanvasProps) {
       {(line) => (
         <Line
           points={line.points}
-          stroke={line.color}
+          stroke={rgbaToString(
+            line.tool === "eraser" ? { ...line.color, a: 1 } : line.color,
+          )}
           strokeWidth={line.strokeWidth}
           tension={0.5}
           lineCap="round"
