@@ -4,9 +4,9 @@
 // see the documentation: https://zed.dev/docs/configuring-zed#settings-files
 {
   "formatter": "prettier",
-  "language_servers": ["!biome", "!typescript-language-server", "..."],
+  "language_servers": ["!eslint", "!typescript-language-server", "..."],
   "code_actions_on_format": {
-    "source.fixAll.eslint": true,
-    "source.organizeImports": true
-  }
+    "source.fixAll.biome": true,
+    "source.organizeImports.biome": true,
+  },
 }

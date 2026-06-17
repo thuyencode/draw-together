@@ -3,7 +3,7 @@ import {
   type Meta,
   type StoryObj,
 } from "storybook-solidjs-vite";
-import DrawingBoard from "./_drawing-board";
+import { DrawingBoard } from "./";
 
 const decorator = createJSXDecorator((Story) => (
   <div class="h-dvh">

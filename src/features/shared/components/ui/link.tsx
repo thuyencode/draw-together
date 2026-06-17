@@ -1,6 +1,9 @@
-import { A, type AnchorProps } from "@solidjs/router";
+import {
+  Link as BaseLink,
+  type LinkProps as BaseLinkProps,
+} from "@tanstack/solid-router";
 import { cva, type VariantProps } from "class-variance-authority";
-import { splitProps, type ParentProps } from "solid-js";
+import { type ParentProps, splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 
 export const linkStyles = cva(
@@ -26,14 +29,28 @@ export const linkStyles = cva(
 type LinkVariantProps = VariantProps<typeof linkStyles>;
 
 export type LinkProps = ParentProps<
-  LinkVariantProps & Omit<AnchorProps, keyof LinkVariantProps>
->;
+  LinkVariantProps & Omit<BaseLinkProps, keyof LinkVariantProps>
+> & { class?: string };
 
 export function Link(_props: LinkProps) {
   const [props, rest] = splitProps(_props, ["class", "variant", "size"]);
 
   return (
-    <A
+    <BaseLink
+      class={cn(
+        linkStyles({ variant: props.variant, size: props.size }),
+        props.class,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export function _Link(_props: LinkProps) {
+  const [props, rest] = splitProps(_props, ["class", "variant", "size"]);
+
+  return (
+    <a
       class={cn(
         linkStyles({ variant: props.variant, size: props.size }),
         props.class,

@@ -1,9 +1,14 @@
+import { ClientOnly, createFileRoute } from "@tanstack/solid-router";
 import { DrawingBoard } from "~/features/drawing-board/components";
 
-export default function HomePage() {
+export const Route = createFileRoute("/")({ component: HomePage });
+
+function HomePage() {
   return (
     <main class="h-dvh w-full">
-      <DrawingBoard />
+      <ClientOnly>
+        <DrawingBoard />
+      </ClientOnly>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-export default function NotFound() {
+export function NotFound() {
   return (
     <main class="p-4 flex justify-center">
       <img

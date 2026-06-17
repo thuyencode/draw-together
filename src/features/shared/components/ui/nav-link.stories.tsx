@@ -1,23 +1,12 @@
-import { MemoryRouter, Route } from "@solidjs/router";
-import { type VariantProps } from "class-variance-authority";
-import { HomeIcon } from "lucide-solid";
+import type { VariantProps } from "class-variance-authority";
+import { HouseIcon } from "lucide-solid";
 import { For } from "solid-js";
-import {
-  createJSXDecorator,
-  type Meta,
-  type StoryObj,
-} from "storybook-solidjs-vite";
-import { NavLink, type navLinkStyles } from "./nav-link";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
+import { _NavLink, type navLinkStyles } from "./nav-link";
 
-const decorator = createJSXDecorator((Story) => (
-  <MemoryRouter root={Story}>
-    <Route path="/" component={Story} />
-  </MemoryRouter>
-));
-
-const meta: Meta<typeof NavLink> = {
+const meta: Meta<typeof _NavLink> = {
   title: "Navigation/NavLink",
-  component: NavLink,
+  component: _NavLink,
   parameters: {
     layout: "centered",
   },
@@ -37,18 +26,17 @@ const meta: Meta<typeof NavLink> = {
     iconOnly: false,
     size: "md",
   },
-  decorators: [decorator],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof NavLink>;
+type Story = StoryObj<typeof _NavLink>;
 
 export const Default: Story = {
   render: (args) => (
-    <NavLink {...args} href="/">
-      {args.iconOnly ? <HomeIcon /> : "Default"}
-    </NavLink>
+    <_NavLink {...args} href="/">
+      {args.iconOnly ? <HouseIcon /> : "Default"}
+    </_NavLink>
   ),
 };
 
@@ -61,9 +49,9 @@ export const Sizes: Story = {
     <div class="flex flex-wrap items-center gap-4">
       <For each={sizes}>
         {(s) => (
-          <NavLink size={s} href="/">
+          <_NavLink size={s} href="/">
             {s}
-          </NavLink>
+          </_NavLink>
         )}
       </For>
     </div>
@@ -73,13 +61,13 @@ export const Sizes: Story = {
 export const WithIcons: Story = {
   render: () => (
     <div class="flex flex-wrap items-center gap-4">
-      <NavLink href="/">
-        <HomeIcon />
+      <_NavLink href="/">
+        <HouseIcon />
         Dashboard
-      </NavLink>
-      <NavLink href="/" iconOnly>
-        <HomeIcon />
-      </NavLink>
+      </_NavLink>
+      <_NavLink href="/" iconOnly>
+        <HouseIcon />
+      </_NavLink>
     </div>
   ),
 };
@@ -87,8 +75,10 @@ export const WithIcons: Story = {
 export const Active: Story = {
   render: () => (
     <div class="flex flex-wrap items-center gap-4">
-      <NavLink href="/">Active (current page)</NavLink>
-      <NavLink href="/not-found">Inactive</NavLink>
+      <_NavLink data-status="active" href="/">
+        Active (current page)
+      </_NavLink>
+      <_NavLink href="/not-found">Inactive</_NavLink>
     </div>
   ),
 };

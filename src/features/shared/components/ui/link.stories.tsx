@@ -1,22 +1,11 @@
-import { MemoryRouter, Route } from "@solidjs/router";
 import { LinkIcon } from "lucide-solid";
 import { For } from "solid-js";
-import {
-  createJSXDecorator,
-  type Meta,
-  type StoryObj,
-} from "storybook-solidjs-vite";
-import { Link, type LinkProps } from "./link";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
+import { _Link, type LinkProps } from "./link";
 
-const decorator = createJSXDecorator((Story) => (
-  <MemoryRouter root={Story}>
-    <Route path="/" component={Story} />
-  </MemoryRouter>
-));
-
-const meta: Meta<typeof Link> = {
+const meta: Meta<typeof _Link> = {
   title: "Navigation/Link",
-  component: Link,
+  component: _Link,
   parameters: {
     layout: "centered",
   },
@@ -36,12 +25,11 @@ const meta: Meta<typeof Link> = {
     size: "sm",
     href: "#",
   },
-  decorators: [decorator],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Link>;
+type Story = StoryObj<typeof _Link>;
 
 export const Default: Story = {
   args: {
@@ -58,10 +46,10 @@ export const Variants: Story = {
     <div class="flex flex-wrap items-center gap-4">
       <For each={variants}>
         {(v) => (
-          <Link variant={v} href="#">
+          <_Link variant={v} href="#">
             {v}
             <LinkIcon />
-          </Link>
+          </_Link>
         )}
       </For>
     </div>
@@ -75,10 +63,10 @@ export const Sizes: Story = {
     <div class="flex flex-wrap items-center gap-4">
       <For each={sizes}>
         {(s) => (
-          <Link size={s} href="#">
+          <_Link size={s} href="#">
             {s}
             <LinkIcon />
-          </Link>
+          </_Link>
         )}
       </For>
     </div>

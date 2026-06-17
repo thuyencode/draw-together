@@ -1,4 +1,4 @@
-import { CheckIcon } from "lucide-solid";
+import { CheckIcon, CopyIcon, DeleteIcon, PenIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Button } from "./button";
@@ -43,54 +43,15 @@ export const WithIcons: Story = {
       <Menu.Positioner>
         <Menu.Content>
           <Menu.Item value="edit">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-            </svg>
+            <PenIcon />
             Edit
           </Menu.Item>
           <Menu.Item value="duplicate">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-            </svg>
+            <CopyIcon />
             Duplicate
           </Menu.Item>
           <Menu.Item value="delete" data-variant="destructive">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M3 6h18" />
-              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-            </svg>
+            <DeleteIcon />
             Delete
           </Menu.Item>
         </Menu.Content>
@@ -253,7 +214,7 @@ export const DisabledItems: Story = {
 export const ContextMenu: Story = {
   render: () => (
     <Menu.Root>
-      <Menu.ContextTrigger class="flex h-40 w-80 items-center justify-center rounded-lg border-2 border-dashed border-border-color-base-100 bg-background-soft-50 text-text-100 text-sm select-none">
+      <Menu.ContextTrigger class="border-border-color-base-100 bg-background-soft-50 text-text-100 flex h-40 w-80 items-center justify-center rounded-lg border-2 border-dashed text-sm select-none">
         Right-click here
       </Menu.ContextTrigger>
       <Menu.Positioner>

@@ -17,4 +17,5 @@
       "solid-konva": ["./solid-konva/lib/index.ts"],
     },
   },
+  "include": [".storybook/**/*", "vite.config.ts", "src/**/*"],
 }

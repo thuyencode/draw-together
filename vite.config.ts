@@ -1,9 +1,11 @@
-import { solidStart } from "@solidjs/start/config";
-import { nitroV2Plugin as nitro } from "@solidjs/vite-plugin-nitro-2";
-import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import tailwindcss from "@tailwindcss/vite";
+import { devtools } from "@tanstack/devtools-vite";
+import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
+import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
+import solid from "vite-plugin-solid";
 
 const dirname =
   typeof __dirname !== "undefined"
@@ -12,34 +14,13 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [solidStart({ ssr: true }), tailwindcss(), nitro()],
-  // test: {
-  //   projects: [
-  //     {
-  //       extends: true,
-  //       plugins: [
-  //         // The plugin will run tests for the stories defined in your Storybook config
-  //         // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-  //         storybookTest({
-  //           configDir: path.join(dirname, ".storybook"),
-  //         }),
-  //       ],
-  //       test: {
-  //         name: "storybook",
-  //         browser: {
-  //           enabled: true,
-  //           headless: true,
-  //           provider: playwright({}),
-  //           instances: [
-  //             {
-  //               browser: "chromium",
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     },
-  //   ],
-  // },
+  plugins: [
+    devtools(),
+    nitro(),
+    tailwindcss(),
+    tanstackStart(),
+    solid({ ssr: true }),
+  ],
   resolve: {
     alias: {
       "~": path.resolve(dirname, "./src"),

@@ -1,11 +1,13 @@
-import type { AnchorProps } from "@solidjs/router";
-import { A } from "@solidjs/router";
+import {
+  Link as BaseLink,
+  type LinkProps as BaseLinkProps,
+} from "@tanstack/solid-router";
 import { cva, type VariantProps } from "class-variance-authority";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 
 export const navLinkStyles = cva(
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors no-underline outline-none text-foreground-soft-500 hover:bg-background-soft-100 hover:text-foreground-soft-200 aria-[current=page]:bg-primary-500/10 aria-[current=page]:text-primary-600",
+  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors no-underline outline-none text-foreground-soft-500 hover:bg-background-soft-100 hover:text-foreground-soft-200 data-[status=active]:bg-primary-500/10 data-[status=active]:text-primary-600",
   {
     variants: {
       size: {
@@ -69,13 +71,28 @@ export const navLinkStyles = cva(
 
 type NavLinkStyleProps = VariantProps<typeof navLinkStyles>;
 type NavLinkProps = NavLinkStyleProps &
-  Omit<AnchorProps, keyof NavLinkStyleProps>;
+  Omit<BaseLinkProps, keyof NavLinkStyleProps> & { class?: string };
 
 export function NavLink(_props: NavLinkProps) {
   const [props, rest] = splitProps(_props, ["class", "size", "iconOnly"]);
 
   return (
-    <A
+    <BaseLink
+      class={cn(
+        navLinkStyles({ size: props.size, iconOnly: props.iconOnly }),
+        props.class,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export function _NavLink(_props: NavLinkProps) {
+  const [props, rest] = splitProps(_props, ["class", "size", "iconOnly"]);
+
+  return (
+    // @ts-expect-error
+    <a
       class={cn(
         navLinkStyles({ size: props.size, iconOnly: props.iconOnly }),
         props.class,

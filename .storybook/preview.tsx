@@ -1,5 +1,7 @@
 import type { Preview } from "storybook-solidjs-vite";
-import "~/app.css";
+import "../src/app.css";
+
+// export const decorators: Decorator[] = [withRouter];
 
 const preview: Preview = {
   parameters: {
