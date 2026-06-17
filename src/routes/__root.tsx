@@ -1,10 +1,11 @@
+/// <reference types="vite/client" />\
 import {
   createRootRouteWithContext,
+  ErrorComponent,
   HeadContent,
   Outlet,
   Scripts,
 } from "@tanstack/solid-router";
-import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
 import { Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import { Header, NotFound } from "~/features/shared/components";
@@ -31,6 +32,7 @@ export const Route = createRootRouteWithContext()({
   }),
   shellComponent: RootComponent,
   notFoundComponent: NotFound,
+  errorComponent: ErrorComponent,
 });
 
 function RootComponent() {
@@ -44,7 +46,6 @@ function RootComponent() {
         <Header />
         <Suspense>
           <Outlet />
-          <TanStackRouterDevtools />
         </Suspense>
         <Scripts />
       </body>

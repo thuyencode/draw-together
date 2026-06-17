@@ -1,4 +1,4 @@
-import { createEffect } from "solid-js";
+import { ClientOnly } from "@tanstack/solid-router";
 import { createStore } from "solid-js/store";
 import { ColorSettingsPanels } from "./color-settings-panel";
 import { DrawingCanvas } from "./drawing-canvas";
@@ -6,7 +6,7 @@ import { ToolSettingsPanels } from "./tool-settings-panel";
 import { ToolsPanel } from "./tools-panel";
 import type { DrawingAction, DrawingElements, DrawingSettings } from "./types";
 
-export function DrawingBoard() {
+export default function DrawingBoard() {
   let containerRef!: HTMLDivElement;
 
   const [settings, setSettings] = createStore<DrawingSettings>({
@@ -20,10 +20,6 @@ export function DrawingBoard() {
     freeformLines: [],
     shapes: [],
     straightLines: [],
-  });
-
-  createEffect(() => {
-    console.log(settings.color);
   });
 
   const dispatch = (action: DrawingAction) => {
@@ -92,11 +88,13 @@ export function DrawingBoard() {
         color={settings.color}
       />
 
-      <DrawingCanvas
-        settings={settings}
-        elements={elements}
-        dispatch={dispatch}
-      />
+      <ClientOnly>
+        <DrawingCanvas
+          settings={settings}
+          elements={elements}
+          dispatch={dispatch}
+        />
+      </ClientOnly>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { onMount } from "solid-js";
 import { Layer, Stage } from "solid-konva";
 import { FreeformInput } from "./freeform-input";
 import { ShapeInput } from "./shape-input";
@@ -14,6 +15,10 @@ export interface DrawingCanvasProps extends PropsWithDispatch {
 }
 
 export function DrawingCanvas(props: DrawingCanvasProps) {
+  onMount(() => {
+    console.log("Loaded!");
+  });
+
   return (
     <Stage class="h-full">
       <Layer>

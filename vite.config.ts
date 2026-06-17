@@ -16,7 +16,7 @@ const dirname =
 export default defineConfig({
   plugins: [
     devtools(),
-    nitro(),
+    nitro({ preset: "bun" }),
     tailwindcss(),
     tanstackStart(),
     solid({ ssr: true }),
