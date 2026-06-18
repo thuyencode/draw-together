@@ -1,22 +1,24 @@
-import type Konva from "konva";
-import { createEffect, For, Match, onCleanup, Show, Switch } from "solid-js";
+import { For, Match, Show, Switch, createEffect, onCleanup } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Circle, Rect, useStage } from "solid-konva";
-import type { DrawingCanvasProps } from "./drawing-canvas";
-import type { Drag, Shape, ShapeInfo } from "./types";
+import { KonvaCircle, KonvaRect } from "./shapes";
 import { normalizeBbox, rgbaToString } from "./utils";
+import type Konva from "konva";
+import type { DrawingCanvasProps } from "./drawing-canvas";
+import type { Drag, PropsWithLayer, Shape, ShapeInfo } from "./types";
 
-export function ShapeInput(props: DrawingCanvasProps) {
+type ShapeInputProps = DrawingCanvasProps & PropsWithLayer;
+
+export function ShapeInput(props: ShapeInputProps) {
   const [drag, setDrag] = createStore<Drag>({
     anchor: null,
     livePointer: null,
   });
 
-  const stage = useStage();
-
   createEffect(() => {
-    const currentStage = stage?.stage();
-    if (!currentStage) return;
+    const currentLayer = props.layer;
+    if (!currentLayer) return;
+
+    const stage = currentLayer.getStage();
 
     const tool = props.settings.tool;
     const isShapeTool = tool === "circle" || tool === "rectangle";
@@ -25,7 +27,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
     const onMouseDown = () => {
       props.dispatch({ type: "set_is_painting", isPainting: true });
 
-      const pos = currentStage.getPointerPosition();
+      const pos = stage.getPointerPosition();
       if (!pos) return;
 
       setDrag({
@@ -45,7 +47,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
           props.dispatch({
             type: "add_shape",
             shape: {
-              tool: tool as Shape,
+              tool: tool,
               ...bbox,
               strokeWidth: props.settings.strokeWidth,
               color: { ...props.settings.color },
@@ -59,7 +61,7 @@ export function ShapeInput(props: DrawingCanvasProps) {
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-      const pos = currentStage.getPointerPosition();
+      const pos = stage.getPointerPosition();
       if (!pos) return;
 
       setDrag("livePointer", { x: pos.x, y: pos.y });
@@ -68,13 +70,13 @@ export function ShapeInput(props: DrawingCanvasProps) {
       e.evt.preventDefault();
     };
 
-    currentStage
+    stage
       .on("mousedown touchstart", onMouseDown)
       .on("mousemove touchmove", onMouseMove)
       .on("mouseup touchend", onMouseUp);
 
     onCleanup(() => {
-      currentStage
+      stage
         .off("mousedown touchstart", onMouseDown)
         .off("mousemove touchmove", onMouseMove)
         .off("mouseup touchend", onMouseUp);
@@ -99,49 +101,62 @@ export function ShapeInput(props: DrawingCanvasProps) {
 
   return (
     <>
-      <For each={props.elements.shapes}>{(s) => <ShapeNode info={s} />}</For>
-      <Show when={preview()}>{(p) => <ShapeNode info={p()} isPreview />}</Show>
+      <For each={props.elements.shapes}>
+        {(s) => (
+          <Switch>
+            <Match when={s.tool === "rectangle"}>
+              <KonvaRect
+                layer={props.layer}
+                x={s.x}
+                y={s.y}
+                width={s.width}
+                height={s.height}
+                stroke={rgbaToString(s.color)}
+                strokeWidth={s.strokeWidth}
+              />
+            </Match>
+            <Match when={s.tool === "circle"}>
+              <KonvaCircle
+                layer={props.layer}
+                x={s.x + s.width / 2}
+                y={s.y + s.height / 2}
+                radius={Math.min(s.width, s.height) / 2}
+                stroke={rgbaToString(s.color)}
+                strokeWidth={s.strokeWidth}
+              />
+            </Match>
+          </Switch>
+        )}
+      </For>
+      <Show when={preview()}>
+        {(p) => (
+          <Switch>
+            <Match when={p().tool === "rectangle"}>
+              <KonvaRect
+                layer={props.layer}
+                x={p().x}
+                y={p().y}
+                width={p().width}
+                height={p().height}
+                stroke={rgbaToString(p().color)}
+                strokeWidth={p().strokeWidth}
+                dash={[p().strokeWidth * 2, p().strokeWidth * 4]}
+              />
+            </Match>
+            <Match when={p().tool === "circle"}>
+              <KonvaCircle
+                layer={props.layer}
+                x={p().x + p().width / 2}
+                y={p().y + p().height / 2}
+                radius={Math.min(p().width, p().height) / 2}
+                stroke={rgbaToString(p().color)}
+                strokeWidth={p().strokeWidth}
+                dash={[p().strokeWidth * 2, p().strokeWidth * 4]}
+              />
+            </Match>
+          </Switch>
+        )}
+      </Show>
     </>
-  );
-}
-
-interface ShapeNodeProps {
-  info: ShapeInfo;
-  isPreview?: boolean;
-}
-
-function ShapeNode(props: ShapeNodeProps) {
-  const s = () => props.info;
-
-  const getDashSize = () => {
-    return props.isPreview
-      ? [s().strokeWidth * 2, s().strokeWidth * 4]
-      : undefined;
-  };
-
-  return (
-    <Switch>
-      <Match when={s().tool === "rectangle"}>
-        <Rect
-          x={s().x}
-          y={s().y}
-          width={s().width}
-          height={s().height}
-          stroke={rgbaToString(s().color)}
-          strokeWidth={s().strokeWidth}
-          dash={getDashSize()}
-        />
-      </Match>
-      <Match when={s().tool === "circle"}>
-        <Circle
-          x={s().x + s().width / 2}
-          y={s().y + s().height / 2}
-          radius={Math.min(s().width, s().height) / 2}
-          stroke={rgbaToString(s().color)}
-          strokeWidth={s().strokeWidth}
-          dash={getDashSize()}
-        />
-      </Match>
-    </Switch>
   );
 }

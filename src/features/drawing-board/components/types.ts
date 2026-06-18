@@ -1,5 +1,6 @@
 import type { RgbColor } from "@irojs/iro-core";
 import type { Point, Size } from "@zag-js/rect-utils";
+import type Konva from "konva";
 
 export type Shape = "circle" | "rectangle";
 export type Freeform = "brush" | "eraser";
@@ -70,6 +71,10 @@ export type PropsWithContainerRef<P = unknown> = P & {
 
 export type PropsWithDefaultPosition<P = unknown> = P & {
   defaultPosition: Position;
+};
+
+export type PropsWithLayer<P = unknown> = P & {
+  layer: Konva.Layer | undefined;
 };
 
 export type PropsWithDispatch<P = unknown> = P & {

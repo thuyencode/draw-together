@@ -1,15 +1,17 @@
-import type { LucideIcon } from "lucide-solid";
 import { CircleIcon, ShapesIcon, SquareIcon } from "lucide-solid";
 import { Index, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { Menu } from "~/features/shared/components/ui";
 import { ToolButton } from "./tool-button";
+import type { LucideIcon } from "lucide-solid";
 import type { PropsWithDispatch, PropsWithTool, Shape } from "./types";
+import { Menu } from "~/features/shared/components/ui";
 
 const shapeIconMap: Record<Shape, LucideIcon> = {
   circle: CircleIcon,
   rectangle: SquareIcon,
 };
+
+const shapes = Object.keys(shapeIconMap) as Shape[];
 
 type ShapeToolsMenuProps = PropsWithDispatch &
   PropsWithTool & {
@@ -18,7 +20,6 @@ type ShapeToolsMenuProps = PropsWithDispatch &
 
 export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
   const selected = () => Object.hasOwn(shapeIconMap, props.tool);
-  const shapes = Object.keys(shapeIconMap) as Shape[];
 
   return (
     <Menu.Root

@@ -1,15 +1,18 @@
-import type Konva from "konva";
-import { createEffect, For, onCleanup } from "solid-js";
-import { Line, useStage } from "solid-konva";
-import type { DrawingCanvasProps } from "./drawing-canvas";
+import { For, createEffect, onCleanup } from "solid-js";
+import { KonvaLine } from "./shapes";
 import { rgbaToString } from "./utils";
+import type Konva from "konva";
+import type { DrawingCanvasProps } from "./drawing-canvas";
+import type { PropsWithLayer } from "./types";
 
-export function FreeformInput(props: DrawingCanvasProps) {
-  const stage = useStage();
+type FreeformInputProps = DrawingCanvasProps & PropsWithLayer;
 
+export function FreeformInput(props: FreeformInputProps) {
   createEffect(() => {
-    const currentStage = stage?.stage();
-    if (!currentStage) return;
+    const currentLayer = props.layer;
+    if (!currentLayer) return;
+
+    const stage = currentLayer.getStage();
 
     const tool = props.settings.tool;
     if (tool !== "brush" && tool !== "eraser") return;
@@ -17,7 +20,7 @@ export function FreeformInput(props: DrawingCanvasProps) {
     const onMouseDown = () => {
       props.dispatch({ type: "set_is_painting", isPainting: true });
 
-      const pos = currentStage.getPointerPosition();
+      const pos = stage.getPointerPosition();
       if (!pos) return;
 
       props.dispatch({
@@ -39,7 +42,7 @@ export function FreeformInput(props: DrawingCanvasProps) {
       if (!props.settings.isPainting) return;
       e.evt.preventDefault();
 
-      const pos = currentStage.getPointerPosition();
+      const pos = stage.getPointerPosition();
       if (!pos) return;
 
       props.dispatch({
@@ -48,13 +51,13 @@ export function FreeformInput(props: DrawingCanvasProps) {
       });
     };
 
-    currentStage
+    stage
       .on("mousedown touchstart", onMouseDown)
       .on("mousemove touchmove", onMouseMove)
       .on("mouseup touchend", onMouseUp);
 
     onCleanup(() => {
-      currentStage
+      stage
         .off("mousedown touchstart", onMouseDown)
         .off("mousemove touchmove", onMouseMove)
         .off("mouseup touchend", onMouseUp);
@@ -64,7 +67,8 @@ export function FreeformInput(props: DrawingCanvasProps) {
   return (
     <For each={props.elements.freeformLines}>
       {(line) => (
-        <Line
+        <KonvaLine
+          layer={props.layer}
           points={line.points}
           stroke={rgbaToString(
             line.tool === "eraser" ? { ...line.color, a: 1 } : line.color,

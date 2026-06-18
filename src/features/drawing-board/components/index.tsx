@@ -1,10 +1,12 @@
-import { ClientOnly } from "@tanstack/solid-router";
+import { ErrorBoundary, Suspense, lazy, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+import { ClientOnly } from "@tanstack/solid-router";
 import { ColorSettingsPanels } from "./color-settings-panel";
-import { DrawingCanvas } from "./drawing-canvas";
 import { ToolSettingsPanels } from "./tool-settings-panel";
 import { ToolsPanel } from "./tools-panel";
 import type { DrawingAction, DrawingElements, DrawingSettings } from "./types";
+
+const DrawingCanvas = lazy(() => import("./drawing-canvas"));
 
 export default function DrawingBoard() {
   let containerRef!: HTMLDivElement;
@@ -89,12 +91,25 @@ export default function DrawingBoard() {
       />
 
       <ClientOnly>
-        <DrawingCanvas
-          settings={settings}
-          elements={elements}
-          dispatch={dispatch}
-        />
+        <ErrorBoundary fallback={(error) => <LogError error={error} />}>
+          <Suspense fallback={"Loading canvas..."}>
+            <DrawingCanvas
+              settings={settings}
+              elements={elements}
+              dispatch={dispatch}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </ClientOnly>
     </div>
   );
+}
+
+function LogError(props: { error: unknown }) {
+  onMount(() => {
+    console.log("ErrorBoundary");
+    console.error(props.error);
+  });
+
+  return null;
 }

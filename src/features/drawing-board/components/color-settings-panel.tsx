@@ -1,4 +1,3 @@
-import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid";
 import iro from "@jaames/iro";
 import {
   ArrowDownLeftIcon,
@@ -7,8 +6,8 @@ import {
   XIcon,
 } from "lucide-solid";
 import { createSignal, onMount } from "solid-js";
-import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
+import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid";
 import type {
   DrawingSettings,
   PropsWithContainerRef,
@@ -16,6 +15,7 @@ import type {
   PropsWithDispatch,
   Size,
 } from "./types";
+import { FloatingPanel } from "~/features/shared/components/ui";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &

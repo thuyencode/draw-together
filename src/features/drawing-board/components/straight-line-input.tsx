@@ -1,21 +1,24 @@
-import type Konva from "konva";
-import { createEffect, For, onCleanup, Show } from "solid-js";
+import { For, Show, createEffect, onCleanup } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Line, useStage } from "solid-konva";
-import type { DrawingCanvasProps } from "./drawing-canvas";
-import type { Drag, StraightLineInfo } from "./types";
+import { KonvaLine } from "./shapes";
 import { rgbaToString } from "./utils";
+import type Konva from "konva";
+import type { DrawingCanvasProps } from "./drawing-canvas";
+import type { Drag, PropsWithLayer, StraightLineInfo } from "./types";
 
-export function StraightLineInput(props: DrawingCanvasProps) {
+type StraightLineInputProps = DrawingCanvasProps & PropsWithLayer;
+
+export function StraightLineInput(props: StraightLineInputProps) {
   const [drag, setDrag] = createStore<Drag>({
     anchor: null,
     livePointer: null,
   });
-  const stage = useStage();
 
   createEffect(() => {
-    const currentStage = stage?.stage();
-    if (!currentStage) return;
+    const currentLayer = props.layer;
+    if (!currentLayer) return;
+
+    const stage = currentLayer.getStage();
 
     const tool = props.settings.tool;
     if (tool !== "straight-line") return;
@@ -23,7 +26,7 @@ export function StraightLineInput(props: DrawingCanvasProps) {
     const onMouseDown = () => {
       props.dispatch({ type: "set_is_painting", isPainting: true });
 
-      const pos = currentStage.getPointerPosition();
+      const pos = stage.getPointerPosition();
       if (!pos) return;
 
       setDrag({
@@ -53,7 +56,7 @@ export function StraightLineInput(props: DrawingCanvasProps) {
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-      const pos = currentStage.getPointerPosition();
+      const pos = stage.getPointerPosition();
       if (!pos) return;
 
       setDrag("livePointer", { x: pos.x, y: pos.y });
@@ -62,13 +65,13 @@ export function StraightLineInput(props: DrawingCanvasProps) {
       e.evt.preventDefault();
     };
 
-    currentStage
+    stage
       .on("mousedown touchstart", onMouseDown)
       .on("mousemove touchmove", onMouseMove)
       .on("mouseup touchend", onMouseUp);
 
     onCleanup(() => {
-      currentStage
+      stage
         .off("mousedown touchstart", onMouseDown)
         .off("mousemove touchmove", onMouseMove)
         .off("mouseup touchend", onMouseUp);
@@ -78,7 +81,6 @@ export function StraightLineInput(props: DrawingCanvasProps) {
   const preview = (): StraightLineInfo | null => {
     const a = drag.anchor;
     const cur = drag.livePointer;
-
     if (!a || !cur) return null;
 
     return {
@@ -92,34 +94,32 @@ export function StraightLineInput(props: DrawingCanvasProps) {
   return (
     <>
       <For each={props.elements.straightLines}>
-        {(line) => <StraightLineNode info={line} />}
+        {(line) => (
+          <KonvaLine
+            layer={props.layer}
+            points={line.points}
+            stroke={rgbaToString(line.color)}
+            strokeWidth={line.strokeWidth}
+            tension={0}
+            lineCap="round"
+            lineJoin="round"
+          />
+        )}
       </For>
       <Show when={preview()}>
-        {(p) => <StraightLineNode info={p()} isPreview />}
+        {(p) => (
+          <KonvaLine
+            layer={props.layer}
+            points={p().points}
+            stroke={rgbaToString(p().color)}
+            strokeWidth={p().strokeWidth}
+            tension={0}
+            lineCap="round"
+            lineJoin="round"
+            dash={[p().strokeWidth * 2, p().strokeWidth * 4]}
+          />
+        )}
       </Show>
     </>
-  );
-}
-
-interface StraightLineNodeProps {
-  info: StraightLineInfo;
-  isPreview?: boolean;
-}
-
-function StraightLineNode(props: StraightLineNodeProps) {
-  return (
-    <Line
-      points={props.info.points}
-      stroke={rgbaToString(props.info.color)}
-      strokeWidth={props.info.strokeWidth}
-      tension={0}
-      lineCap="round"
-      lineJoin="round"
-      dash={
-        props.isPreview
-          ? [props.info.strokeWidth * 2, props.info.strokeWidth * 4]
-          : undefined
-      }
-    />
   );
 }

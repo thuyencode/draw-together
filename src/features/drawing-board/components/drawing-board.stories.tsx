@@ -1,9 +1,6 @@
-import {
-  createJSXDecorator,
-  type Meta,
-  type StoryObj,
-} from "storybook-solidjs-vite";
-import { DrawingBoard } from "./";
+import { createJSXDecorator } from "storybook-solidjs-vite";
+import DrawingBoard from ".";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const decorator = createJSXDecorator((Story) => (
   <div class="h-dvh">

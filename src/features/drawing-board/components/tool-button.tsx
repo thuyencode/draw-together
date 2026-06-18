@@ -1,8 +1,8 @@
-import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-import type { ComponentProps, ValidComponent } from "solid-js";
 import { splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import type { ComponentProps, ValidComponent } from "solid-js";
+import type { VariantProps } from "class-variance-authority";
 import { cn } from "~/features/shared/utils/cn";
 
 export const toolButtonStyles = cva(

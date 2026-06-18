@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-solid";
 import {
   ArrowDownLeftIcon,
   BrushIcon,
@@ -8,12 +7,12 @@ import {
   SlashIcon,
   XIcon,
 } from "lucide-solid";
-import { createSignal, Index } from "solid-js";
+import { Index, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import { ShapeToolsMenu } from "./shape-tools-menu";
 import { ToolButton } from "./tool-button";
+import type { LucideIcon } from "lucide-solid";
 import type {
   PropsWithContainerRef,
   PropsWithDefaultPosition,
@@ -22,6 +21,7 @@ import type {
   Size,
   Tool,
 } from "./types";
+import { FloatingPanel } from "~/features/shared/components/ui";
 
 interface ToolItem {
   tool: Tool;
@@ -88,7 +88,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
             </FloatingPanel.Header>
           </FloatingPanel.DragTrigger>
 
-          <FloatingPanel.Body class="flex-row flex-wrap flex-none">
+          <FloatingPanel.Body class="flex-none flex-row flex-wrap">
             <Index each={tools}>
               {(t) => (
                 <ToolButton

@@ -5,7 +5,6 @@ import {
   XIcon,
 } from "lucide-solid";
 import { createSignal } from "solid-js";
-import { Field, FloatingPanel } from "~/features/shared/components/ui";
 import { createPosition } from "./hooks";
 import type {
   DrawingSettings,
@@ -15,6 +14,7 @@ import type {
   PropsWithTool,
   Size,
 } from "./types";
+import { Field, FloatingPanel } from "~/features/shared/components/ui";
 
 type ToolSettingsPanelsProps = PropsWithTool &
   PropsWithContainerRef &
@@ -73,7 +73,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
             <Field.Root>
               <Field.Label>Stroke size</Field.Label>
               <Field.Input
-                class="py-1 rounded"
+                class="rounded py-1"
                 type="number"
                 min="1"
                 step="1"

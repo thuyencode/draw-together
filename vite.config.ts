@@ -24,7 +24,17 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(dirname, "./src"),
-      "solid-konva": path.resolve(dirname, "./solid-konva/lib/index.ts"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes("node_modules/konva")) {
+            return "konva";
+          }
+        },
+      },
     },
   },
 });
