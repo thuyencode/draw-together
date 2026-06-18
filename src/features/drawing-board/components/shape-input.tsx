@@ -4,7 +4,8 @@ import { KonvaCircle, KonvaRect } from "./shapes";
 import { normalizeBbox, rgbaToString } from "./utils";
 import type Konva from "konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
-import type { Drag, PropsWithLayer, Shape, ShapeInfo } from "./types";
+import type { Drag, Point, PropsWithLayer, Shape, ShapeInfo } from "./types";
+import type Konva from "konva";
 
 type ShapeInputProps = DrawingCanvasProps & PropsWithLayer;
 
@@ -43,16 +44,38 @@ export function ShapeInput(props: ShapeInputProps) {
       if (a && cur) {
         const bbox = normalizeBbox(a, cur);
 
-        if (bbox.width > 1 || bbox.height > 1) {
-          props.dispatch({
-            type: "add_shape",
-            shape: {
-              tool: tool,
-              ...bbox,
-              strokeWidth: props.settings.strokeWidth,
-              color: { ...props.settings.color },
-            },
-          });
+        if (tool === "circle") {
+          const cx = bbox.x + bbox.width / 2;
+          const cy = bbox.y + bbox.height / 2;
+          const dx = cur.x - cx;
+          const dy = cur.y - cy;
+          const radius = Math.sqrt(dx * dx + dy * dy);
+          if (radius > 1) {
+            props.dispatch({
+              type: "add_shape",
+              shape: {
+                tool: tool,
+                x: cx,
+                y: cy,
+                width: radius * 2,
+                height: radius * 2,
+                strokeWidth: props.settings.strokeWidth,
+                color: { ...props.settings.color },
+              },
+            });
+          }
+        } else {
+          if (bbox.width > 1 || bbox.height > 1) {
+            props.dispatch({
+              type: "add_shape",
+              shape: {
+                tool: tool,
+                ...bbox,
+                strokeWidth: props.settings.strokeWidth,
+                color: { ...props.settings.color },
+              },
+            });
+          }
         }
       }
 
@@ -88,11 +111,31 @@ export function ShapeInput(props: ShapeInputProps) {
     const cur = drag.livePointer;
     if (!a || !cur) return null;
 
+    const tool = props.settings.tool;
     const bbox = normalizeBbox(a, cur);
+
+    if (tool === "circle") {
+      const cx = bbox.x + bbox.width / 2;
+      const cy = bbox.y + bbox.height / 2;
+      const dx = cur.x - cx;
+      const dy = cur.y - cy;
+      const radius = Math.sqrt(dx * dx + dy * dy);
+      if (radius < 1) return null;
+      return {
+        tool: "circle",
+        x: cx,
+        y: cy,
+        width: radius * 2,
+        height: radius * 2,
+        strokeWidth: props.settings.strokeWidth,
+        color: { ...props.settings.color },
+      };
+    }
+
     if (bbox.width < 1 && bbox.height < 1) return null;
 
     return {
-      tool: props.settings.tool as Shape,
+      tool: tool as Shape,
       ...bbox,
       strokeWidth: props.settings.strokeWidth,
       color: { ...props.settings.color },
@@ -102,61 +145,58 @@ export function ShapeInput(props: ShapeInputProps) {
   return (
     <>
       <For each={props.elements.shapes}>
-        {(s) => (
-          <Switch>
-            <Match when={s.tool === "rectangle"}>
-              <KonvaRect
-                layer={props.layer}
-                x={s.x}
-                y={s.y}
-                width={s.width}
-                height={s.height}
-                stroke={rgbaToString(s.color)}
-                strokeWidth={s.strokeWidth}
-              />
-            </Match>
-            <Match when={s.tool === "circle"}>
-              <KonvaCircle
-                layer={props.layer}
-                x={s.x + s.width / 2}
-                y={s.y + s.height / 2}
-                radius={Math.min(s.width, s.height) / 2}
-                stroke={rgbaToString(s.color)}
-                strokeWidth={s.strokeWidth}
-              />
-            </Match>
-          </Switch>
-        )}
+        {(s) => <ShapeRenderer info={s} layer={props.layer} />}
       </For>
       <Show when={preview()}>
         {(p) => (
-          <Switch>
-            <Match when={p().tool === "rectangle"}>
-              <KonvaRect
-                layer={props.layer}
-                x={p().x}
-                y={p().y}
-                width={p().width}
-                height={p().height}
-                stroke={rgbaToString(p().color)}
-                strokeWidth={p().strokeWidth}
-                dash={[p().strokeWidth * 2, p().strokeWidth * 4]}
-              />
-            </Match>
-            <Match when={p().tool === "circle"}>
-              <KonvaCircle
-                layer={props.layer}
-                x={p().x + p().width / 2}
-                y={p().y + p().height / 2}
-                radius={Math.min(p().width, p().height) / 2}
-                stroke={rgbaToString(p().color)}
-                strokeWidth={p().strokeWidth}
-                dash={[p().strokeWidth * 2, p().strokeWidth * 4]}
-              />
-            </Match>
-          </Switch>
+          <ShapeRenderer
+            info={p()}
+            layer={props.layer}
+            isPreview
+            anchor={drag.anchor ?? undefined}
+          />
         )}
       </Show>
     </>
+  );
+}
+
+type ShapeRendererProps = PropsWithLayer<{
+  isPreview?: boolean;
+  info: ShapeInfo;
+  anchor?: Point;
+}>;
+
+function ShapeRenderer(props: ShapeRendererProps) {
+  const s = () => props.info;
+  const dash = () =>
+    props.isPreview ? [s().strokeWidth * 2, s().strokeWidth * 4] : undefined;
+
+  return (
+    <Switch>
+      <Match when={s().tool === "rectangle"}>
+        <KonvaRect
+          layer={props.layer}
+          x={s().x}
+          y={s().y}
+          width={s().width}
+          height={s().height}
+          stroke={rgbaToString(s().color)}
+          strokeWidth={s().strokeWidth}
+          dash={dash()}
+        />
+      </Match>
+      <Match when={s().tool === "circle"}>
+        <KonvaCircle
+          layer={props.layer}
+          x={s().x}
+          y={s().y}
+          radius={s().width / 2}
+          stroke={rgbaToString(s().color)}
+          strokeWidth={s().strokeWidth}
+          dash={dash()}
+        />
+      </Match>
+    </Switch>
   );
 }
