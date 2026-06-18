@@ -1,6 +1,6 @@
 import { For } from "solid-js";
-import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Slider } from "./slider";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const meta: Meta<typeof Slider.Root> = {
   title: "Forms/Slider",

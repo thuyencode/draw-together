@@ -1,10 +1,10 @@
 import {
+  Outlet,
+  RouterProvider,
   createMemoryHistory,
   createRootRoute,
   createRoute,
   createRouter,
-  Outlet,
-  RouterProvider,
 } from "@tanstack/solid-router";
 import type { Decorator } from "storybook-solidjs-vite";
 

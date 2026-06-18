@@ -6,7 +6,7 @@ function FieldRoot(_props: BaseField.RootProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseField.Root
-      class={cn("max-w-sm w-full mx-auto grid gap-2", props.class)}
+      class={cn("mx-auto grid w-full max-w-sm gap-2", props.class)}
       {...rest}
     />
   );
@@ -16,7 +16,7 @@ function FieldLabel(_props: BaseField.LabelProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseField.Label
-      class={cn("text-sm font-normal text-text-50", props.class)}
+      class={cn("text-text-50 text-sm font-normal", props.class)}
       {...rest}
     />
   );
@@ -28,7 +28,7 @@ function FieldInput(_props: BaseField.InputProps) {
     <BaseField.Input
       class={cn(
         // Base
-        "bg-input-background peer max-w-full rounded-lg border px-4 py-2.5 text-title-50 placeholder:text-input-placeholder-text focus:ring-4 disabled:border-border-color-base-100 disabled:text-input-disabled-text disabled:placeholder:text-input-disabled-text outline-none w-full",
+        "bg-input-background peer text-title-50 placeholder:text-input-placeholder-text disabled:border-border-color-base-100 disabled:text-input-disabled-text disabled:placeholder:text-input-disabled-text w-full max-w-full rounded-lg border px-4 py-2.5 outline-none focus:ring-4",
         // Default
         "border-border-color-base-300 focus:border-input-primary-focus-border focus:ring-input-primary-focus-border/20",
         // Error
@@ -48,7 +48,7 @@ function FieldTextarea(_props: BaseField.TextareaProps) {
     <BaseField.Textarea
       class={cn(
         // Base
-        "bg-input-background peer h-32 w-full rounded-lg border px-4 py-3.5 text-title-50 outline-none placeholder:text-input-placeholder-text focus:ring-4 disabled:border-border-color-base-200 disabled:bg-background-soft-50 disabled:text-input-disabled-text disabled:placeholder:text-input-disabled-text",
+        "bg-input-background peer text-title-50 placeholder:text-input-placeholder-text disabled:border-border-color-base-200 disabled:bg-background-soft-50 disabled:text-input-disabled-text disabled:placeholder:text-input-disabled-text h-32 w-full rounded-lg border px-4 py-3.5 outline-none focus:ring-4",
         // Default
         "border-border-color-base-200 focus:border-input-primary-focus-border focus:ring-input-primary-focus-border/20",
         // Error
@@ -68,12 +68,12 @@ function FieldSelect(_props: BaseField.SelectProps) {
     <BaseField.Select
       class={cn(
         // Base
-        "w-full min-w-0 rounded-lg border px-3 py-2 pr-8 text-sm text-title-50 bg-transparent outline-none appearance-none transition",
+        "text-title-50 w-full min-w-0 appearance-none rounded-lg border bg-transparent px-3 py-2 pr-8 text-sm transition outline-none",
         // Chevron
-        "bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1rem]",
+        "bg-size-[1rem] bg-position-[right_0.5rem_center] bg-no-repeat",
         'bg-[url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%239CA3AF%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27m6 9 6 6 6-6%27/%3E%3C/svg%3E")]',
         // Default
-        "border-border-color-base-300 focus:border-input-primary-focus-border focus:ring-4 focus:ring-input-primary-focus-border/20",
+        "border-border-color-base-300 focus:border-input-primary-focus-border focus:ring-input-primary-focus-border/20 focus:ring-4",
         // Error
         "data-invalid:border-input-error-focus-border data-invalid:focus:ring-input-error-focus-border/20 user-invalid:border-input-error-focus-border user-invalid:focus:ring-input-error-focus-border/20",
         // Success
@@ -91,7 +91,7 @@ function FieldHelperText(_props: BaseField.HelperTextProps) {
     <BaseField.HelperText
       class={cn(
         // Base
-        "text-sm font-normal peer-disabled:text-input-disabled-text",
+        "peer-disabled:text-input-disabled-text text-sm font-normal",
         // Default
         "text-text-50",
         // Success (via peer input)

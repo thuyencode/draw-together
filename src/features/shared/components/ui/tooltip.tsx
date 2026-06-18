@@ -39,7 +39,7 @@ function TooltipContent(_props: BaseTooltip.ContentProps) {
   return (
     <BaseTooltip.Content
       class={cn(
-        "relative max-w-80 z-50 bg-background-100 text-tooltip-text px-3 py-2 rounded-lg border border-tooltip-border font-medium text-xs leading-5 shadow-md data-[state='open']:animate-[scale-fade-in_0.15s_ease-out] data-[state='closed']:animate-[scale-fade-out_0.1s_ease-in] transform-origin-[var(--transform-origin)]",
+        "bg-background-100 text-tooltip-text border-tooltip-border transform-origin-[var(--transform-origin)] relative z-50 max-w-80 rounded-lg border px-3 py-2 text-xs leading-5 font-medium shadow-md data-[state='closed']:animate-[scale-fade-out_0.1s_ease-in] data-[state='open']:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
       {...rest}

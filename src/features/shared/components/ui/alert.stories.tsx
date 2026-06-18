@@ -6,8 +6,8 @@ import {
   XCircle,
 } from "lucide-solid";
 import { For } from "solid-js";
-import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import Alert from "./alert";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const meta: Meta<typeof Alert> = {
   title: "Feedback/Alert",
@@ -55,7 +55,7 @@ const variantIcons = {
 
 export const Variants: Story = {
   render: () => (
-    <div class="flex flex-col gap-6 w-full">
+    <div class="flex w-full flex-col gap-6">
       <For each={variants}>
         {(variant) => {
           const Icon = variantIcons[variant];
@@ -76,7 +76,7 @@ export const Variants: Story = {
 
 export const WithActions: Story = {
   render: () => (
-    <div class="flex flex-col gap-6 w-full">
+    <div class="flex w-full flex-col gap-6">
       <Alert
         variant="danger"
         title="Delete Account"
@@ -93,7 +93,7 @@ export const WithActions: Story = {
 
 export const WithoutTitle: Story = {
   render: () => (
-    <div class="flex flex-col gap-6 w-full">
+    <div class="flex w-full flex-col gap-6">
       <Alert
         variant="info"
         message="A new software update is available. See what's new."

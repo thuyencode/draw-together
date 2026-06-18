@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Field } from "./field";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const meta = {
   title: "Forms/Field",

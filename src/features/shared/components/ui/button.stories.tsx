@@ -1,7 +1,8 @@
 import { XIcon } from "lucide-solid";
 import { For } from "solid-js";
+import { Button } from "./button";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import { Button, type ButtonProps } from "./button";
+import type { ButtonProps } from "./button";
 
 const meta: Meta<typeof Button> = {
   title: "Actions/Button",
@@ -80,7 +81,7 @@ export const Appearances: Story = {
     <div class="space-y-10 lg:space-y-5">
       <For each={appearances}>
         {(appearance) => (
-          <div class="flex items-center justify-between gap-6 md:gap-11 flex-wrap">
+          <div class="flex flex-wrap items-center justify-between gap-6 md:gap-11">
             <p class="text-title-50 capitalize">{appearance}:</p>
             <div class="flex flex-wrap gap-4">
               <For each={variants}>
@@ -108,7 +109,7 @@ const sizes = ["xs", "sm", "md", "lg"] as const satisfies NonNullable<
 
 export const Sizes: Story = {
   render: () => (
-    <div class="flex flex-wrap gap-4 items-center">
+    <div class="flex flex-wrap items-center gap-4">
       <For each={sizes}>
         {(size) => (
           <Button type="button" size={size} variant="primary" appearance="fill">

@@ -1,15 +1,15 @@
 /// <reference types="vite/client" />\
 import {
-  createRootRouteWithContext,
   ErrorComponent,
   HeadContent,
   Outlet,
   Scripts,
+  createRootRouteWithContext,
 } from "@tanstack/solid-router";
 import { Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
-import { Header, NotFound } from "~/features/shared/components";
 import css from "../app.css?url";
+import { Header, NotFound } from "~/features/shared/components";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({

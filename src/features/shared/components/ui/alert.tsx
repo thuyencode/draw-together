@@ -1,8 +1,10 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
-import { createSignal, mergeProps, Show, type JSX } from "solid-js";
+import { Show, createSignal, mergeProps } from "solid-js";
 import { cn } from "../../utils/cn";
 import { Button } from "./button";
+import type { JSX } from "solid-js";
+import type { VariantProps } from "class-variance-authority";
 
 const wrapperStyles = cva(
   "relative w-full max-w-4xl rounded-lg border px-5 py-4 pr-10",

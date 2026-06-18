@@ -33,7 +33,7 @@ function MenuContent(_props: BaseMenu.ContentProps) {
   return (
     <BaseMenu.Content
       class={cn(
-        "relative flex flex-col p-1 min-w-[max(var(--reference-width),10rem)] max-h-[min(var(--available-height,300px),300px)] bg-dropdown-background border border-neutral-300 rounded-lg shadow-md z-[calc(var(--z-index)+var(--layer-index,0))] outline-none origin-(--transform-origin) data-[state=open]:animate-[scale-fade-in_0.15s_ease-out] data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in]",
+        "bg-dropdown-background relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col rounded-lg border border-neutral-300 p-1 shadow-md outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
       {...rest}
@@ -46,7 +46,7 @@ function MenuItem(_props: BaseMenu.ItemProps) {
   return (
     <BaseMenu.Item
       class={cn(
-        "flex items-center gap-2 min-h-8 px-[0.725rem] text-sm leading-5 rounded select-none outline-none text-text-50 no-underline data-highlighted:bg-dropdown-hover-background data-disabled:text-text-100 data-disabled:opacity-50",
+        "text-text-50 data-highlighted:bg-dropdown-hover-background data-disabled:text-text-100 flex min-h-8 items-center gap-2 rounded px-[0.725rem] text-sm leading-5 no-underline outline-none select-none data-disabled:opacity-50",
         props.class,
       )}
       {...rest}
@@ -82,7 +82,7 @@ function MenuTriggerItem(_props: BaseMenu.TriggerItemProps) {
   return (
     <BaseMenu.TriggerItem
       class={cn(
-        "flex items-center justify-between gap-2 min-h-8 px-[0.725rem] text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background after:content-['›'] after:text-base after:text-text-100",
+        "data-highlighted:bg-dropdown-hover-background after:text-text-100 flex min-h-8 items-center justify-between gap-2 rounded px-[0.725rem] text-sm leading-5 outline-none select-none after:text-base after:content-['›']",
         props.class,
       )}
       {...rest}
@@ -95,7 +95,7 @@ function MenuCheckboxItem(_props: BaseMenu.CheckboxItemProps) {
   return (
     <BaseMenu.CheckboxItem
       class={cn(
-        "flex items-center gap-2 p-2 text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-primary-500 data-disabled:text-text-100 data-disabled:opacity-50",
+        "data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-primary-500 data-disabled:text-text-100 flex items-center gap-2 rounded p-2 text-sm leading-5 outline-none select-none data-disabled:opacity-50",
         props.class,
       )}
       {...rest}
@@ -118,7 +118,7 @@ function MenuRadioItem(_props: BaseMenu.RadioItemProps) {
   return (
     <BaseMenu.RadioItem
       class={cn(
-        "flex items-center gap-2 p-2 text-sm leading-5 rounded select-none outline-none data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-primary-500 data-disabled:text-text-100 data-disabled:opacity-50",
+        "data-highlighted:bg-dropdown-hover-background data-[state=checked]:text-primary-500 data-disabled:text-text-100 flex items-center gap-2 rounded p-2 text-sm leading-5 outline-none select-none data-disabled:opacity-50",
         props.class,
       )}
       {...rest}
@@ -130,7 +130,7 @@ function MenuSeparator(_props: BaseMenu.SeparatorProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseMenu.Separator
-      class={cn("h-px my-1 border-0 bg-dropdown-divider", props.class)}
+      class={cn("bg-dropdown-divider my-1 h-px border-0", props.class)}
       {...rest}
     />
   );
@@ -154,7 +154,7 @@ function MenuItemIndicator(_props: BaseMenu.ItemIndicatorProps) {
   return (
     <BaseMenu.ItemIndicator
       class={cn(
-        "flex items-center justify-center text-primary-500 shrink-0 size-4 [&_svg]:size-3.5",
+        "text-primary-500 flex size-4 shrink-0 items-center justify-center [&_svg]:size-3.5",
         props.class,
       )}
       {...rest}
@@ -167,7 +167,7 @@ function MenuArrow(_props: BaseMenu.ArrowProps) {
   return (
     <BaseMenu.Arrow
       class={cn(
-        "[--arrow-background:var(--dropdown-background)] [--arrow-shadow-color:var(--border)] -z-1",
+        "-z-1 [--arrow-background:var(--dropdown-background)] [--arrow-shadow-color:var(--border)]",
         props.class,
       )}
       {...rest}
@@ -179,7 +179,7 @@ function MenuArrowTip(_props: BaseMenu.ArrowTipProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseMenu.ArrowTip
-      class={cn("border-t border-l border-border", props.class)}
+      class={cn("border-border border-t border-l", props.class)}
       {...rest}
     />
   );

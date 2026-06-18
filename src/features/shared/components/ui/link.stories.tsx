@@ -1,7 +1,8 @@
 import { LinkIcon } from "lucide-solid";
 import { For } from "solid-js";
+import { _Link } from "./link";
+import type { LinkProps } from "./link";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import { _Link, type LinkProps } from "./link";
 
 const meta: Meta<typeof _Link> = {
   title: "Navigation/Link",

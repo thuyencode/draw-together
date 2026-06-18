@@ -1,10 +1,9 @@
-import {
-  Link as BaseLink,
-  type LinkProps as BaseLinkProps,
-} from "@tanstack/solid-router";
-import { cva, type VariantProps } from "class-variance-authority";
+import { Link as BaseLink } from "@tanstack/solid-router";
+import { cva } from "class-variance-authority";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
+import type { VariantProps } from "class-variance-authority";
+import type { LinkProps as BaseLinkProps } from "@tanstack/solid-router";
 
 export const navLinkStyles = cva(
   "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors no-underline outline-none text-foreground-soft-500 hover:bg-background-soft-100 hover:text-foreground-soft-200 data-[status=active]:bg-primary-500/10 data-[status=active]:text-primary-600",
@@ -92,6 +91,7 @@ export function _NavLink(_props: NavLinkProps) {
 
   return (
     // @ts-expect-error
+    // eslint-disable-next-line jsx-a11y/anchor-has-content
     <a
       class={cn(
         navLinkStyles({ size: props.size, iconOnly: props.iconOnly }),

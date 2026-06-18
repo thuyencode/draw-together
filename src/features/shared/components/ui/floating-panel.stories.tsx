@@ -6,13 +6,12 @@ import {
   XIcon,
 } from "lucide-solid";
 import { Portal } from "solid-js/web";
-import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Button } from "./button";
 import { FloatingPanel } from "./floating-panel";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const meta: Meta = {
   title: "Overlays/FloatingPanel",
-  component: FloatingPanel,
   parameters: {
     layout: "centered",
   },

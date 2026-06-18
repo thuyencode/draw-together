@@ -1,3 +1,6 @@
+import { Slider as BaseSlider } from "@ark-ui/solid";
+import { splitProps } from "solid-js";
+import { cn } from "../../utils/cn";
 import type {
   SliderControlProps,
   SliderLabelProps,
@@ -9,9 +12,6 @@ import type {
   SliderTrackProps,
   SliderValueTextProps,
 } from "@ark-ui/solid";
-import { Slider as BaseSlider } from "@ark-ui/solid";
-import { splitProps } from "solid-js";
-import { cn } from "../../utils/cn";
 
 function SliderRoot(_props: SliderRootProps) {
   const [props, rest] = splitProps(_props, ["class"]);
@@ -31,7 +31,7 @@ function SliderLabel(_props: SliderLabelProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Label
-      class={cn("text-sm font-medium text-text-50", props.class)}
+      class={cn("text-text-50 text-sm font-medium", props.class)}
       {...rest}
     />
   );
@@ -41,7 +41,7 @@ function SliderValueText(_props: SliderValueTextProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.ValueText
-      class={cn("text-sm text-tooltip-text", props.class)}
+      class={cn("text-tooltip-text text-sm", props.class)}
       {...rest}
     />
   );
@@ -77,7 +77,7 @@ function SliderRange(_props: SliderRangeProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Range
-      class={cn("h-1.5 rounded-full bg-primary-500", props.class)}
+      class={cn("bg-primary-500 h-1.5 rounded-full", props.class)}
       {...rest}
     />
   );
@@ -88,10 +88,10 @@ function SliderThumb(_props: SliderThumbProps) {
   return (
     <BaseSlider.Thumb
       class={cn(
-        "size-5 rounded-full border-2 border-primary-500 bg-white-100 outline-none transition-shadow duration-150",
-        "hover:ring-4 hover:ring-primary-500/20 hover:cursor-grab",
-        "data-dragging:cursor-grabbing data-dragging:bg-primary-500 data-dragging:ring-0",
-        "data-focus-visible:ring-4 data-focus-visible:ring-primary-500/20",
+        "border-primary-500 bg-white-100 size-5 rounded-full border-2 transition-shadow duration-150 outline-none",
+        "hover:ring-primary-500/20 hover:cursor-grab hover:ring-4",
+        "data-dragging:bg-primary-500 data-dragging:cursor-grabbing data-dragging:ring-0",
+        "data-focus-visible:ring-primary-500/20 data-focus-visible:ring-4",
         "data-disabled:pointer-events-none data-disabled:border-(--border-color-base-300)",
         props.class,
       )}
@@ -115,7 +115,7 @@ function SliderMarker(_props: SliderMarkerProps) {
   return (
     <BaseSlider.Marker
       class={cn(
-        "flex flex-col items-center gap-0.5 text-xs leading-4 text-text-100",
+        "text-text-100 flex flex-col items-center gap-0.5 text-xs leading-4",
         "before:block before:size-1 before:rounded-full before:bg-(--border-color-base-100)",
         "data-[state='under-value']:before:bg-primary-500 data-[state='at-value']:before:bg-primary-500",
         props.class,

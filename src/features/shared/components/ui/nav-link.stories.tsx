@@ -1,8 +1,9 @@
-import type { VariantProps } from "class-variance-authority";
 import { HouseIcon } from "lucide-solid";
 import { For } from "solid-js";
+import { _NavLink } from "./nav-link";
+import type { navLinkStyles } from "./nav-link";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import { _NavLink, type navLinkStyles } from "./nav-link";
+import type { VariantProps } from "class-variance-authority";
 
 const meta: Meta<typeof _NavLink> = {
   title: "Navigation/NavLink",

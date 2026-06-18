@@ -1,8 +1,8 @@
 import { CheckIcon, CopyIcon, DeleteIcon, PenIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
-import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Button } from "./button";
 import { Menu } from "./menu";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const meta: Meta<typeof Menu> = {
   title: "Overlays/Menu",

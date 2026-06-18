@@ -1,10 +1,10 @@
-import {
-  Link as BaseLink,
-  type LinkProps as BaseLinkProps,
-} from "@tanstack/solid-router";
-import { cva, type VariantProps } from "class-variance-authority";
-import { type ParentProps, splitProps } from "solid-js";
+import { Link as BaseLink } from "@tanstack/solid-router";
+import { cva } from "class-variance-authority";
+import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
+import type { VariantProps } from "class-variance-authority";
+import type { ParentProps } from "solid-js";
+import type { LinkProps as BaseLinkProps } from "@tanstack/solid-router";
 
 export const linkStyles = cva(
   "inline-flex items-center font-medium transition [&>svg]:size-4 [&>svg]:text-current!",
@@ -50,6 +50,7 @@ export function _Link(_props: LinkProps) {
   const [props, rest] = splitProps(_props, ["class", "variant", "size"]);
 
   return (
+    // eslint-disable-next-line jsx-a11y/anchor-has-content
     <a
       class={cn(
         linkStyles({ variant: props.variant, size: props.size }),

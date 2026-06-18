@@ -16,7 +16,7 @@ function FloatingPanelContent(_props: BaseFloatingPanel.ContentProps) {
   return (
     <BaseFloatingPanel.Content
       class={cn(
-        "bg-background-50 rounded-lg border border-alert-default-border w-full shadow-lg flex flex-col outline-none data-topmost:z-999999 data-behind:opacity-40",
+        "bg-background-50 border-alert-default-border flex w-full flex-col rounded-lg border shadow-lg outline-none data-behind:opacity-40 data-topmost:z-999999",
         props.class,
       )}
       {...rest}
@@ -35,7 +35,7 @@ function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
     <BaseFloatingPanel.Header
       data-vertical={props.vertical ? "" : undefined}
       class={cn(
-        "group py-2 px-4 bg-alert-default-background border-b border-alert-default-border flex items-center rounded-t-lg cursor-grab active:cursor-grabbing gap-1",
+        "group bg-alert-default-background border-alert-default-border flex cursor-grab items-center gap-1 rounded-t-lg border-b px-4 py-2 active:cursor-grabbing",
         props.vertical ? "flex-col" : "justify-between",
         props.class,
       )}
@@ -50,7 +50,7 @@ function FloatingPanelTitle(_props: BaseFloatingPanel.TitleProps) {
   return (
     <BaseFloatingPanel.Title
       class={cn(
-        "font-medium text-sm text-alert-default-title flex items-center gap-1 [&_svg]:size-4 [&_svg]:text-alert-default-close-icon group-data-vertical:flex-col text-center group-data-vertical:[&_svg]:rotate-90",
+        "text-alert-default-title [&_svg]:text-alert-default-close-icon flex items-center gap-1 text-center text-sm font-medium group-data-vertical:flex-col [&_svg]:size-4 group-data-vertical:[&_svg]:rotate-90",
         props.class,
       )}
       {...rest}
@@ -78,7 +78,7 @@ function FloatingPanelBody(_props: BaseFloatingPanel.BodyProps) {
   return (
     <BaseFloatingPanel.Body
       class={cn(
-        "flex flex-col p-1 gap-1 overflow-auto flex-1 text-sm text-alert-default-description bg-background-50",
+        "text-alert-default-description bg-background-50 flex flex-1 flex-col gap-1 overflow-auto p-1 text-sm",
         props.class,
       )}
       {...rest}
@@ -94,7 +94,7 @@ function FloatingPanelResizeTrigger(
   return (
     <BaseFloatingPanel.ResizeTrigger
       class={cn(
-        "data-[axis='n']:h-1.5 data-[axis='s']:h-1.5 data-[axis='n']:max-w-[90%] data-[axis='s']:max-w-[90%] data-[axis='e']:w-1.5 data-[axis='w']:w-1.5 data-[axis='e']:max-h-[90%] data-[axis='w']:max-h-[90%] data-[axis='ne']:size-2.5 data-[axis='nw']:size-2.5 data-[axis='se']:size-2.5 data-[axis='sw']:size-2.5",
+        "data-[axis='e']:max-h-[90%] data-[axis='e']:w-1.5 data-[axis='n']:h-1.5 data-[axis='n']:max-w-[90%] data-[axis='ne']:size-2.5 data-[axis='nw']:size-2.5 data-[axis='s']:h-1.5 data-[axis='s']:max-w-[90%] data-[axis='se']:size-2.5 data-[axis='sw']:size-2.5 data-[axis='w']:max-h-[90%] data-[axis='w']:w-1.5",
         props.class,
       )}
       {...rest}
@@ -110,7 +110,7 @@ function FloatingPanelCloseTrigger(
   return (
     <BaseFloatingPanel.CloseTrigger
       class={cn(
-        "size-6 inline-flex items-center justify-center p-0 border border-alert-default-border rounded bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background [&_svg]:size-3.5 hover:text-pricing-icon-background",
+        "border-alert-default-border bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background hover:text-pricing-icon-background inline-flex size-6 items-center justify-center rounded border p-0 [&_svg]:size-3.5",
         props.class,
       )}
       {...rest}
@@ -137,7 +137,7 @@ function FloatingPanelStageTrigger(
   return (
     <BaseFloatingPanel.StageTrigger
       class={cn(
-        "size-6 inline-flex items-center justify-center p-0 border border-alert-default-border rounded bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background [&_svg]:size-3.5  hover:text-background-50",
+        "border-alert-default-border bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background hover:text-background-50 inline-flex size-6 items-center justify-center rounded border p-0 [&_svg]:size-3.5",
         props.class,
       )}
       {...rest}

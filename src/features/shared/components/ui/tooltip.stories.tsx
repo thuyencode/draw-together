@@ -1,6 +1,6 @@
 import { For } from "solid-js";
-import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { Tooltip } from "./tooltip";
+import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const meta: Meta<typeof Tooltip> = {
   title: "Actions/Tooltip",
@@ -46,7 +46,7 @@ const placements = [
 
 export const Positioning: Story = {
   render: () => (
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 md:p-12 max-w-3xl">
+    <div class="grid max-w-3xl grid-cols-2 gap-6 p-6 md:grid-cols-3 md:p-12">
       <For each={placements}>
         {(placement) => (
           <Tooltip.Root

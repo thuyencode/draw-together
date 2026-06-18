@@ -1,9 +1,10 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import type { ValidComponent } from "solid-js";
-import { splitProps, type ComponentProps } from "solid-js";
+import { cva } from "class-variance-authority";
+import { splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import type { PropsWithAs } from "../../types/props";
 import { cn } from "../../utils/cn";
+import type { ComponentProps, ValidComponent } from "solid-js";
+import type { VariantProps } from "class-variance-authority";
+import type { PropsWithAs } from "../../types/props";
 
 export const buttonStyles = cva(
   "flex items-center justify-center gap-3 rounded-lg font-medium transition focus:ring-3 disabled:pointer-events-none [&>svg]:text-current! outline-none",

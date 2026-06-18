@@ -1,8 +1,8 @@
 export function NotFound() {
   return (
-    <main class="p-4 flex justify-center">
+    <main class="flex justify-center p-4">
       <img
-        class="max-w-xl h-auto"
+        class="h-auto max-w-xl"
         src="https://httpducks.com/404.jpg"
         alt="Not Found"
       />
