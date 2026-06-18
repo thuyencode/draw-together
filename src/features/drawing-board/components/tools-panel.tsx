@@ -41,7 +41,7 @@ type ToolsPanelProps = PropsWithTool &
   PropsWithDispatch;
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal<Size>({ width: 54, height: 240 });
+  const [size, setSize] = createSignal<Size>({ width: 54, height: 290 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
