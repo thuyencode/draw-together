@@ -1,19 +1,22 @@
+import "konva/lib/Core";
+import { Circle } from "konva/lib/shapes/Circle";
+
 import { createEffect, onCleanup, splitProps } from "solid-js";
-import Konva from "konva";
+import type { CircleConfig } from "konva/lib/shapes/Circle";
 import type { PropsWithLayer } from "../types";
 
-type KonvaCircleProps = PropsWithLayer<Konva.CircleConfig>;
+type KonvaCircleProps = PropsWithLayer<CircleConfig>;
 
 export function KonvaCircle(_props: KonvaCircleProps) {
   const [props, config] = splitProps(_props, ["layer"]);
-  let node: Konva.Circle | undefined;
+  let node: Circle | undefined;
 
   createEffect(() => {
     const layer = props.layer;
     if (!layer) return;
 
     if (!node) {
-      node = new Konva.Circle(config);
+      node = new Circle(config);
       layer.add(node);
     }
 

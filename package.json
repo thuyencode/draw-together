@@ -26,6 +26,7 @@
   "dependencies": {
     "@ark-ui/solid": "^5.37.1",
     "@jaames/iro": "^5.5.2",
+    "@solid-primitives/resize-observer": "^2.1.5",
     "@t3-oss/env-core": "^0.13.11",
     "@tanstack/router-plugin": "^1.168.18",
     "@tanstack/solid-form": "latest",

@@ -2,7 +2,6 @@ import { For, Match, Show, Switch, createEffect, onCleanup } from "solid-js";
 import { createStore } from "solid-js/store";
 import { KonvaCircle, KonvaRect } from "./shapes";
 import { normalizeBbox, rgbaToString } from "./utils";
-import type Konva from "konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
 import type { Drag, Point, PropsWithLayer, Shape, ShapeInfo } from "./types";
 import type Konva from "konva";

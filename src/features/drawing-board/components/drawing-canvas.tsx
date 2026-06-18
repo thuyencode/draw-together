@@ -1,5 +1,8 @@
+import "konva/lib/Core";
+import { Layer } from "konva/lib/Layer";
+import { Stage } from "konva/lib/Stage";
+
 import { createElementSize } from "@solid-primitives/resize-observer";
-import Konva from "konva";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { FreeformInput } from "./freeform-input";
 import { ShapeInput } from "./shape-input";
@@ -18,20 +21,20 @@ export type DrawingCanvasProps = PropsWithDispatch<{
 export default function DrawingCanvas(props: DrawingCanvasProps) {
   const [containerRef, setContainerRef] = createSignal<HTMLDivElement>();
   const size = createElementSize(containerRef);
-  const [layer, setLayer] = createSignal<Konva.Layer>();
-  const [stage, setStage] = createSignal<Konva.Stage>();
+  const [layer, setLayer] = createSignal<Layer>();
+  const [stage, setStage] = createSignal<Stage>();
 
   onMount(() => {
     const ref = containerRef();
     if (!ref) return;
 
-    const s = new Konva.Stage({
+    const s = new Stage({
       width: size.width ?? undefined,
       height: size.height ?? undefined,
       container: ref,
     });
 
-    const konvaLayer = new Konva.Layer();
+    const konvaLayer = new Layer();
     s.add(konvaLayer);
 
     setLayer(konvaLayer);

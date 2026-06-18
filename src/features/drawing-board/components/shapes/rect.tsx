@@ -1,19 +1,22 @@
+import "konva/lib/Core";
+import { Rect } from "konva/lib/shapes/Rect";
+
 import { createEffect, onCleanup, splitProps } from "solid-js";
-import Konva from "konva";
+import type { RectConfig } from "konva/lib/shapes/Rect";
 import type { PropsWithLayer } from "../types";
 
-export type KonvaRectProps = PropsWithLayer<Konva.RectConfig>;
+export type KonvaRectProps = PropsWithLayer<RectConfig>;
 
 export function KonvaRect(_props: KonvaRectProps) {
   const [props, config] = splitProps(_props, ["layer"]);
-  let node: Konva.Rect | undefined;
+  let node: Rect | undefined;
 
   createEffect(() => {
     const layer = props.layer;
     if (!layer) return;
 
     if (!node) {
-      node = new Konva.Rect(config);
+      node = new Rect(config);
       layer.add(node);
     }
 
