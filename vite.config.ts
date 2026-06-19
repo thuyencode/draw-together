@@ -6,6 +6,7 @@ import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
+import { analyzer } from "vite-bundle-analyzer";
 
 const dirname =
   typeof __dirname !== "undefined"
@@ -14,6 +15,7 @@ const dirname =
 
 export default defineConfig({
   plugins: [
+    analyzer(),
     devtools(),
     nitro({
       preset: "bun",
