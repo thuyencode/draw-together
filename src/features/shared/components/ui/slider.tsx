@@ -1,19 +1,8 @@
-import { Slider as BaseSlider } from "@ark-ui/solid";
+import { Slider as BaseSlider } from "@ark-ui/solid/slider";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
-import type {
-  SliderControlProps,
-  SliderLabelProps,
-  SliderMarkerGroupProps,
-  SliderMarkerProps,
-  SliderRangeProps,
-  SliderRootProps,
-  SliderThumbProps,
-  SliderTrackProps,
-  SliderValueTextProps,
-} from "@ark-ui/solid";
 
-function SliderRoot(_props: SliderRootProps) {
+function SliderRoot(_props: BaseSlider.RootProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -27,7 +16,7 @@ function SliderRoot(_props: SliderRootProps) {
   );
 }
 
-function SliderLabel(_props: SliderLabelProps) {
+function SliderLabel(_props: BaseSlider.LabelProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Label
@@ -37,7 +26,7 @@ function SliderLabel(_props: SliderLabelProps) {
   );
 }
 
-function SliderValueText(_props: SliderValueTextProps) {
+function SliderValueText(_props: BaseSlider.ValueTextProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.ValueText
@@ -47,7 +36,7 @@ function SliderValueText(_props: SliderValueTextProps) {
   );
 }
 
-function SliderControl(_props: SliderControlProps) {
+function SliderControl(_props: BaseSlider.ControlProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Control
@@ -60,7 +49,7 @@ function SliderControl(_props: SliderControlProps) {
   );
 }
 
-function SliderTrack(_props: SliderTrackProps) {
+function SliderTrack(_props: BaseSlider.TrackProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Track
@@ -73,7 +62,7 @@ function SliderTrack(_props: SliderTrackProps) {
   );
 }
 
-function SliderRange(_props: SliderRangeProps) {
+function SliderRange(_props: BaseSlider.RangeProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Range
@@ -83,7 +72,7 @@ function SliderRange(_props: SliderRangeProps) {
   );
 }
 
-function SliderThumb(_props: SliderThumbProps) {
+function SliderThumb(_props: BaseSlider.ThumbProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Thumb
@@ -100,7 +89,7 @@ function SliderThumb(_props: SliderThumbProps) {
   );
 }
 
-function SliderMarkerGroup(_props: SliderMarkerGroupProps) {
+function SliderMarkerGroup(_props: BaseSlider.MarkerGroupProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.MarkerGroup
@@ -110,7 +99,7 @@ function SliderMarkerGroup(_props: SliderMarkerGroupProps) {
   );
 }
 
-function SliderMarker(_props: SliderMarkerProps) {
+function SliderMarker(_props: BaseSlider.MarkerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseSlider.Marker

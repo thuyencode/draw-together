@@ -1,4 +1,4 @@
-import { Menu as BaseMenu } from "@ark-ui/solid";
+import { Menu as BaseMenu } from "@ark-ui/solid/menu";
 import { splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
 import { cn } from "../../utils/cn";

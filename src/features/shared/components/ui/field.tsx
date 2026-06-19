@@ -1,4 +1,4 @@
-import { Field as BaseField } from "@ark-ui/solid";
+import { Field as BaseField } from "@ark-ui/solid/field";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 

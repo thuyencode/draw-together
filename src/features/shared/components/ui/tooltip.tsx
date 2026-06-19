@@ -1,4 +1,4 @@
-import { Tooltip as BaseTooltip } from "@ark-ui/solid";
+import { Tooltip as BaseTooltip } from "@ark-ui/solid/tooltip";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 

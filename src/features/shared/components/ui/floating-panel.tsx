@@ -1,4 +1,4 @@
-import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid";
+import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid/floating-panel";
 import { splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 
