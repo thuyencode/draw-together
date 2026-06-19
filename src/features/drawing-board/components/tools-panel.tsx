@@ -41,7 +41,7 @@ type ToolsPanelProps = PropsWithTool &
   PropsWithDispatch;
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal<Size>({ width: 54, height: 290 });
+  const [size, setSize] = createSignal<Size>({ width: 54, height: 270 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
@@ -93,11 +93,13 @@ export function ToolsPanel(props: ToolsPanelProps) {
             </FloatingPanel.Header>
           </FloatingPanel.DragTrigger>
 
-          <FloatingPanel.Body class="flex-none flex-row flex-wrap">
+          <FloatingPanel.Body
+            class="flex-none flex-row flex-wrap"
+            classList={{ "justify-center": shouldBeVertical() }}
+          >
             <Index each={tools}>
               {(t) => (
                 <ToolButton
-                  iconOnly
                   type="button"
                   data-current-tool={t().tool === props.tool}
                   onClick={() =>

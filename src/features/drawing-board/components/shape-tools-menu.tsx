@@ -27,7 +27,7 @@ export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
         placement: props.isParentPanelVertical ? "right" : "bottom",
       }}
     >
-      <ToolButton iconOnly data-current-tool={selected()} as={Menu.Trigger}>
+      <ToolButton data-current-tool={selected()} as={Menu.Trigger}>
         <Show when={selected()} fallback={<ShapesIcon />}>
           <Dynamic component={shapeIconMap[props.tool as Shape]} />
         </Show>
@@ -43,7 +43,6 @@ export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
           <Index each={shapes}>
             {(shape) => (
               <ToolButton
-                iconOnly
                 data-current-tool={props.tool === shape()}
                 as={Menu.Item}
                 value={shape()}

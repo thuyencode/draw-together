@@ -17,7 +17,6 @@
     },
   },
   "include": [
-    ".storybook/**/*",
     "vite.config.ts",
     "eslint.config.ts",
     "vitest.shims.d.ts",

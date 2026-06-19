@@ -1,7 +1,7 @@
 import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid/floating-panel";
 import { splitProps } from "solid-js";
-import { cn } from "../../utils/cn";
 import { useIsClient } from "../../hooks";
+import { cn } from "../../utils/cn";
 
 interface FloatingPanelPositionerProps
   extends BaseFloatingPanel.PositionerProps {
@@ -27,7 +27,7 @@ function FloatingPanelContent(_props: BaseFloatingPanel.ContentProps) {
   return (
     <BaseFloatingPanel.Content
       class={cn(
-        "bg-background-50 border-alert-default-border flex w-full flex-col rounded-lg border shadow-lg outline-none data-behind:opacity-40 data-topmost:z-999999",
+        "bg-base-100 flex w-full flex-col rounded-lg border border-neutral-300 shadow-lg outline-none data-behind:opacity-90 data-topmost:z-9999",
         props.class,
       )}
       {...rest}
@@ -46,7 +46,7 @@ function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
     <BaseFloatingPanel.Header
       data-vertical={props.vertical ? "" : undefined}
       class={cn(
-        "group bg-alert-default-background border-alert-default-border flex cursor-grab items-center gap-1 rounded-t-lg border-b px-4 py-2 active:cursor-grabbing",
+        "group bg-base-200 flex cursor-grab items-center gap-1 rounded-t-lg border-b border-neutral-300 px-4 py-2 active:cursor-grabbing",
         props.vertical ? "flex-col" : "justify-between",
         props.class,
       )}
@@ -61,7 +61,7 @@ function FloatingPanelTitle(_props: BaseFloatingPanel.TitleProps) {
   return (
     <BaseFloatingPanel.Title
       class={cn(
-        "text-alert-default-title [&_svg]:text-alert-default-close-icon flex items-center gap-1 text-center text-sm font-medium group-data-vertical:flex-col [&_svg]:size-4 group-data-vertical:[&_svg]:rotate-90",
+        "flex items-center gap-1 text-center text-sm font-medium group-data-vertical:flex-col [&_svg]:size-4 group-data-vertical:[&_svg]:rotate-90",
         props.class,
       )}
       {...rest}
@@ -75,7 +75,7 @@ function FloatingPanelControl(_props: BaseFloatingPanel.ControlProps) {
   return (
     <BaseFloatingPanel.Control
       class={cn(
-        "flex items-center gap-1 group-data-vertical:flex-col",
+        "flex items-center gap-0.5 group-data-vertical:flex-col",
         props.class,
       )}
       {...rest}
@@ -89,7 +89,7 @@ function FloatingPanelBody(_props: BaseFloatingPanel.BodyProps) {
   return (
     <BaseFloatingPanel.Body
       class={cn(
-        "text-alert-default-description bg-background-50 flex flex-1 flex-col gap-1 overflow-auto p-1 text-sm",
+        "flex flex-1 flex-col gap-0.5 overflow-auto p-1 text-sm",
         props.class,
       )}
       {...rest}
@@ -120,10 +120,7 @@ function FloatingPanelCloseTrigger(
 
   return (
     <BaseFloatingPanel.CloseTrigger
-      class={cn(
-        "border-alert-default-border bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background hover:text-pricing-icon-background inline-flex size-6 items-center justify-center rounded border p-0 [&_svg]:size-3.5",
-        props.class,
-      )}
+      class={cn("btn btn-xs btn-ghost btn-square [&_svg]:size-4", props.class)}
       {...rest}
     />
   );
@@ -147,10 +144,7 @@ function FloatingPanelStageTrigger(
 
   return (
     <BaseFloatingPanel.StageTrigger
-      class={cn(
-        "border-alert-default-border bg-alert-default-background text-alert-default-close-icon hover:bg-alert-default-icon-background hover:text-background-50 inline-flex size-6 items-center justify-center rounded border p-0 [&_svg]:size-3.5",
-        props.class,
-      )}
+      class={cn("btn btn-xs btn-ghost btn-square [&_svg]:size-4", props.class)}
       {...rest}
     />
   );

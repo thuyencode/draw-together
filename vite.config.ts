@@ -33,14 +33,22 @@ export default defineConfig({
   build: {
     rolldownOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes("node_modules/konva")) {
-            return "konva";
-          }
+        codeSplitting: {
+          groups: [
+            {
+              name(id) {
+                if (id.includes("node_modules/konva")) {
+                  return "konva";
+                }
 
-          if (id.includes("node_modules/@ark-ui")) {
-            return "ark-ui";
-          }
+                if (id.includes("node_modules/@ark-ui")) {
+                  return "ark-ui";
+                }
+
+                return null;
+              },
+            },
+          ],
         },
       },
     },

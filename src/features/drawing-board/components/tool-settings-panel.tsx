@@ -14,7 +14,7 @@ import type {
   PropsWithTool,
   Size,
 } from "./types";
-import { Field, FloatingPanel } from "~/features/shared/components/ui";
+import { FloatingPanel } from "~/features/shared/components/ui";
 
 type ToolSettingsPanelsProps = PropsWithTool &
   PropsWithContainerRef &
@@ -75,22 +75,23 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
           </FloatingPanel.DragTrigger>
 
           <FloatingPanel.Body class="p-2">
-            <Field.Root>
-              <Field.Label>Stroke size</Field.Label>
-              <Field.Input
-                class="rounded py-1"
+            <label class="input">
+              <span class="text-neutral-500">Stroke size</span>
+              <input
                 type="number"
+                class="grow"
                 min="1"
                 step="1"
                 value={props.settings.strokeWidth}
-                onInput={(e) => {
+                onChange={(e) => {
                   props.dispatch({
                     type: "set_stroke_width",
                     strokeWidth: Number.parseInt(e.target.value, 10),
                   });
                 }}
               />
-            </Field.Root>
+              <span class="badge badge-info badge-xs">px</span>
+            </label>
           </FloatingPanel.Body>
 
           <FloatingPanel.ResizeTrigger axis="n" />
