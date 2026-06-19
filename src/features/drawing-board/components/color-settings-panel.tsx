@@ -7,7 +7,7 @@ import {
 } from "lucide-solid";
 import { createSignal, onMount } from "solid-js";
 import { createPosition } from "./hooks";
-import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid";
+import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid/floating-panel";
 import type {
   DrawingSettings,
   PropsWithContainerRef,
@@ -82,7 +82,12 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
       size={size()}
       onSizeChange={handleSizeChange}
     >
-      <FloatingPanel.Positioner>
+      <FloatingPanel.Positioner
+        initialStyle={{
+          "--x": "20px",
+          "--y": "20px",
+        }}
+      >
         <FloatingPanel.Content>
           <FloatingPanel.DragTrigger>
             <FloatingPanel.Header ref={floatingPanelHeaderRef}>

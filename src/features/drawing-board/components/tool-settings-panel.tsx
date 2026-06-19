@@ -46,7 +46,12 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
         }
       }}
     >
-      <FloatingPanel.Positioner>
+      <FloatingPanel.Positioner
+        initialStyle={{
+          "--x": "20px",
+          "--y": "20px",
+        }}
+      >
         <FloatingPanel.Content>
           <FloatingPanel.DragTrigger>
             <FloatingPanel.Header>
