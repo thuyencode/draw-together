@@ -3,7 +3,13 @@ import { createStore } from "solid-js/store";
 import { KonvaCircle, KonvaRect } from "./shapes";
 import { normalizeBbox, rgbaToString } from "./utils";
 import type { DrawingCanvasProps } from "./drawing-canvas";
-import type { Drag, Point, PropsWithLayer, Shape, ShapeInfo } from "./types";
+import type {
+  Drag,
+  Point,
+  PropsWithLayer,
+  ShapeInfo,
+  ShapeVariant,
+} from "./types";
 import type Konva from "konva";
 
 type ShapeInputProps = DrawingCanvasProps & PropsWithLayer;
@@ -20,12 +26,11 @@ export function ShapeInput(props: ShapeInputProps) {
 
     const stage = currentLayer.getStage();
 
-    const tool = props.settings.tool;
-    const isShapeTool = tool === "circle" || tool === "rectangle";
-    if (!isShapeTool) return;
+    if (props.settings.tool !== "shape") return;
+    const variant = props.settings.variant;
 
     const onMouseDown = () => {
-      props.dispatch({ type: "set_is_painting", isPainting: true });
+      props.commands.setIsPainting(true);
 
       const pos = stage.getPointerPosition();
       if (!pos) return;
@@ -43,43 +48,37 @@ export function ShapeInput(props: ShapeInputProps) {
       if (a && cur) {
         const bbox = normalizeBbox(a, cur);
 
-        if (tool === "circle") {
+        if (variant === "circle") {
           const cx = bbox.x + bbox.width / 2;
           const cy = bbox.y + bbox.height / 2;
           const dx = cur.x - cx;
           const dy = cur.y - cy;
           const radius = Math.sqrt(dx * dx + dy * dy);
           if (radius > 1) {
-            props.dispatch({
-              type: "add_shape",
-              shape: {
-                tool: tool,
-                x: cx,
-                y: cy,
-                width: radius * 2,
-                height: radius * 2,
-                strokeWidth: props.settings.strokeWidth,
-                color: { ...props.settings.color },
-              },
+            props.commands.addShape({
+              tool: "circle",
+              x: cx,
+              y: cy,
+              width: radius * 2,
+              height: radius * 2,
+              strokeWidth: props.settings.strokeWidth,
+              color: { ...props.settings.color },
             });
           }
         } else {
           if (bbox.width > 1 || bbox.height > 1) {
-            props.dispatch({
-              type: "add_shape",
-              shape: {
-                tool: tool,
-                ...bbox,
-                strokeWidth: props.settings.strokeWidth,
-                color: { ...props.settings.color },
-              },
+            props.commands.addShape({
+              tool: "rectangle",
+              ...bbox,
+              strokeWidth: props.settings.strokeWidth,
+              color: { ...props.settings.color },
             });
           }
         }
       }
 
       setDrag({ anchor: null, livePointer: null });
-      props.dispatch({ type: "set_is_painting", isPainting: false });
+      props.commands.setIsPainting(false);
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -110,10 +109,10 @@ export function ShapeInput(props: ShapeInputProps) {
     const cur = drag.livePointer;
     if (!a || !cur) return null;
 
-    const tool = props.settings.tool;
+    const variant = props.settings.variant;
     const bbox = normalizeBbox(a, cur);
 
-    if (tool === "circle") {
+    if (variant === "circle") {
       const cx = bbox.x + bbox.width / 2;
       const cy = bbox.y + bbox.height / 2;
       const dx = cur.x - cx;
@@ -134,7 +133,7 @@ export function ShapeInput(props: ShapeInputProps) {
     if (bbox.width < 1 && bbox.height < 1) return null;
 
     return {
-      tool: tool as Shape,
+      tool: variant as ShapeVariant,
       ...bbox,
       strokeWidth: props.settings.strokeWidth,
       color: { ...props.settings.color },

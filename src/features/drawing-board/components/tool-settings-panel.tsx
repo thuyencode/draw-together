@@ -8,9 +8,9 @@ import { createSignal } from "solid-js";
 import { createPosition } from "./hooks";
 import type {
   DrawingSettings,
+  PropsWithCommands,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
-  PropsWithDispatch,
   PropsWithTool,
   Size,
 } from "./types";
@@ -19,7 +19,7 @@ import { FloatingPanel } from "~/features/shared/components/ui";
 type ToolSettingsPanelsProps = PropsWithTool &
   PropsWithContainerRef &
   PropsWithDefaultPosition &
-  PropsWithDispatch & {
+  PropsWithCommands & {
     settings: DrawingSettings;
   };
 
@@ -57,7 +57,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
             <FloatingPanel.Header>
               <FloatingPanel.Title class="capitalize">
                 <GripVerticalIcon />
-                {props.tool} Settings
+                {props.variant} Settings
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
@@ -84,10 +84,9 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
                 step="1"
                 value={props.settings.strokeWidth}
                 onChange={(e) => {
-                  props.dispatch({
-                    type: "set_stroke_width",
-                    strokeWidth: Number.parseInt(e.target.value, 10),
-                  });
+                  props.commands.setStrokeWidth(
+                    Number.parseInt(e.target.value, 10),
+                  );
                 }}
               />
               <span class="badge badge-info badge-xs">px</span>

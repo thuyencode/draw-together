@@ -2,29 +2,32 @@ import type { RgbColor } from "@irojs/iro-core";
 import type { Point, Size } from "@zag-js/rect-utils";
 import type Konva from "konva";
 
-export type Shape = "circle" | "rectangle";
-export type Freeform = "brush" | "eraser";
-export type Tool = Freeform | Shape | "straight-line";
+export type Tool = "shape" | "brush" | "eraser" | "straight-line";
 
-export type DrawingAction =
-  | { type: "set_tool"; tool: Tool }
-  | { type: "set_stroke_width"; strokeWidth: number }
-  | { type: "set_color"; color: RgbColor }
-  | { type: "set_is_painting"; isPainting: boolean }
-  | { type: "add_freeform_line"; line: FreeformInfo }
-  | { type: "append_freeform_point"; point: [number, number] }
-  | { type: "add_shape"; shape: ShapeInfo }
-  | { type: "add_straight_line"; line: StraightLineInfo };
+export type ShapeVariant = "circle" | "rectangle";
+type BrushVariant = "plain";
+type EraserVariant = "plain";
+type StraightLineVariant = "plain";
+
+export type Variant =
+  | ShapeVariant
+  | BrushVariant
+  | EraserVariant
+  | StraightLineVariant;
+
+export type ToolSettings =
+  | { tool: Extract<Tool, "shape">; variant: ShapeVariant }
+  | { tool: Extract<Tool, "brush">; variant: BrushVariant }
+  | { tool: Extract<Tool, "eraser">; variant: EraserVariant }
+  | { tool: Extract<Tool, "straight-line">; variant: StraightLineVariant };
 
 export interface StrokeConfig {
   strokeWidth: number;
   color: RgbColor;
 }
 
-export interface DrawingSettings extends StrokeConfig {
-  isPainting: boolean;
-  tool: Tool;
-}
+export type DrawingSettings = ToolSettings &
+  StrokeConfig & { isPainting: boolean };
 
 export interface DrawingElements {
   freeformLines: FreeformInfo[];
@@ -33,12 +36,12 @@ export interface DrawingElements {
 }
 
 export interface FreeformInfo extends StrokeConfig {
-  tool: Freeform;
+  tool: Extract<Tool, "brush" | "eraser">;
   points: number[];
 }
 
 export interface ShapeInfo extends StrokeConfig {
-  tool: Shape;
+  tool: ShapeVariant;
   x: number;
   y: number;
   width: number;
@@ -63,7 +66,21 @@ export interface Drag {
   livePointer: Point | null;
 }
 
-export type PropsWithTool<P = unknown> = P & { tool: Tool };
+export interface Commands {
+  setTool: (settings: ToolSettings) => void;
+  setStrokeWidth: (strokeWidth: number) => void;
+  setColor: (color: RgbColor) => void;
+  setIsPainting: (isPainting: boolean) => void;
+  addFreeformLine: (line: FreeformInfo) => void;
+  appendFreeformPoint: (point: [number, number]) => void;
+  addShape: (shape: ShapeInfo) => void;
+  addStraightLine: (line: StraightLineInfo) => void;
+}
+
+export type PropsWithTool<P = unknown> = P & {
+  tool: Tool;
+  variant: Variant;
+};
 
 export type PropsWithContainerRef<P = unknown> = P & {
   containerRef: HTMLDivElement;
@@ -77,8 +94,8 @@ export type PropsWithLayer<P = unknown> = P & {
   layer: Konva.Layer | undefined;
 };
 
-export type PropsWithDispatch<P = unknown> = P & {
-  dispatch: (action: DrawingAction) => void;
+export type PropsWithCommands<P = unknown> = P & {
+  commands: Commands;
 };
 
 export type { Point, Size };

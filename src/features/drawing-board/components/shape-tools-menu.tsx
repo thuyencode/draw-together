@@ -3,23 +3,23 @@ import { Index, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { ToolButton } from "./tool-button";
 import type { LucideIcon } from "lucide-solid";
-import type { PropsWithDispatch, PropsWithTool, Shape } from "./types";
+import type { PropsWithCommands, PropsWithTool, ShapeVariant } from "./types";
 import { Menu } from "~/features/shared/components/ui";
 
-const shapeIconMap: Record<Shape, LucideIcon> = {
+const shapeIconMap: Record<ShapeVariant, LucideIcon> = {
   circle: CircleIcon,
   rectangle: SquareIcon,
 };
 
-const shapes = Object.keys(shapeIconMap) as Shape[];
+const shapes = Object.keys(shapeIconMap) as ShapeVariant[];
 
-type ShapeToolsMenuProps = PropsWithDispatch &
+type ShapeToolsMenuProps = PropsWithCommands &
   PropsWithTool & {
     isParentPanelVertical?: boolean;
   };
 
 export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
-  const selected = () => Object.hasOwn(shapeIconMap, props.tool);
+  const selected = () => props.tool === "shape";
 
   return (
     <Menu.Root
@@ -29,7 +29,7 @@ export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
     >
       <ToolButton data-current-tool={selected()} as={Menu.Trigger}>
         <Show when={selected()} fallback={<ShapesIcon />}>
-          <Dynamic component={shapeIconMap[props.tool as Shape]} />
+          <Dynamic component={shapeIconMap[props.variant as ShapeVariant]} />
         </Show>
         <span class="sr-only">Shapes</span>
       </ToolButton>
@@ -43,11 +43,13 @@ export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
           <Index each={shapes}>
             {(shape) => (
               <ToolButton
-                data-current-tool={props.tool === shape()}
+                data-current-tool={
+                  props.tool === "shape" && props.variant === shape()
+                }
                 as={Menu.Item}
                 value={shape()}
                 onClick={() =>
-                  props.dispatch({ type: "set_tool", tool: shape() })
+                  props.commands.setTool({ tool: "shape", variant: shape() })
                 }
               >
                 <Dynamic component={shapeIconMap[shape()]} />

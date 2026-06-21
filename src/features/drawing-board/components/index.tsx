@@ -4,7 +4,7 @@ import { ClientOnly } from "@tanstack/solid-router";
 import { ColorSettingsPanels } from "./color-settings-panel";
 import { ToolSettingsPanels } from "./tool-settings-panel";
 import { ToolsPanel } from "./tools-panel";
-import type { DrawingAction, DrawingElements, DrawingSettings } from "./types";
+import type { Commands, DrawingElements, DrawingSettings } from "./types";
 
 const DrawingCanvas = lazy(() => import("./drawing-canvas"));
 
@@ -12,8 +12,9 @@ export default function DrawingBoard() {
   let containerRef!: HTMLDivElement;
 
   const [settings, setSettings] = createStore<DrawingSettings>({
-    isPainting: false,
     tool: "straight-line",
+    variant: "plain",
+    isPainting: false,
     strokeWidth: 5,
     color: { r: 9, g: 139, b: 250 },
   });
@@ -24,67 +25,58 @@ export default function DrawingBoard() {
     straightLines: [],
   });
 
-  const dispatch = (action: DrawingAction) => {
-    switch (action.type) {
-      case "set_tool":
-        setSettings("tool", action.tool);
-        break;
-      case "set_stroke_width":
-        setSettings("strokeWidth", action.strokeWidth);
-        break;
-      case "set_color":
-        setSettings("color", action.color);
-        break;
-      case "set_is_painting":
-        setSettings("isPainting", action.isPainting);
-        break;
-      case "add_freeform_line":
-        setElements(
-          "freeformLines",
-          elements.freeformLines.length,
-          action.line,
-        );
-        break;
-      case "append_freeform_point": {
-        const lastIdx = elements.freeformLines.length - 1;
-        if (lastIdx === -1) break;
+  const commands: Commands = {
+    setTool(ts) {
+      setSettings(ts);
+    },
+    setStrokeWidth(strokeWidth) {
+      setSettings("strokeWidth", strokeWidth);
+    },
+    setColor(color) {
+      setSettings("color", color);
+    },
+    setIsPainting(isPainting) {
+      setSettings("isPainting", isPainting);
+    },
+    addFreeformLine(line) {
+      setElements("freeformLines", elements.freeformLines.length, line);
+    },
+    appendFreeformPoint(point) {
+      const lastIdx = elements.freeformLines.length - 1;
+      if (lastIdx === -1) return;
 
-        setElements("freeformLines", lastIdx, "points", (prev) => [
-          ...prev,
-          ...action.point,
-        ]);
-        break;
-      }
-      case "add_shape":
-        setElements("shapes", elements.shapes.length, action.shape);
-        break;
-      case "add_straight_line":
-        setElements(
-          "straightLines",
-          elements.straightLines.length,
-          action.line,
-        );
-        break;
-    }
+      setElements("freeformLines", lastIdx, "points", (prev) => [
+        ...prev,
+        ...point,
+      ]);
+    },
+    addShape(shape) {
+      setElements("shapes", elements.shapes.length, shape);
+    },
+    addStraightLine(line) {
+      setElements("straightLines", elements.straightLines.length, line);
+    },
   };
 
   return (
     <div class="relative h-full" ref={containerRef}>
       <ToolsPanel
         tool={settings.tool}
-        dispatch={dispatch}
+        variant={settings.variant}
+        commands={commands}
         containerRef={containerRef}
         defaultPosition="top-left"
       />
       <ToolSettingsPanels
         tool={settings.tool}
-        dispatch={dispatch}
+        variant={settings.variant}
+        commands={commands}
         containerRef={containerRef}
         defaultPosition="bottom-right"
         settings={settings}
       />
       <ColorSettingsPanels
-        dispatch={dispatch}
+        commands={commands}
         containerRef={containerRef}
         defaultPosition="top-right"
         color={settings.color}
@@ -96,7 +88,7 @@ export default function DrawingBoard() {
             <DrawingCanvas
               settings={settings}
               elements={elements}
-              dispatch={dispatch}
+              commands={commands}
             />
           </Suspense>
         </ErrorBoundary>

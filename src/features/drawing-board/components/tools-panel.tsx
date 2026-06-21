@@ -14,34 +14,38 @@ import { ShapeToolsMenu } from "./shape-tools-menu";
 import { ToolButton } from "./tool-button";
 import type { LucideIcon } from "lucide-solid";
 import type {
+  PropsWithCommands,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
-  PropsWithDispatch,
   PropsWithTool,
   Size,
-  Tool,
+  ToolSettings,
 } from "./types";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
-interface ToolItem {
-  tool: Tool;
+type ToolItem = ToolSettings & {
   label: string;
   icon: LucideIcon;
-}
+};
 
 const tools: ToolItem[] = [
-  { tool: "brush", label: "Brush", icon: BrushIcon },
-  { tool: "eraser", label: "Eraser", icon: EraserIcon },
-  { tool: "straight-line", label: "Straight line", icon: SlashIcon },
+  { tool: "brush", variant: "plain", label: "Brush", icon: BrushIcon },
+  { tool: "eraser", variant: "plain", label: "Eraser", icon: EraserIcon },
+  {
+    tool: "straight-line",
+    variant: "plain",
+    label: "Straight line",
+    icon: SlashIcon,
+  },
 ];
 
 type ToolsPanelProps = PropsWithTool &
   PropsWithContainerRef &
   PropsWithDefaultPosition &
-  PropsWithDispatch;
+  PropsWithCommands;
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal<Size>({ width: 54, height: 270 });
+  const [size, setSize] = createSignal<Size>({ width: 54, height: 265 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
@@ -101,13 +105,10 @@ export function ToolsPanel(props: ToolsPanelProps) {
               {(t) => (
                 <ToolButton
                   type="button"
-                  data-current-tool={t().tool === props.tool}
-                  onClick={() =>
-                    props.dispatch({
-                      type: "set_tool",
-                      tool: t().tool,
-                    })
+                  data-current-tool={
+                    t().tool === props.tool && t().variant === props.variant
                   }
+                  onClick={() => props.commands.setTool(t())}
                 >
                   <Dynamic component={t().icon} />
                   <span class="sr-only">{t().label}</span>
@@ -117,7 +118,8 @@ export function ToolsPanel(props: ToolsPanelProps) {
 
             <ShapeToolsMenu
               tool={props.tool}
-              dispatch={props.dispatch}
+              variant={props.variant}
+              commands={props.commands}
               isParentPanelVertical={shouldBeVertical()}
             />
           </FloatingPanel.Body>

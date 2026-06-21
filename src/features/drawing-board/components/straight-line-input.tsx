@@ -2,9 +2,9 @@ import { For, Show, createEffect, onCleanup } from "solid-js";
 import { createStore } from "solid-js/store";
 import { KonvaLine } from "./shapes";
 import { rgbaToString } from "./utils";
-import type Konva from "konva";
 import type { DrawingCanvasProps } from "./drawing-canvas";
 import type { Drag, PropsWithLayer, StraightLineInfo } from "./types";
+import type Konva from "konva";
 
 type StraightLineInputProps = DrawingCanvasProps & PropsWithLayer;
 
@@ -20,11 +20,10 @@ export function StraightLineInput(props: StraightLineInputProps) {
 
     const stage = currentLayer.getStage();
 
-    const tool = props.settings.tool;
-    if (tool !== "straight-line") return;
+    if (props.settings.tool !== "straight-line") return;
 
     const onMouseDown = () => {
-      props.dispatch({ type: "set_is_painting", isPainting: true });
+      props.commands.setIsPainting(true);
 
       const pos = stage.getPointerPosition();
       if (!pos) return;
@@ -40,19 +39,16 @@ export function StraightLineInput(props: StraightLineInputProps) {
       const cur = drag.livePointer;
 
       if (a && cur) {
-        props.dispatch({
-          type: "add_straight_line",
-          line: {
-            tool: "straight-line",
-            points: [a.x, a.y, cur.x, cur.y],
-            strokeWidth: props.settings.strokeWidth,
-            color: { ...props.settings.color },
-          },
+        props.commands.addStraightLine({
+          tool: "straight-line",
+          points: [a.x, a.y, cur.x, cur.y],
+          strokeWidth: props.settings.strokeWidth,
+          color: { ...props.settings.color },
         });
       }
 
       setDrag({ anchor: null, livePointer: null });
-      props.dispatch({ type: "set_is_painting", isPainting: false });
+      props.commands.setIsPainting(false);
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {

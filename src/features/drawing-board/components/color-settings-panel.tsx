@@ -10,16 +10,16 @@ import { createPosition } from "./hooks";
 import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid/floating-panel";
 import type {
   DrawingSettings,
+  PropsWithCommands,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
-  PropsWithDispatch,
   Size,
 } from "./types";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
-  PropsWithDispatch &
+  PropsWithCommands &
   Pick<DrawingSettings, "color">;
 
 export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
@@ -49,10 +49,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
     });
 
     const onColorChange = (color: iro.Color) => {
-      props.dispatch({
-        type: "set_color",
-        color: color.rgba,
-      });
+      props.commands.setColor(color.rgba);
     };
 
     colorPicker.on("input:end", onColorChange);

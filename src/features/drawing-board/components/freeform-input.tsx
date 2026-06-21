@@ -18,24 +18,21 @@ export function FreeformInput(props: FreeformInputProps) {
     if (tool !== "brush" && tool !== "eraser") return;
 
     const onMouseDown = () => {
-      props.dispatch({ type: "set_is_painting", isPainting: true });
+      props.commands.setIsPainting(true);
 
       const pos = stage.getPointerPosition();
       if (!pos) return;
 
-      props.dispatch({
-        type: "add_freeform_line",
-        line: {
-          tool,
-          points: [pos.x, pos.y, pos.x, pos.y],
-          strokeWidth: props.settings.strokeWidth,
-          color: { ...props.settings.color },
-        },
+      props.commands.addFreeformLine({
+        tool,
+        points: [pos.x, pos.y, pos.x, pos.y],
+        strokeWidth: props.settings.strokeWidth,
+        color: { ...props.settings.color },
       });
     };
 
     const onMouseUp = () => {
-      props.dispatch({ type: "set_is_painting", isPainting: false });
+      props.commands.setIsPainting(false);
     };
 
     const onMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -45,10 +42,7 @@ export function FreeformInput(props: FreeformInputProps) {
       const pos = stage.getPointerPosition();
       if (!pos) return;
 
-      props.dispatch({
-        type: "append_freeform_point",
-        point: [pos.x, pos.y],
-      });
+      props.commands.appendFreeformPoint([pos.x, pos.y]);
     };
 
     stage

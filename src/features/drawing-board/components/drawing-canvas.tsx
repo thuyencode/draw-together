@@ -10,10 +10,10 @@ import { StraightLineInput } from "./straight-line-input";
 import type {
   DrawingElements,
   DrawingSettings,
-  PropsWithDispatch,
+  PropsWithCommands,
 } from "./types";
 
-export type DrawingCanvasProps = PropsWithDispatch<{
+export type DrawingCanvasProps = PropsWithCommands<{
   settings: DrawingSettings;
   elements: DrawingElements;
 }>;
@@ -62,19 +62,19 @@ export default function DrawingCanvas(props: DrawingCanvasProps) {
         layer={layer()}
         settings={props.settings}
         elements={props.elements}
-        dispatch={props.dispatch}
+        commands={props.commands}
       />
       <ShapeInput
         layer={layer()}
         settings={props.settings}
         elements={props.elements}
-        dispatch={props.dispatch}
+        commands={props.commands}
       />
       <StraightLineInput
         layer={layer()}
         settings={props.settings}
         elements={props.elements}
-        dispatch={props.dispatch}
+        commands={props.commands}
       />
     </div>
   );
