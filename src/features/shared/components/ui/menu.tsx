@@ -37,7 +37,15 @@ function MenuContent(_props: BaseMenu.ContentProps) {
 
 function MenuItem(_props: BaseMenu.ItemProps) {
   const [props, rest] = splitProps(_props, ["class"]);
-  return <BaseMenuItem class={cn("btn btn-ghost", props.class)} {...rest} />;
+  return (
+    <BaseMenuItem
+      class={cn(
+        "btn btn-ghost data-disabled:btn-disabled data-highlighted:bg-neutral-200",
+        props.class,
+      )}
+      {...rest}
+    />
+  );
 }
 
 export const Menu = {

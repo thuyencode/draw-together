@@ -23,7 +23,7 @@ export function ToolButton<T extends ValidComponent = "button">(
     <Dynamic
       component={props.as ?? "button"}
       class={cn(
-        "btn btn-ghost btn-md btn-square data-[current-tool=true]:btn-soft data-[current-tool=true]:hover:bg-primary/20 data-[current-tool=true]:btn-primary data-[current-tool=true]:hover:text-primary border-0 shadow-none [&>svg]:size-5",
+        "btn btn-ghost btn-square data-[current-tool=true]:btn-soft data-[current-tool=true]:hover:bg-primary/20 data-[current-tool=true]:btn-primary data-[current-tool=true]:hover:text-primary border-0 shadow-none [&>svg]:size-5",
         props.class,
       )}
       {...rest}
