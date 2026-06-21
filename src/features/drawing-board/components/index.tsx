@@ -12,10 +12,10 @@ export default function DrawingBoard() {
   let containerRef!: HTMLDivElement;
 
   const [settings, setSettings] = createStore<DrawingSettings>({
-    tool: "straight-line",
+    tool: "brush",
     variant: "plain",
     isPainting: false,
-    strokeWidth: 5,
+    strokeWidth: 2,
     color: { r: 9, g: 139, b: 250 },
   });
 
