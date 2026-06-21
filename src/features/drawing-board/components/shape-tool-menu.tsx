@@ -13,12 +13,12 @@ const shapeIconMap: Record<ShapeVariant, LucideIcon> = {
 
 const shapes = Object.keys(shapeIconMap) as ShapeVariant[];
 
-type ShapeToolsMenuProps = PropsWithCommands &
+type ShapeToolMenuProps = PropsWithCommands &
   PropsWithTool & {
     isParentPanelVertical?: boolean;
   };
 
-export function ShapeToolsMenu(props: ShapeToolsMenuProps) {
+export function ShapeToolMenu(props: ShapeToolMenuProps) {
   const selected = () => props.tool === "shape";
 
   return (

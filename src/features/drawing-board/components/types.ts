@@ -5,7 +5,7 @@ import type Konva from "konva";
 export type Tool = "shape" | "brush" | "eraser" | "straight-line";
 
 export type ShapeVariant = "circle" | "rectangle";
-type BrushVariant = "plain";
+export type BrushVariant = "plain";
 type EraserVariant = "plain";
 type StraightLineVariant = "plain";
 

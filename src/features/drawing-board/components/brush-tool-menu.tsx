@@ -1,0 +1,63 @@
+import { BrushIcon, PencilIcon } from "lucide-solid";
+import { Index, Show } from "solid-js";
+import { Dynamic } from "solid-js/web";
+import { ToolButton } from "./tool-button";
+import type { LucideIcon } from "lucide-solid";
+import type { BrushVariant, PropsWithCommands, PropsWithTool } from "./types";
+import { Menu } from "~/features/shared/components/ui";
+
+const brushIconMap: Record<BrushVariant, LucideIcon> = {
+  plain: PencilIcon,
+};
+
+const brushes = Object.keys(brushIconMap) as BrushVariant[];
+
+type BrushToolMenuProps = PropsWithCommands &
+  PropsWithTool & {
+    isParentPanelVertical?: boolean;
+  };
+
+export function BrushToolMenu(props: BrushToolMenuProps) {
+  const selected = () => props.tool === "brush";
+
+  return (
+    <Menu.Root
+      positioning={{
+        placement: props.isParentPanelVertical ? "right" : "bottom",
+      }}
+    >
+      <ToolButton data-current-tool={selected()} as={Menu.Trigger}>
+        <Show when={selected()} fallback={<BrushIcon />}>
+          <Dynamic component={brushIconMap[props.variant as BrushVariant]} />
+        </Show>
+        <span class="sr-only">Brush</span>
+      </ToolButton>
+
+      <Menu.Positioner
+        style={{
+          "--z-index": "9999",
+        }}
+      >
+        <Menu.Content class="min-w-min">
+          <Index each={brushes}>
+            {(brush) => (
+              <ToolButton
+                data-current-tool={
+                  props.tool === "brush" && props.variant === brush()
+                }
+                as={Menu.Item}
+                value={brush()}
+                onClick={() =>
+                  props.commands.setTool({ tool: "brush", variant: brush() })
+                }
+              >
+                <Dynamic component={brushIconMap[brush()]} />
+                <span class="sr-only">{brush()}</span>
+              </ToolButton>
+            )}
+          </Index>
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
+  );
+}

@@ -1,6 +1,5 @@
 import {
   ArrowDownLeftIcon,
-  BrushIcon,
   EraserIcon,
   GripVerticalIcon,
   MinusIcon,
@@ -10,7 +9,8 @@ import {
 import { Index, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { createPosition } from "./hooks";
-import { ShapeToolsMenu } from "./shape-tools-menu";
+import { BrushToolMenu } from "./brush-tool-menu";
+import { ShapeToolMenu } from "./shape-tool-menu";
 import { ToolButton } from "./tool-button";
 import type { LucideIcon } from "lucide-solid";
 import type {
@@ -29,7 +29,6 @@ type ToolItem = ToolSettings & {
 };
 
 const tools: ToolItem[] = [
-  { tool: "brush", variant: "plain", label: "Brush", icon: BrushIcon },
   { tool: "eraser", variant: "plain", label: "Eraser", icon: EraserIcon },
   {
     tool: "straight-line",
@@ -101,6 +100,13 @@ export function ToolsPanel(props: ToolsPanelProps) {
             class="flex-none flex-row flex-wrap"
             classList={{ "justify-center": shouldBeVertical() }}
           >
+            <BrushToolMenu
+              tool={props.tool}
+              variant={props.variant}
+              commands={props.commands}
+              isParentPanelVertical={shouldBeVertical()}
+            />
+
             <Index each={tools}>
               {(t) => (
                 <ToolButton
@@ -116,7 +122,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
               )}
             </Index>
 
-            <ShapeToolsMenu
+            <ShapeToolMenu
               tool={props.tool}
               variant={props.variant}
               commands={props.commands}
