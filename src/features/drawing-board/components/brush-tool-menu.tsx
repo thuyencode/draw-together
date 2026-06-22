@@ -18,7 +18,10 @@ type BrushToolMenuProps = PropsWithCommands &
   };
 
 export function BrushToolMenu(props: BrushToolMenuProps) {
-  const selected = () => props.tool === "brush";
+  const selected = (variant?: BrushVariant) =>
+    variant
+      ? props.tool === "brush" && props.variant === variant
+      : props.tool === "brush";
 
   return (
     <Menu.Root
@@ -42,9 +45,7 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
           <Index each={brushes}>
             {(brush) => (
               <ToolButton
-                data-current-tool={
-                  props.tool === "brush" && props.variant === brush()
-                }
+                data-current-tool={selected(brush())}
                 as={Menu.Item}
                 value={brush()}
                 onClick={() =>

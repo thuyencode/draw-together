@@ -19,7 +19,10 @@ type ShapeToolMenuProps = PropsWithCommands &
   };
 
 export function ShapeToolMenu(props: ShapeToolMenuProps) {
-  const selected = () => props.tool === "shape";
+  const selected = (variant?: ShapeVariant) =>
+    variant
+      ? props.tool === "shape" && props.variant === variant
+      : props.tool === "shape";
 
   return (
     <Menu.Root
@@ -43,9 +46,7 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
           <Index each={shapes}>
             {(shape) => (
               <ToolButton
-                data-current-tool={
-                  props.tool === "shape" && props.variant === shape()
-                }
+                data-current-tool={selected(shape())}
                 as={Menu.Item}
                 value={shape()}
                 onClick={() =>
