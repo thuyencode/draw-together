@@ -2,15 +2,10 @@ import { BrushIcon, PencilIcon } from "lucide-solid";
 import { Index, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { ToolButton } from "./tool-button";
+import { StrokeInkIcon, StrokePenIcon } from "./icons";
 import type { LucideIcon } from "lucide-solid";
 import type { BrushVariant, PropsWithCommands, PropsWithTool } from "./types";
 import { Menu } from "~/features/shared/components/ui";
-
-const brushIconMap: Record<BrushVariant, LucideIcon> = {
-  plain: PencilIcon,
-};
-
-const brushes = Object.keys(brushIconMap) as BrushVariant[];
 
 type BrushToolMenuProps = PropsWithCommands &
   PropsWithTool & {
@@ -62,3 +57,10 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
     </Menu.Root>
   );
 }
+
+const brushIconMap: Record<BrushVariant, LucideIcon> = {
+  plain: StrokePenIcon,
+  ink: StrokeInkIcon,
+};
+
+const brushes = Object.keys(brushIconMap) as BrushVariant[];

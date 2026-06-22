@@ -50,11 +50,19 @@ export default function DrawingBoard() {
         ...point,
       ]);
     },
+    setFreeformLinePoints(index, points) {
+      setElements("freeformLines", index, "points", points);
+    },
     addShape(shape) {
       setElements("shapes", elements.shapes.length, shape);
     },
     addStraightLine(line) {
       setElements("straightLines", elements.straightLines.length, line);
+    },
+    clearCanvas() {
+      setElements("freeformLines", []);
+      setElements("shapes", []);
+      setElements("straightLines", []);
     },
   };
 

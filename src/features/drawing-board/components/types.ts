@@ -2,10 +2,10 @@ import type { RgbColor } from "@irojs/iro-core";
 import type { Point, Size } from "@zag-js/rect-utils";
 import type Konva from "konva";
 
-export type Tool = "shape" | "brush" | "eraser" | "straight-line";
+export type Tool = "shape" | "brush" | "eraser" | "straight-line" | "reset";
 
 export type ShapeVariant = "circle" | "rectangle";
-export type BrushVariant = "plain";
+export type BrushVariant = "plain" | "ink";
 type EraserVariant = "plain";
 type StraightLineVariant = "plain";
 
@@ -19,7 +19,8 @@ export type ToolSettings =
   | { tool: Extract<Tool, "shape">; variant: ShapeVariant }
   | { tool: Extract<Tool, "brush">; variant: BrushVariant }
   | { tool: Extract<Tool, "eraser">; variant: EraserVariant }
-  | { tool: Extract<Tool, "straight-line">; variant: StraightLineVariant };
+  | { tool: Extract<Tool, "straight-line">; variant: StraightLineVariant }
+  | { tool: Extract<Tool, "reset">; variant: "plain" };
 
 export interface StrokeConfig {
   strokeWidth: number;
@@ -37,6 +38,7 @@ export interface DrawingElements {
 
 export interface FreeformInfo extends StrokeConfig {
   tool: Extract<Tool, "brush" | "eraser">;
+  variant: BrushVariant | EraserVariant;
   points: number[];
 }
 
@@ -73,8 +75,10 @@ export interface Commands {
   setIsPainting: (isPainting: boolean) => void;
   addFreeformLine: (line: FreeformInfo) => void;
   appendFreeformPoint: (point: [number, number]) => void;
+  setFreeformLinePoints: (index: number, points: number[]) => void;
   addShape: (shape: ShapeInfo) => void;
   addStraightLine: (line: StraightLineInfo) => void;
+  clearCanvas: () => void;
 }
 
 export type PropsWithTool<P = unknown> = P & {

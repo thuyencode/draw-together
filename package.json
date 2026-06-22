@@ -11,7 +11,7 @@
     "url": "https://github.com/thuyencode/draw-together/issues"
   },
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "vite dev --port 3000 --host",
     "generate-routes": "tsr generate",
     "build": "bun --bun vite build",
     "start": "bun run .output/server/index.mjs",

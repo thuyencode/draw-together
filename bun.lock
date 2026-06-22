@@ -20,6 +20,7 @@
         "konva": "^10.3.0",
         "lucide-solid": "^1.20.0",
         "nitro": "npm:nitro-nightly@latest",
+        "perfect-freehand": "^1.2.3",
         "solid-js": "^1.9.13",
         "tailwind-merge": "^3.6.0",
         "valibot": "^1.4.1",

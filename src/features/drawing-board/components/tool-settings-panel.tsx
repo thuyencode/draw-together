@@ -6,6 +6,7 @@ import {
 } from "lucide-solid";
 import { createSignal } from "solid-js";
 import { createPosition } from "./hooks";
+import { normalizeToolName } from "./utils";
 import type {
   DrawingSettings,
   PropsWithCommands,
@@ -57,7 +58,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
             <FloatingPanel.Header>
               <FloatingPanel.Title class="capitalize">
                 <GripVerticalIcon />
-                {props.variant} Settings
+                {normalizeToolName(props.tool)} Settings
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
