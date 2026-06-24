@@ -76,10 +76,4 @@ export function normalizeBbox(
 export const rgbaToString = ({ r, g, b, a = 1 }: RgbColor) =>
   a < 1 ? `rgba(${r}, ${g}, ${b}, ${a})` : `rgb(${r}, ${g}, ${b})`;
 
-export function normalizeToolName(tool: Tool) {
-  const parts = tool.split("-");
-
-  if (parts.length < 2) return tool;
-
-  return parts.join(" ");
-}
+export const normalizeToolName = (tool: Tool) => tool.replace(/-/g, " ");
