@@ -5,7 +5,7 @@ export function ErrorComponent(props: ErrorComponentProps) {
   return (
     <div
       role="alert"
-      class="alert alert-error alert-soft flex max-w-sm flex-col"
+      class="alert alert-error alert-soft mx-auto flex max-w-sm flex-col"
     >
       <p class="inline-flex items-center gap-2 text-lg font-bold">
         <BugIcon />
