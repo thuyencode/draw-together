@@ -1,5 +1,6 @@
 import type { RgbColor } from "@irojs/iro-core";
 import type { Point, Position, Size, Tool } from "./types";
+import type { CircleProps, FabricObjectProps, RectProps } from "fabric";
 
 const GAP = 20;
 
@@ -61,19 +62,36 @@ export function getInitialPosition(
   }
 }
 
-export function normalizeBbox(
-  a: { x: number; y: number },
-  b: { x: number; y: number },
-) {
-  return {
-    x: Math.min(a.x, b.x),
-    y: Math.min(a.y, b.y),
-    width: Math.abs(b.x - a.x),
-    height: Math.abs(b.y - a.y),
-  };
-}
-
 export const rgbaToString = ({ r, g, b, a = 1 }: RgbColor) =>
   a < 1 ? `rgba(${r}, ${g}, ${b}, ${a})` : `rgb(${r}, ${g}, ${b})`;
 
 export const normalizeToolName = (tool: Tool) => tool.replace(/-/g, " ");
+
+export function getRectFromPoints(
+  initial: Point,
+  current: Point,
+): Pick<RectProps, "left" | "top" | "width" | "height"> {
+  const width = Math.abs(current.x - initial.x);
+  const height = Math.abs(current.y - initial.y);
+  const left =
+    (Math.min(initial.x, current.x) + Math.max(initial.x, current.x)) / 2;
+  const top =
+    (Math.min(initial.y, current.y) + Math.max(initial.y, current.y)) / 2;
+
+  return { left, top, width, height };
+}
+
+export function getCircleFromPoints(
+  initial: Point,
+  current: Point,
+): Pick<CircleProps, "left" | "top" | "radius"> {
+  const radius =
+    Math.max(Math.abs(current.x - initial.x), Math.abs(current.y - initial.y)) /
+    2;
+  const left =
+    (Math.min(initial.x, current.x) + Math.max(initial.x, current.x)) / 2;
+  const top =
+    (Math.min(initial.y, current.y) + Math.max(initial.y, current.y)) / 2;
+
+  return { left, top, radius };
+}

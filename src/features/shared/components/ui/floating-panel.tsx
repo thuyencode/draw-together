@@ -27,7 +27,7 @@ function FloatingPanelContent(_props: BaseFloatingPanel.ContentProps) {
   return (
     <BaseFloatingPanel.Content
       class={cn(
-        "bg-base-100 flex w-full flex-col rounded-lg border border-neutral-300 shadow-lg outline-none data-behind:opacity-90 data-topmost:z-9999",
+        "bg-base-100 border-neutral/40 flex w-full flex-col rounded-lg border shadow-lg outline-none data-behind:opacity-90 data-topmost:z-9999",
         props.class,
       )}
       {...rest}
@@ -46,7 +46,7 @@ function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
     <BaseFloatingPanel.Header
       data-vertical={props.vertical ? "" : undefined}
       class={cn(
-        "group bg-base-200 flex cursor-grab items-center gap-1 rounded-t-lg border-b border-neutral-300 px-4 py-2 active:cursor-grabbing",
+        "group bg-base-200 border-neutral/40 flex cursor-grab items-center gap-1 rounded-t-lg border-b px-4 py-2 active:cursor-grabbing",
         props.vertical ? "flex-col" : "justify-between",
         props.class,
       )}

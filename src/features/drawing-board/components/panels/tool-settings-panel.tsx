@@ -5,24 +5,19 @@ import {
   XIcon,
 } from "lucide-solid";
 import { createSignal } from "solid-js";
-import { createPosition } from "./hooks";
-import { normalizeToolName } from "./utils";
+import { createPosition } from "../../hooks";
+import { normalizeToolName } from "../../utils";
 import type {
-  DrawingSettings,
-  PropsWithCommands,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
-  PropsWithTool,
+  PropsWithSettings,
   Size,
-} from "./types";
+} from "../../types";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
-type ToolSettingsPanelsProps = PropsWithTool &
+type ToolSettingsPanelsProps = PropsWithSettings &
   PropsWithContainerRef &
-  PropsWithDefaultPosition &
-  PropsWithCommands & {
-    settings: DrawingSettings;
-  };
+  PropsWithDefaultPosition;
 
 export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
   const [size, setSize] = createSignal<Size>({ width: 300, height: 240 });
@@ -58,7 +53,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
             <FloatingPanel.Header>
               <FloatingPanel.Title class="capitalize">
                 <GripVerticalIcon />
-                {normalizeToolName(props.tool)} Settings
+                {normalizeToolName(props.settings.tool)} Settings
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
@@ -85,9 +80,10 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
                 step="1"
                 value={props.settings.strokeWidth}
                 onChange={(e) => {
-                  props.commands.setStrokeWidth(
-                    Number.parseInt(e.target.value, 10),
-                  );
+                  props.setSettings((prev) => ({
+                    ...prev,
+                    strokeWidth: Number.parseInt(e.target.value, 10),
+                  }));
                 }}
               />
               <span class="badge badge-info badge-xs">px</span>

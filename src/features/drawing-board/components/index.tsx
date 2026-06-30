@@ -1,115 +1,17 @@
-import { ErrorBoundary, Suspense, lazy, onMount } from "solid-js";
-import { createStore } from "solid-js/store";
 import { ClientOnly } from "@tanstack/solid-router";
-import { ColorSettingsPanels } from "./color-settings-panel";
-import { ToolSettingsPanels } from "./tool-settings-panel";
-import { ToolsPanel } from "./tools-panel";
-import type { Commands, DrawingElements, DrawingSettings } from "./types";
+import { ErrorBoundary, Suspense, lazy } from "solid-js";
+import { errorBoundaryFallBackProp } from "~/features/shared/components";
 
-const DrawingCanvas = lazy(() => import("./drawing-canvas"));
+const DrawingBoardClient = lazy(() => import("./_drawing-board.client"));
 
 export default function DrawingBoard() {
-  let containerRef!: HTMLDivElement;
-
-  const [settings, setSettings] = createStore<DrawingSettings>({
-    tool: "brush",
-    variant: "plain",
-    isPainting: false,
-    strokeWidth: 2,
-    color: { r: 9, g: 139, b: 250 },
-  });
-
-  const [elements, setElements] = createStore<DrawingElements>({
-    freeformLines: [],
-    shapes: [],
-    straightLines: [],
-  });
-
-  const commands: Commands = {
-    setTool(ts) {
-      setSettings(ts);
-    },
-    setStrokeWidth(strokeWidth) {
-      setSettings("strokeWidth", strokeWidth);
-    },
-    setColor(color) {
-      setSettings("color", color);
-    },
-    setIsPainting(isPainting) {
-      setSettings("isPainting", isPainting);
-    },
-    addFreeformLine(line) {
-      setElements("freeformLines", elements.freeformLines.length, line);
-    },
-    appendFreeformPoint(point) {
-      const lastIdx = elements.freeformLines.length - 1;
-      if (lastIdx === -1) return;
-
-      setElements("freeformLines", lastIdx, "points", (prev) => [
-        ...prev,
-        ...point,
-      ]);
-    },
-    setFreeformLinePoints(index, points) {
-      setElements("freeformLines", index, "points", points);
-    },
-    addShape(shape) {
-      setElements("shapes", elements.shapes.length, shape);
-    },
-    addStraightLine(line) {
-      setElements("straightLines", elements.straightLines.length, line);
-    },
-    clearCanvas() {
-      setElements("freeformLines", []);
-      setElements("shapes", []);
-      setElements("straightLines", []);
-    },
-  };
-
   return (
-    <div class="relative h-full" ref={containerRef}>
-      <ToolsPanel
-        tool={settings.tool}
-        variant={settings.variant}
-        commands={commands}
-        containerRef={containerRef}
-        defaultPosition="top-left"
-      />
-      <ToolSettingsPanels
-        tool={settings.tool}
-        variant={settings.variant}
-        commands={commands}
-        containerRef={containerRef}
-        defaultPosition="bottom-right"
-        settings={settings}
-      />
-      <ColorSettingsPanels
-        commands={commands}
-        containerRef={containerRef}
-        defaultPosition="top-right"
-        color={settings.color}
-      />
-
-      <ClientOnly>
-        <ErrorBoundary fallback={(error) => <LogError error={error} />}>
-          <Suspense fallback={"Loading canvas..."}>
-            <DrawingCanvas
-              settings={settings}
-              elements={elements}
-              commands={commands}
-            />
-          </Suspense>
-        </ErrorBoundary>
-      </ClientOnly>
-    </div>
+    <ClientOnly>
+      <ErrorBoundary fallback={errorBoundaryFallBackProp}>
+        <Suspense fallback={"Loading canvas..."}>
+          <DrawingBoardClient />
+        </Suspense>
+      </ErrorBoundary>
+    </ClientOnly>
   );
-}
-
-function LogError(props: { error: unknown }) {
-  onMount(() => {
-    console.log("ErrorBoundary");
-    console.error(props.error);
-  });
-
-  return null;
 }

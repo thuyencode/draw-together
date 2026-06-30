@@ -1,21 +1,20 @@
 import { CircleIcon, ShapesIcon, SquareIcon } from "lucide-solid";
 import { Index, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { ToolButton } from "./tool-button";
+import { ToolButton } from "../ui";
 import type { LucideIcon } from "lucide-solid";
-import type { PropsWithCommands, PropsWithTool, ShapeVariant } from "./types";
+import type { PropsWithSettings, ShapeVariant } from "../../types";
 import { Menu } from "~/features/shared/components/ui";
 
-type ShapeToolMenuProps = PropsWithCommands &
-  PropsWithTool & {
-    isParentPanelVertical?: boolean;
-  };
+type ShapeToolMenuProps = PropsWithSettings & {
+  isParentPanelVertical?: boolean;
+};
 
 export function ShapeToolMenu(props: ShapeToolMenuProps) {
   const selected = (variant?: ShapeVariant) =>
     variant
-      ? props.tool === "shape" && props.variant === variant
-      : props.tool === "shape";
+      ? props.settings.tool === "shape" && props.settings.variant === variant
+      : props.settings.tool === "shape";
 
   return (
     <Menu.Root
@@ -25,7 +24,9 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
     >
       <ToolButton data-current-tool={selected()} as={Menu.Trigger}>
         <Show when={selected()} fallback={<ShapesIcon />}>
-          <Dynamic component={shapeIconMap[props.variant as ShapeVariant]} />
+          <Dynamic
+            component={shapeIconMap[props.settings.variant as ShapeVariant]}
+          />
         </Show>
         <span class="sr-only">Shapes</span>
       </ToolButton>
@@ -43,7 +44,12 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
                 as={Menu.Item}
                 value={shape()}
                 onClick={() =>
-                  props.commands.setTool({ tool: "shape", variant: shape() })
+                  // eslint-disable-next-line solid/reactivity
+                  props.setSettings((prev) => ({
+                    ...prev,
+                    tool: "shape",
+                    variant: shape(),
+                  }))
                 }
               >
                 <Dynamic component={shapeIconMap[shape()]} />

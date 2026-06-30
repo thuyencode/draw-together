@@ -40,7 +40,7 @@ function MenuItem(_props: BaseMenu.ItemProps) {
   return (
     <BaseMenuItem
       class={cn(
-        "btn btn-ghost data-disabled:btn-disabled data-highlighted:bg-neutral-200",
+        "btn btn-ghost data-disabled:btn-disabled data-highlighted:bg-base-300",
         props.class,
       )}
       {...rest}

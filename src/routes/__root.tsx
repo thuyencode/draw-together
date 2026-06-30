@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />\
 import {
-  ErrorComponent,
   HeadContent,
   Outlet,
   Scripts,
@@ -9,7 +8,7 @@ import {
 import { Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
-import { Header, NotFound } from "~/features/shared/components";
+import { ErrorComponent, Header, NotFound } from "~/features/shared/components";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -42,7 +41,7 @@ function RootComponent() {
         <HydrationScript />
         <HeadContent />
       </head>
-      <body>
+      <body class="h-dvh min-h-dvh">
         <Header />
         <Suspense>
           <Outlet />

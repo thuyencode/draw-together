@@ -25,19 +25,19 @@
     "@ark-ui/solid": "^5.37.1",
     "@jaames/iro": "^5.5.2",
     "@solid-primitives/resize-observer": "^2.1.5",
+    "@solid-primitives/scheduled": "^1.5.3",
     "@t3-oss/env-core": "^0.13.11",
-    "@tanstack/router-plugin": "^1.168.18",
     "@tanstack/solid-form": "latest",
+    "@tanstack/solid-hotkeys": "^0.10.0",
     "@tanstack/solid-query": "latest",
-    "@tanstack/solid-query-devtools": "latest",
     "@tanstack/solid-router": "latest",
-    "@tanstack/solid-router-devtools": "latest",
     "@tanstack/solid-router-ssr-query": "latest",
     "@tanstack/solid-start": "latest",
-    "konva": "^10.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "fabric": "^7.4.0",
     "lucide-solid": "^1.20.0",
     "nitro": "npm:nitro-nightly@latest",
-    "perfect-freehand": "^1.2.3",
     "solid-js": "^1.9.13",
     "tailwind-merge": "^3.6.0",
     "valibot": "^1.4.1"
@@ -49,10 +49,11 @@
     "@tanstack/eslint-config": "^0.4.0",
     "@tanstack/eslint-plugin-router": "^1.162.0",
     "@tanstack/router-cli": "^1.167.17",
+    "@tanstack/router-plugin": "^1.168.18",
+    "@tanstack/solid-query-devtools": "latest",
+    "@tanstack/solid-router-devtools": "latest",
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
     "@types/node": "^25.9.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "daisyui": "^5.5.23",
     "eslint": "^10.5.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -66,6 +67,7 @@
     "vite-plugin-solid": "^2.11.12"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "bun": ">=1"
   }
 }

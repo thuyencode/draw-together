@@ -6,21 +6,20 @@ import {
   XIcon,
 } from "lucide-solid";
 import { createSignal, onMount } from "solid-js";
-import { createPosition } from "./hooks";
+import { createPosition } from "../../hooks";
 import type { FloatingPanelSizeChangeDetails } from "@ark-ui/solid/floating-panel";
 import type {
-  DrawingSettings,
-  PropsWithCommands,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
+  PropsWithSettings,
+  Settings,
   Size,
-} from "./types";
+} from "../../types";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
-  PropsWithCommands &
-  Pick<DrawingSettings, "color">;
+  PropsWithSettings;
 
 export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
   const [size, setSize] = createSignal<Size>({ width: 225, height: 350 });
@@ -36,7 +35,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
 
   onMount(() => {
     colorPicker = iro.ColorPicker(floatingPanelBodyRef, {
-      color: props.color,
+      color: props.settings.color,
       width: size().width - 8 - 1,
       layout: [
         { component: iro.ui.Wheel },
@@ -49,7 +48,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
     });
 
     const onColorChange = (color: iro.Color) => {
-      props.commands.setColor(color.rgba);
+      props.setSettings((prev) => ({ ...prev, color: color.rgba }));
     };
 
     colorPicker.on("input:end", onColorChange);

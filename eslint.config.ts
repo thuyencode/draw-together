@@ -25,6 +25,6 @@ export default [
     },
   },
   {
-    ignores: [".output/**/*"],
+    ignores: [".output/**/*", "./fabricjs-psbrush/**/*"],
   },
 ];

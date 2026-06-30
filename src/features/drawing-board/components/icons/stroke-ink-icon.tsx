@@ -9,7 +9,6 @@ export function StrokeInkIcon(props: LucideProps) {
       xmlns:xlink="http://www.w3.org/1999/xlink"
       aria-hidden="true"
       role="img"
-      style={{ color: "rgb(74, 85, 101)" }}
       width="64"
       height="64"
       viewBox="0 0 24 24"

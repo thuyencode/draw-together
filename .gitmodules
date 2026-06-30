@@ -1,0 +1,3 @@
+[submodule "fabricjs-psbrush"]
+	path = fabricjs-psbrush
+	url = https://github.com/cgwire/fabricjs-psbrush.git

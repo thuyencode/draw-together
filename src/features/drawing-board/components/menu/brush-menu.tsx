@@ -1,22 +1,21 @@
-import { BrushIcon, PencilIcon } from "lucide-solid";
-import { Index, Show } from "solid-js";
+import { BrushIcon } from "lucide-solid";
+import { Index, Show, untrack } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { ToolButton } from "./tool-button";
-import { StrokeInkIcon, StrokePenIcon } from "./icons";
+import { StrokeInkIcon, StrokePenIcon } from "../icons";
+import { ToolButton } from "../ui";
+import type { BrushVariant, PropsWithSettings } from "../../types";
 import type { LucideIcon } from "lucide-solid";
-import type { BrushVariant, PropsWithCommands, PropsWithTool } from "./types";
 import { Menu } from "~/features/shared/components/ui";
 
-type BrushToolMenuProps = PropsWithCommands &
-  PropsWithTool & {
-    isParentPanelVertical?: boolean;
-  };
+type BrushToolMenuProps = PropsWithSettings & {
+  isParentPanelVertical?: boolean;
+};
 
 export function BrushToolMenu(props: BrushToolMenuProps) {
   const selected = (variant?: BrushVariant) =>
     variant
-      ? props.tool === "brush" && props.variant === variant
-      : props.tool === "brush";
+      ? props.settings.tool === "brush" && props.settings.variant === variant
+      : props.settings.tool === "brush";
 
   return (
     <Menu.Root
@@ -26,7 +25,9 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
     >
       <ToolButton data-current-tool={selected()} as={Menu.Trigger}>
         <Show when={selected()} fallback={<BrushIcon />}>
-          <Dynamic component={brushIconMap[props.variant as BrushVariant]} />
+          <Dynamic
+            component={brushIconMap[props.settings.variant as BrushVariant]}
+          />
         </Show>
         <span class="sr-only">Brush</span>
       </ToolButton>
@@ -44,7 +45,11 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
                 as={Menu.Item}
                 value={brush()}
                 onClick={() =>
-                  props.commands.setTool({ tool: "brush", variant: brush() })
+                  props.setSettings((prev) => ({
+                    ...prev,
+                    tool: "brush",
+                    variant: untrack(brush),
+                  }))
                 }
               >
                 <Dynamic component={brushIconMap[brush()]} />
@@ -60,7 +65,7 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
 
 const brushIconMap: Record<BrushVariant, LucideIcon> = {
   plain: StrokePenIcon,
-  ink: StrokeInkIcon,
+  pressure: StrokeInkIcon,
 };
 
 const brushes = Object.keys(brushIconMap) as BrushVariant[];

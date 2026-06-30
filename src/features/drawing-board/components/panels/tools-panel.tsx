@@ -3,35 +3,40 @@ import {
   EraserIcon,
   GripVerticalIcon,
   MinusIcon,
+  MousePointerIcon,
+  RedoIcon,
+  RotateCwIcon,
   SlashIcon,
-  TrashIcon,
+  UndoIcon,
   XIcon,
 } from "lucide-solid";
 import { Index, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { BrushToolMenu } from "./brush-tool-menu";
-import { createPosition } from "./hooks";
-import { ShapeToolMenu } from "./shape-tool-menu";
-import { ToolButton } from "./tool-button";
-import type { LucideIcon } from "lucide-solid";
+import { createPosition } from "../../hooks";
+import { BrushToolMenu, ShapeToolMenu } from "../menu";
+import { ToolButton } from "../ui";
 import type {
-  Commands,
-  PropsWithCommands,
   PropsWithContainerRef,
   PropsWithDefaultPosition,
-  PropsWithTool,
+  PropsWithSettings,
   Size,
-  ToolSettings,
-} from "./types";
+  ToolConfig,
+} from "../../types";
+import type { LucideIcon } from "lucide-solid";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
-type ToolsPanelProps = PropsWithTool &
+type ToolsPanelProps = PropsWithSettings &
   PropsWithContainerRef &
-  PropsWithDefaultPosition &
-  PropsWithCommands;
+  PropsWithDefaultPosition & {
+    isUndoAvailable: boolean;
+    isRedoAvailable: boolean;
+    onUndo: () => void;
+    onRedo: () => void;
+    onReset: () => void;
+  };
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal<Size>({ width: 54, height: 305 });
+  const [size, setSize] = createSignal<Size>({ width: 54, height: 390 });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
@@ -87,34 +92,64 @@ export function ToolsPanel(props: ToolsPanelProps) {
             class="flex-none flex-row flex-wrap"
             classList={{ "justify-center": shouldBeVertical() }}
           >
-            <BrushToolMenu
-              tool={props.tool}
-              variant={props.variant}
-              commands={props.commands}
-              isParentPanelVertical={shouldBeVertical()}
-            />
-
-            <ShapeToolMenu
-              tool={props.tool}
-              variant={props.variant}
-              commands={props.commands}
-              isParentPanelVertical={shouldBeVertical()}
-            />
-
             <Index each={tools}>
               {(t) => (
                 <ToolButton
                   type="button"
                   data-current-tool={
-                    t().tool === props.tool && t().variant === props.variant
+                    t().tool === props.settings.tool &&
+                    t().variant === props.settings.variant
                   }
-                  onClick={() => t().onClick(props.commands)}
+                  onClick={() =>
+                    // @ts-ignore - The ToolConfig type is already satisfied but the TS compiler doesn't know that
+                    // eslint-disable-next-line solid/reactivity
+                    props.setSettings((prev) => ({
+                      ...prev,
+                      tool: t().tool,
+                      variant: t().variant,
+                    }))
+                  }
                 >
                   <Dynamic component={t().icon} />
                   <span class="sr-only">{t().label}</span>
                 </ToolButton>
               )}
             </Index>
+
+            <BrushToolMenu
+              settings={props.settings}
+              setSettings={props.setSettings}
+              isParentPanelVertical={shouldBeVertical()}
+            />
+
+            <ShapeToolMenu
+              settings={props.settings}
+              setSettings={props.setSettings}
+              isParentPanelVertical={shouldBeVertical()}
+            />
+
+            <ToolButton
+              type="button"
+              disabled={!props.isUndoAvailable}
+              onClick={props.onUndo}
+            >
+              <UndoIcon />
+              <span class="sr-only">Undo</span>
+            </ToolButton>
+
+            <ToolButton
+              type="button"
+              disabled={!props.isRedoAvailable}
+              onClick={props.onRedo}
+            >
+              <RedoIcon />
+              <span class="sr-only">Redo</span>
+            </ToolButton>
+
+            <ToolButton type="button" onClick={props.onReset}>
+              <RotateCwIcon />
+              <span class="sr-only">Clear</span>
+            </ToolButton>
           </FloatingPanel.Body>
 
           <FloatingPanel.ResizeTrigger axis="n" />
@@ -131,34 +166,22 @@ export function ToolsPanel(props: ToolsPanelProps) {
   );
 }
 
-type ToolItem = ToolSettings & {
+type ToolItem = ToolConfig & {
   label: string;
   icon: LucideIcon;
-  onClick: (commands: Commands) => void;
 };
 
 const tools: ToolItem[] = [
+  {
+    tool: "select",
+    variant: "select",
+    label: "Select",
+    icon: MousePointerIcon,
+  },
   {
     tool: "eraser",
     variant: "plain",
     label: "Eraser",
     icon: EraserIcon,
-    onClick: (commands) =>
-      commands.setTool({ tool: "eraser", variant: "plain" }),
-  },
-  {
-    tool: "straight-line",
-    variant: "plain",
-    label: "Straight line",
-    icon: SlashIcon,
-    onClick: (commands) =>
-      commands.setTool({ tool: "straight-line", variant: "plain" }),
-  },
-  {
-    tool: "reset",
-    variant: "plain",
-    label: "Clear canvas",
-    icon: TrashIcon,
-    onClick: (commands) => commands.clearCanvas(),
   },
 ];

@@ -28,6 +28,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(dirname, "./src"),
+      "fabricjs-psbrush": path.resolve(dirname, "./fabricjs-psbrush/lib"),
     },
   },
   build: {
@@ -37,12 +38,12 @@ export default defineConfig({
           groups: [
             {
               name(id) {
-                if (id.includes("node_modules/konva")) {
-                  return "konva";
-                }
-
                 if (id.includes("node_modules/@ark-ui")) {
                   return "ark-ui";
+                }
+
+                if (id.includes("node_modules/fabric")) {
+                  return "fabric";
                 }
 
                 return null;
