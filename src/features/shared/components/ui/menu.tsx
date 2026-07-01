@@ -27,7 +27,7 @@ function MenuContent(_props: BaseMenu.ContentProps) {
   return (
     <BaseMenuContent
       class={cn(
-        "bg-base-100 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 rounded-lg border border-neutral-300 p-1 shadow-md outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
+        "bg-base-100 border-neutral/40 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 rounded-lg border p-1 shadow-md outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
       {...rest}
