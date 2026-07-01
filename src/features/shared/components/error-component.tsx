@@ -1,7 +1,12 @@
 import { BugIcon } from "lucide-solid";
+import { onMount } from "solid-js";
 import type { ErrorComponentProps } from "@tanstack/solid-router";
 
 export function ErrorComponent(props: ErrorComponentProps) {
+  onMount(() => {
+    console.error(props.error);
+  });
+
   return (
     <div
       role="alert"
