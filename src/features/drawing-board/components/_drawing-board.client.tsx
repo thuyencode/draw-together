@@ -25,7 +25,7 @@ import type { FabricObjectProps } from "fabric";
 
 FabricObject.customProperties = ["objectId"];
 
-export default function _DrawingBoard() {
+export default function DrawingBoard() {
   let containerRef!: HTMLDivElement;
   let canvasElementRef!: HTMLCanvasElement;
 
