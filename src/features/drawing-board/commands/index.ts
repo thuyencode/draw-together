@@ -4,4 +4,6 @@ export interface Command {
 }
 
 export * from "./add-command";
+export * from "./modify-command";
 export * from "./remove-command";
+

@@ -16,7 +16,7 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { AddCommand, RemoveCommand } from "../commands";
-import { createCanvas } from "../hooks/";
+import { createCanvas } from "../hooks";
 import { getCircleFromPoints, getRectFromPoints, rgbaToString } from "../utils";
 import { ColorSettingsPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
