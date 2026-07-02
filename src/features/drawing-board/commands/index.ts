@@ -1,6 +1,6 @@
 export interface Command {
-  execute: () => void | Promise<void>;
   undo: () => void | Promise<void>;
+  execute: () => void | Promise<void>;
 }
 
 export * from "./add-command";

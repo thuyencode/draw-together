@@ -1,44 +1,76 @@
-import { util } from "fabric";
-import type { Canvas, FabricObject, SerializedObjectProps } from "fabric";
+import { ActiveSelection, util } from "fabric";
+import type {
+  Canvas,
+  FabricObject,
+  SerializedGroupProps,
+  SerializedObjectProps,
+} from "fabric";
 import type { Command } from ".";
+
+// Waiting for https://github.com/fabricjs/fabric.js/issues/11016 to be solved
 
 export class RemoveCommand implements Command {
   private objectDataList: SerializedObjectProps[];
+  private selectionData: SerializedGroupProps | undefined;
 
   constructor(
     private canvas: Canvas,
-    objects: FabricObject[],
+    target: FabricObject[] | ActiveSelection,
   ) {
-    /*
-     * If many objects are selected, discard them first before
-     * serialized to get the correct coord values on canvas
-     * Coord values are handled differently for groups
-     */
-    this.canvas.discardActiveObject();
-
-    this.objectDataList = objects.map((o) => o.toDatalessObject());
+    if (target instanceof ActiveSelection) {
+      this.selectionData = target.toObject();
+      this.objectDataList = target.getObjects().map((o) => o.toObject());
+    } else {
+      this.objectDataList = target.map((o) => o.toObject());
+    }
   }
 
   async undo() {
-    this.canvas.discardActiveObject();
+    if (this.selectionData) {
+      const [restored]: ActiveSelection[] = await util.enlivenObjects([
+        this.selectionData,
+      ]);
 
-    const objects: FabricObject[] = await util.enlivenObjects(
-      this.objectDataList,
-    );
+      /*
+       * Override the `onDeselect` method to fix a damm weird behavior
+       * After deserializing an ActiveSelection, you click outside of it
+       * and then click on it again. Guess what, it is still there although
+       * it's empty. Biscuit!
+       */
+      restored.onDeselect = () => {
+        restored.forEachObject((o) => {
+          /*
+           * Must add each object to back canvas or else they will disappear
+           * once you click outside of their ActiveSelection instance
+           */
+          this.canvas.add(o);
+        });
 
-    objects.forEach((t) => console.log("undo origin", t.left, t.top));
+        restored.removeAll();
+        this.canvas.remove(restored);
+        return false;
+      };
 
-    this.canvas.add(...objects);
+      this.canvas.add(restored);
+      this.canvas.setActiveObject(restored);
+    } else {
+      const restored: FabricObject[] = await util.enlivenObjects(
+        this.objectDataList,
+      );
+
+      this.canvas.add(...restored);
+    }
+
     this.canvas.requestRenderAll();
   }
 
   execute() {
+    this.canvas.discardActiveObject();
+
     const objectIds = this.objectDataList.map((o) => o.objectId);
     const targets = this.canvas
       .getObjects()
       .filter((o) => objectIds.includes(o.objectId));
-
-    targets.forEach((t) => console.log("execute origin", t.left, t.top));
 
     this.canvas.remove(...targets);
     this.canvas.requestRenderAll();

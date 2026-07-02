@@ -47,7 +47,6 @@ export default function DrawingBoard() {
 
   onMount(() => {
     const c = canvas();
-
     if (!c) return;
 
     const untrack_settings = untrack(() => settings);
@@ -191,9 +190,20 @@ export default function DrawingBoard() {
     if (!c) return;
 
     const activeObjects = c.getActiveObjects();
-    const objects = activeObjects.length === 0 ? c.getObjects() : activeObjects;
+    /*
+     * If no objects is selected, get all objects on canvas for removal
+     * If there is more than one object selected, get the ActiveSelection object instead
+     * Otherwise, get array of selected objects, it only has one item
+     */
+    const target = (
+      activeObjects.length === 0
+        ? c.getObjects()
+        : activeObjects.length > 1
+          ? c.getActiveObject()
+          : activeObjects
+    ) as FabricObject[] | ActiveSelection;
 
-    const command = new RemoveCommand(c, objects);
+    const command = new RemoveCommand(c, target);
     command.execute();
 
     setHistory((prev) => [...prev, command]);
@@ -211,7 +221,6 @@ export default function DrawingBoard() {
     }));
 
     const objects = c.getObjects();
-
     if (objects.length === 0) return;
 
     const selection = new ActiveSelection(c.getObjects(), { canvas: c });
