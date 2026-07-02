@@ -12,7 +12,6 @@ import type {
   PropsWithContainerRef,
   PropsWithDefaultPosition,
   PropsWithSettings,
-  Settings,
   Size,
 } from "../../types";
 import { FloatingPanel } from "~/features/shared/components/ui";
@@ -79,7 +78,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
       onSizeChange={handleSizeChange}
     >
       <FloatingPanel.Positioner
-        initialStyle={{
+        ssrStyle={{
           "--x": "20px",
           "--y": "20px",
         }}

@@ -43,7 +43,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
       }}
     >
       <FloatingPanel.Positioner
-        initialStyle={{
+        ssrStyle={{
           "--x": "20px",
           "--y": "20px",
         }}

@@ -6,7 +6,6 @@ import {
   MousePointerIcon,
   RedoIcon,
   RotateCwIcon,
-  SlashIcon,
   UndoIcon,
   XIcon,
 } from "lucide-solid";
@@ -61,7 +60,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
       }}
     >
       <FloatingPanel.Positioner
-        initialStyle={{
+        ssrStyle={{
           "--x": "20px",
           "--y": "20px",
         }}

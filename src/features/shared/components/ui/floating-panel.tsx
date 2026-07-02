@@ -1,21 +1,20 @@
 import { FloatingPanel as BaseFloatingPanel } from "@ark-ui/solid/floating-panel";
 import { splitProps } from "solid-js";
-import { useIsClient } from "../../hooks";
+import { isServer } from "solid-js/web";
 import { cn } from "../../utils/cn";
 
 interface FloatingPanelPositionerProps
   extends BaseFloatingPanel.PositionerProps {
-  initialStyle?: BaseFloatingPanel.PositionerProps["style"];
+  ssrStyle?: BaseFloatingPanel.PositionerProps["style"];
 }
 
 function FloatingPanelPositioner(_props: FloatingPanelPositionerProps) {
-  const [props, rest] = splitProps(_props, ["class", "initialStyle", "style"]);
-  const isClient = useIsClient();
+  const [props, rest] = splitProps(_props, ["class", "ssrStyle", "style"]);
 
   return (
     <BaseFloatingPanel.Positioner
       class={cn("z-50", props.class)}
-      style={isClient() ? props.style : props.initialStyle}
+      style={isServer ? props.ssrStyle : props.style}
       {...rest}
     />
   );

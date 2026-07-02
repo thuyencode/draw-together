@@ -2,6 +2,7 @@ import { createElementSize } from "@solid-primitives/resize-observer";
 import { throttle } from "@solid-primitives/scheduled";
 import { Canvas } from "fabric";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { isServer } from "solid-js/web";
 import type { Accessor } from "solid-js";
 import type { CanvasOptions } from "fabric";
 
@@ -17,13 +18,8 @@ export function createCanvas(
     const el = canvasElementRef();
     if (!el) return;
 
-    const canvasInstance = new Canvas(el, options);
+    const canvasInstance = isServer ? undefined : new Canvas(el, options);
     setCanvas(canvasInstance);
-  });
-
-  onCleanup(() => {
-    canvas()?.dispose();
-    setCanvas(undefined);
   });
 
   const onResize = throttle(
@@ -31,6 +27,12 @@ export function createCanvas(
       canvasInstance.setDimensions({ width, height }),
     100,
   );
+
+  onCleanup(() => {
+    canvas()?.dispose();
+    setCanvas(undefined);
+    onResize.clear();
+  });
 
   createEffect(() => {
     const currentCanvas = canvas();
