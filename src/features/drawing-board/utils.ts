@@ -1,6 +1,12 @@
 import type { RgbColor } from "@irojs/iro-core";
+import type {
+  ActiveSelection,
+  Canvas,
+  CircleProps,
+  FabricObject,
+  RectProps,
+} from "fabric";
 import type { Point, Position, Size, Tool } from "./types";
-import type { CircleProps, FabricObjectProps, RectProps } from "fabric";
 
 const GAP = 20;
 
@@ -94,4 +100,22 @@ export function getCircleFromPoints(
     (Math.min(initial.y, current.y) + Math.max(initial.y, current.y)) / 2;
 
   return { left, top, radius };
+}
+
+export function getTargetOfSelection(canvas: Canvas) {
+  const activeObjects = canvas.getActiveObjects();
+  /*
+   * If no objects is selected, get all objects on canvas for removal
+   * If there is more than one object selected, get the ActiveSelection object instead
+   * Otherwise, get array of selected objects, it only has one item
+   */
+  const target = (
+    activeObjects.length === 0
+      ? canvas.getObjects()
+      : activeObjects.length > 1
+        ? canvas.getActiveObject()
+        : activeObjects
+  ) as FabricObject[] | ActiveSelection;
+
+  return target;
 }

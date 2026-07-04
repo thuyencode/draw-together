@@ -7,20 +7,13 @@ import {
   Rect,
 } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
-import {
-  createEffect,
-  createSignal,
-  onCleanup,
-  onMount,
-  untrack,
-} from "solid-js";
+import { createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createStore } from "solid-js/store";
-import { AddCommand, RemoveCommand } from "../commands";
-import { createCanvas } from "../hooks";
+import { AddCommand } from "../commands";
+import { createCanvas, useCanvasHistory } from "../hooks";
 import { getCircleFromPoints, getRectFromPoints, rgbaToString } from "../utils";
 import { ColorSettingsPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
-import type { Command } from "../commands";
 import type { FabricObjectProps } from "fabric";
 
 FabricObject.customProperties = ["objectId"];
@@ -42,8 +35,15 @@ export default function DrawingBoard() {
     color: { r: 9, g: 139, b: 250 },
   });
 
-  const [history, setHistory] = createSignal<Command[]>([]);
-  const [undone, setUndone] = createSignal<Command[]>([]);
+  const {
+    history,
+    undone,
+    pushCommand,
+    handleUndo,
+    handleRedo,
+    handleReset,
+    handleDelete,
+  } = useCanvasHistory(canvas);
 
   onMount(() => {
     const c = canvas();
@@ -68,9 +68,7 @@ export default function DrawingBoard() {
 
     c.on("path:created", (evt) => {
       if (untrack_settings.tool === "brush") {
-        const command = new AddCommand(c, evt.path);
-        setHistory((prev) => [...prev, command]);
-        setUndone([]);
+        pushCommand(new AddCommand(c, evt.path));
       }
     });
 
@@ -104,7 +102,7 @@ export default function DrawingBoard() {
             break;
         }
 
-        c.renderAll();
+        c.requestRenderAll();
       }
     });
 
@@ -118,8 +116,7 @@ export default function DrawingBoard() {
         previewObject = undefined;
         command.execute();
 
-        setHistory((prev) => [...prev, command]);
-        setUndone([]);
+        pushCommand(command);
       }
     });
 
@@ -156,60 +153,6 @@ export default function DrawingBoard() {
     onCleanup(handleReset);
   });
 
-  const handleReset = () => {
-    canvas()?.clear();
-    setHistory([]);
-    setUndone([]);
-  };
-
-  const handleUndo = () => {
-    const h = [...history()];
-    const command = h.pop();
-
-    if (command) {
-      command.undo();
-      setUndone((prev) => [...prev, command]);
-      setHistory(h);
-    }
-  };
-
-  const handleRedo = () => {
-    const u = [...undone()];
-    const command = u.pop();
-
-    if (command) {
-      command.execute();
-      setUndone(u);
-      setHistory((prev) => [...prev, command]);
-    }
-  };
-
-  const handleDelete = () => {
-    const c = canvas();
-
-    if (!c) return;
-
-    const activeObjects = c.getActiveObjects();
-    /*
-     * If no objects is selected, get all objects on canvas for removal
-     * If there is more than one object selected, get the ActiveSelection object instead
-     * Otherwise, get array of selected objects, it only has one item
-     */
-    const target = (
-      activeObjects.length === 0
-        ? c.getObjects()
-        : activeObjects.length > 1
-          ? c.getActiveObject()
-          : activeObjects
-    ) as FabricObject[] | ActiveSelection;
-
-    const command = new RemoveCommand(c, target);
-    command.execute();
-
-    setHistory((prev) => [...prev, command]);
-    setUndone([]);
-  };
-
   const handleSelectAll = () => {
     const c = canvas();
     if (!c) return;
@@ -225,7 +168,6 @@ export default function DrawingBoard() {
 
     const selection = new ActiveSelection(c.getObjects(), { canvas: c });
     c.setActiveObject(selection);
-    c.requestRenderAll();
   };
 
   createHotkey("Mod+Z", handleUndo);
