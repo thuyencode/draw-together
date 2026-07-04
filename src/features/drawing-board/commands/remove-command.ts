@@ -18,8 +18,10 @@ export class RemoveCommand implements Command {
     target: FabricObject[] | ActiveSelection,
   ) {
     if (target instanceof ActiveSelection) {
-      this.selectionData = target.toObject();
-      this.objectDataList = target.getObjects().map((o) => o.toObject());
+      this.selectionData = target.toDatalessObject();
+      this.objectDataList = target
+        .getObjects()
+        .map((o) => o.toDatalessObject());
     } else {
       this.objectDataList = target.map((o) => o.toObject());
     }
