@@ -1,8 +1,6 @@
 import { createSignal } from "solid-js";
-import { AddCommand, RemoveCommand } from "../commands";
-import { getTargetOfSelection } from "../utils";
-import type { Command } from "../commands";
 import type { Canvas } from "fabric";
+import type { Command } from "../commands";
 
 export function useCanvasHistory(canvas: () => Canvas | undefined) {
   const [history, setHistory] = createSignal<Command[]>([]);
@@ -41,18 +39,6 @@ export function useCanvasHistory(canvas: () => Canvas | undefined) {
     setUndone([]);
   };
 
-  const handleDelete = () => {
-    const c = canvas();
-
-    if (!c) return;
-
-    const target = getTargetOfSelection(c);
-    const command = new RemoveCommand(c, target);
-    command.execute();
-
-    pushCommand(command);
-  };
-
   return {
     history,
     undone,
@@ -60,6 +46,5 @@ export function useCanvasHistory(canvas: () => Canvas | undefined) {
     handleUndo,
     handleRedo,
     handleReset,
-    handleDelete,
   };
 }

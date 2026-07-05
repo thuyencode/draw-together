@@ -9,9 +9,14 @@ import {
 import { PSBrush } from "fabricjs-psbrush";
 import { createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createStore } from "solid-js/store";
-import { AddCommand } from "../commands";
+import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { createCanvas, useCanvasHistory } from "../hooks";
-import { getCircleFromPoints, getRectFromPoints, rgbaToString } from "../utils";
+import {
+  getCircleFromPoints,
+  getRectFromPoints,
+  getTargetOfSelection,
+  rgbaToString,
+} from "../utils";
 import { ColorSettingsPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
 import type { FabricObjectProps } from "fabric";
@@ -35,15 +40,8 @@ export default function DrawingBoard() {
     color: { r: 9, g: 139, b: 250 },
   });
 
-  const {
-    history,
-    undone,
-    pushCommand,
-    handleUndo,
-    handleRedo,
-    handleReset,
-    handleDelete,
-  } = useCanvasHistory(canvas);
+  const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
+    useCanvasHistory(canvas);
 
   onMount(() => {
     const c = canvas();
@@ -52,6 +50,7 @@ export default function DrawingBoard() {
     const untrack_settings = untrack(() => settings);
     const initialPoint: Point = { x: 0, y: 0 };
     let previewObject: FabricObject | undefined;
+    let shouldPushModifyCommand = false;
 
     const initialProps = (): Partial<FabricObjectProps> => ({
       top: initialPoint.x,
@@ -67,6 +66,8 @@ export default function DrawingBoard() {
     });
 
     c.on("path:created", (evt) => {
+      evt.path.objectId = window.crypto.randomUUID();
+
       if (untrack_settings.tool === "brush") {
         pushCommand(new AddCommand(c, evt.path));
       }
@@ -84,6 +85,7 @@ export default function DrawingBoard() {
             break;
         }
 
+        previewObject.objectId = window.crypto.randomUUID();
         c.add(previewObject);
       }
     });
@@ -108,16 +110,36 @@ export default function DrawingBoard() {
 
     c.on("mouse:up", () => {
       if (previewObject) {
-        previewObject.objectId = window.crypto.randomUUID();
-
         const command = new AddCommand(c, previewObject);
+        pushCommand(command);
 
         c.remove(previewObject);
         previewObject = undefined;
         command.execute();
-
-        pushCommand(command);
       }
+    });
+
+    c.on("object:moving", () => {
+      shouldPushModifyCommand = true;
+    });
+
+    c.on("object:scaling", () => {
+      shouldPushModifyCommand = true;
+    });
+
+    c.on("object:rotating", () => {
+      shouldPushModifyCommand = true;
+    });
+
+    c.on("object:skewing", () => {
+      shouldPushModifyCommand = true;
+    });
+
+    c.on("object:modified", (evt) => {
+      if (!shouldPushModifyCommand) return;
+      shouldPushModifyCommand = false;
+
+      pushCommand(new ModifyCommand(c, evt.target, evt.transform?.original));
     });
 
     createEffect(() => {
@@ -152,6 +174,17 @@ export default function DrawingBoard() {
 
     onCleanup(handleReset);
   });
+
+  const handleDelete = () => {
+    const c = canvas();
+    if (!c) return;
+
+    const target = getTargetOfSelection(c);
+    const command = new RemoveCommand(c, target);
+
+    command.execute();
+    pushCommand(command);
+  };
 
   const handleSelectAll = () => {
     const c = canvas();
