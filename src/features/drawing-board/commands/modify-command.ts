@@ -30,90 +30,33 @@ export class ModifyCommand implements Command {
   async undo() {
     this._removeExistingObjects();
 
-    if (this.selectionData) {
-      const [restored]: ActiveSelection[] = await util.enlivenObjects([
-        this.selectionData,
-      ]);
+    const restored = await this._restoreObjects();
 
-      if (this.transformOriginal) {
-        const matrix = util.composeMatrix({
-          scaleX: this.transformOriginal.scaleX,
-          scaleY: this.transformOriginal.scaleY,
-          skewX: this.transformOriginal.skewX,
-          skewY: this.transformOriginal.skewY,
-          angle: this.transformOriginal.angle,
-          translateX: this.transformOriginal.left,
-          translateY: this.transformOriginal.top,
-        });
-        util.applyTransformToObject(restored, matrix);
-      }
-
-      restored.onDeselect = () => {
-        restored.forEachObject((o) => {
-          this.canvas.add(o);
-        });
-
-        restored.removeAll();
-        this.canvas.remove(restored);
-        return false;
-      };
-
-      this.canvas.add(restored);
-      this.canvas.setActiveObject(restored);
-    } else {
-      const [restored]: FabricObject[] = await util.enlivenObjects(
-        this.objectDataList,
-      );
-
-      if (this.transformOriginal) {
-        const matrix = util.composeMatrix({
-          scaleX: this.transformOriginal.scaleX,
-          scaleY: this.transformOriginal.scaleY,
-          skewX: this.transformOriginal.skewX,
-          skewY: this.transformOriginal.skewY,
-          angle: this.transformOriginal.angle,
-          translateX: this.transformOriginal.left,
-          translateY: this.transformOriginal.top,
-        });
-        util.applyTransformToObject(restored, matrix);
-      }
-
-      this.canvas.add(restored);
-      this.canvas.setActiveObject(restored);
+    if (this.transformOriginal) {
+      const matrix = util.composeMatrix({
+        scaleX: this.transformOriginal.scaleX,
+        scaleY: this.transformOriginal.scaleY,
+        skewX: this.transformOriginal.skewX,
+        skewY: this.transformOriginal.skewY,
+        angle: this.transformOriginal.angle,
+        translateX: this.transformOriginal.left,
+        translateY: this.transformOriginal.top,
+      });
+      util.applyTransformToObject(restored, matrix);
     }
 
+    this.canvas.add(restored);
+    this.canvas.setActiveObject(restored);
     this.canvas.requestRenderAll();
   }
 
   async execute() {
     this._removeExistingObjects();
 
-    if (this.selectionData) {
-      const [restored]: ActiveSelection[] = await util.enlivenObjects([
-        this.selectionData,
-      ]);
+    const restored = await this._restoreObjects();
 
-      restored.onDeselect = () => {
-        restored.forEachObject((o) => {
-          this.canvas.add(o);
-        });
-
-        restored.removeAll();
-        this.canvas.remove(restored);
-        return false;
-      };
-
-      this.canvas.add(restored);
-      this.canvas.setActiveObject(restored);
-    } else {
-      const [restored]: FabricObject[] = await util.enlivenObjects(
-        this.objectDataList,
-      );
-
-      this.canvas.add(restored);
-      this.canvas.setActiveObject(restored);
-    }
-
+    this.canvas.add(restored);
+    this.canvas.setActiveObject(restored);
     this.canvas.requestRenderAll();
   }
 
@@ -126,5 +69,25 @@ export class ModifyCommand implements Command {
       .filter((o) => objectIds.includes(o.objectId));
 
     this.canvas.remove(...targets);
+  }
+
+  private async _restoreObjects() {
+    const [restored] = await util.enlivenObjects(
+      this.selectionData ? [this.selectionData] : this.objectDataList,
+    );
+
+    if (restored instanceof ActiveSelection) {
+      restored.onDeselect = () => {
+        restored.forEachObject((o) => {
+          this.canvas.add(o);
+        });
+
+        restored.removeAll();
+        this.canvas.remove(restored);
+        return false;
+      };
+    }
+
+    return restored as FabricObject | ActiveSelection;
   }
 }
