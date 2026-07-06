@@ -10,7 +10,7 @@ import { PSBrush } from "fabricjs-psbrush";
 import { createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
-import { createCanvas, useCanvasHistory } from "../hooks";
+import { createCanvas, createCanvasHistory } from "../hooks";
 import {
   getCircleFromPoints,
   getRectFromPoints,
@@ -41,7 +41,7 @@ export default function DrawingBoard() {
   });
 
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
-    useCanvasHistory(canvas);
+    createCanvasHistory(canvas);
 
   onMount(() => {
     const c = canvas();

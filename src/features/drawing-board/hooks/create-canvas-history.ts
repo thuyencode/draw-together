@@ -2,12 +2,14 @@ import { createSignal } from "solid-js";
 import type { Canvas } from "fabric";
 import type { Command } from "../commands";
 
-export function useCanvasHistory(canvas: () => Canvas | undefined) {
+export function createCanvasHistory(canvas: () => Canvas | undefined) {
   const [history, setHistory] = createSignal<Command[]>([]);
   const [undone, setUndone] = createSignal<Command[]>([]);
 
+  const MAX_HISTORY = 50;
+
   const pushCommand = (command: Command) => {
-    setHistory((prev) => [...prev, command]);
+    setHistory((prev) => [...prev, command].slice(-MAX_HISTORY));
     setUndone([]);
   };
 
@@ -17,7 +19,7 @@ export function useCanvasHistory(canvas: () => Canvas | undefined) {
 
     if (command) {
       command.undo();
-      setUndone((prev) => [...prev, command]);
+      setUndone((prev) => [...prev, command].slice(-MAX_HISTORY));
       setHistory(h);
     }
   };
@@ -29,7 +31,7 @@ export function useCanvasHistory(canvas: () => Canvas | undefined) {
     if (command) {
       command.execute();
       setUndone(u);
-      setHistory((prev) => [...prev, command]);
+      setHistory((prev) => [...prev, command].slice(-MAX_HISTORY));
     }
   };
 
