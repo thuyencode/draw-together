@@ -235,6 +235,7 @@ export default function DrawingBoard() {
 
     const selection = new ActiveSelection(c.getObjects(), { canvas: c });
     c.setActiveObject(selection);
+    c.requestRenderAll();
   };
 
   createHotkey("Mod+Z", handleUndo);
