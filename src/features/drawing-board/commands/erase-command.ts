@@ -39,23 +39,15 @@ export class EraseCommand implements Command {
       util.enlivenObjects<Path>([this.clipPathData]),
     ]);
 
-    this.canvas.add(...targets);
-
     const eraser = new EraserBrush(this.canvas);
-    this.canvas.isDrawingMode = true;
-    this.canvas.freeDrawingBrush = eraser;
-
     await eraser.commit({ path, targets });
 
-    this.canvas.isDrawingMode = false;
+    this.canvas.add(...targets);
     this.canvas.requestRenderAll();
   }
 
   private _removeExistingObjects() {
-    const objectIds = [
-      ...this.objectDataList.map((o) => o.objectId),
-      this.clipPathData.objectId,
-    ];
+    const objectIds = this.objectDataList.map((o) => o.objectId);
     const targets = this.canvas
       .getObjects()
       .filter((o) => objectIds.includes(o.objectId));

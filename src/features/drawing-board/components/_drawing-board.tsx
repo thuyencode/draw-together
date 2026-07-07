@@ -24,7 +24,7 @@ import type { Point, Settings } from "../types";
 import type { ErasingEvent } from "@erase2d/fabric";
 import type { FabricObjectProps } from "fabric";
 
-FabricObject.customProperties = ["objectId"];
+FabricObject.customProperties = ["objectId", "erasable"];
 
 export default function DrawingBoard() {
   let containerRef!: HTMLDivElement;
@@ -188,7 +188,6 @@ export default function DrawingBoard() {
         const handleEraserEnd = async (e: ErasingEvent<"end">) => {
           // prevent from committing erasing to the tree
           e.preventDefault();
-          e.detail.path.objectId = window.crypto.randomUUID();
 
           pushCommand(new EraseCommand(c, e.detail));
           await eraser?.commit(e.detail);
