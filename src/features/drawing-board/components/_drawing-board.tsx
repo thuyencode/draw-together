@@ -40,7 +40,7 @@ export default function DrawingBoard() {
     tool: "brush",
     variant: "plain",
     strokeWidth: 2,
-    color: { r: 9, g: 139, b: 250 },
+    color: "#098bfa",
   });
 
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
@@ -59,7 +59,7 @@ export default function DrawingBoard() {
       top: initialPoint.x,
       left: initialPoint.y,
       fill: "transparent",
-      stroke: rgbaToString(untrack_settings.color),
+      stroke: untrack_settings.color,
       strokeWidth: untrack_settings.strokeWidth,
       erasable: true,
     });
@@ -177,7 +177,7 @@ export default function DrawingBoard() {
         }
 
         c.freeDrawingBrush.width = settings.strokeWidth;
-        c.freeDrawingBrush.color = rgbaToString(settings.color);
+        c.freeDrawingBrush.color = settings.color;
       }
     });
 

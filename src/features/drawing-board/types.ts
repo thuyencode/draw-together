@@ -1,16 +1,10 @@
-import type { RgbColor } from "@irojs/iro-core";
 import type { Canvas } from "fabric";
 import type { SetStoreFunction } from "solid-js/store";
 
 export type { Point, Size } from "@zag-js/rect-utils";
 
 export type Tool =
-  | "shape"
-  | "brush"
-  | "eraser"
-  | "straight-line"
-  | "history"
-  | "select";
+  "shape" | "brush" | "eraser" | "straight-line" | "history" | "select";
 
 export type ShapeVariant = "circle" | "rectangle";
 export type BrushVariant = "plain" | "pressure";
@@ -19,11 +13,7 @@ type HistoryVariant = "undo" | "redo" | "clear";
 type SelectVariant = "select";
 
 export type Variant =
-  | ShapeVariant
-  | BrushVariant
-  | EraserVariant
-  | HistoryVariant
-  | SelectVariant;
+  ShapeVariant | BrushVariant | EraserVariant | HistoryVariant | SelectVariant;
 
 export type ToolConfig =
   | { tool: Extract<Tool, "shape">; variant: ShapeVariant }
@@ -34,7 +24,7 @@ export type ToolConfig =
 
 export interface StrokeConfig {
   strokeWidth: number;
-  color: RgbColor;
+  color: string;
 }
 
 export type Settings = ToolConfig & StrokeConfig;
