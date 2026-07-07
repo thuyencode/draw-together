@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@ark-ui/solid": "^5.37.1",
+    "@erase2d/fabric": "^1.2.1",
     "@jaames/iro": "^5.5.2",
     "@solid-primitives/resize-observer": "^2.1.5",
     "@solid-primitives/scheduled": "^1.5.3",

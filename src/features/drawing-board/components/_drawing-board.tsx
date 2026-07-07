@@ -1,3 +1,4 @@
+import { EraserBrush } from "@erase2d/fabric";
 import { createHotkey } from "@tanstack/solid-hotkeys";
 import {
   ActiveSelection,
@@ -10,6 +11,7 @@ import { PSBrush } from "fabricjs-psbrush";
 import { createEffect, onCleanup, onMount, untrack } from "solid-js";
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
+import { EraseCommand } from "../commands/erase-command";
 import { createCanvas, createCanvasHistory } from "../hooks";
 import {
   getCircleFromPoints,
@@ -19,6 +21,7 @@ import {
 } from "../utils";
 import { ColorSettingsPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
+import type { ErasingEvent } from "@erase2d/fabric";
 import type { FabricObjectProps } from "fabric";
 
 FabricObject.customProperties = ["objectId"];
@@ -52,12 +55,13 @@ export default function DrawingBoard() {
     let previewObject: FabricObject | undefined;
     let shouldPushModifyCommand = false;
 
-    const initialProps = (): Partial<FabricObjectProps> => ({
+    const initialShapeProps = (): Partial<FabricObjectProps> => ({
       top: initialPoint.x,
       left: initialPoint.y,
       fill: "transparent",
       stroke: rgbaToString(untrack_settings.color),
       strokeWidth: untrack_settings.strokeWidth,
+      erasable: true,
     });
 
     c.on("mouse:down", (evt) => {
@@ -67,6 +71,7 @@ export default function DrawingBoard() {
 
     c.on("path:created", (evt) => {
       evt.path.objectId = window.crypto.randomUUID();
+      evt.path.erasable = true;
 
       if (untrack_settings.tool === "brush") {
         pushCommand(new AddCommand(c, evt.path));
@@ -77,11 +82,11 @@ export default function DrawingBoard() {
       if (untrack_settings.tool === "shape") {
         switch (untrack_settings.variant) {
           case "circle":
-            previewObject = new Circle(initialProps());
+            previewObject = new Circle(initialShapeProps());
             break;
 
           case "rectangle":
-            previewObject = new Rect(initialProps());
+            previewObject = new Rect(initialShapeProps());
             break;
         }
 
@@ -150,11 +155,15 @@ export default function DrawingBoard() {
     });
 
     createEffect(() => {
-      const isFreeDrawing = settings.tool === "brush";
-
+      const isFreeDrawing =
+        settings.tool === "brush" || settings.tool === "eraser";
       c.isDrawingMode = isFreeDrawing;
 
-      if (isFreeDrawing) {
+      if (!isFreeDrawing) c.freeDrawingBrush = undefined;
+    });
+
+    createEffect(() => {
+      if (settings.tool === "brush") {
         switch (settings.variant) {
           case "plain":
             c.freeDrawingBrush = new PencilBrush(c);
@@ -167,9 +176,33 @@ export default function DrawingBoard() {
 
         c.freeDrawingBrush.width = settings.strokeWidth;
         c.freeDrawingBrush.color = rgbaToString(settings.color);
-      } else {
-        c.freeDrawingBrush = undefined;
       }
+    });
+
+    createEffect(() => {
+      let eraser: EraserBrush | undefined;
+
+      if (settings.tool === "eraser") {
+        const handleEraserEnd = async (e: ErasingEvent<"end">) => {
+          // prevent from committing erasing to the tree
+          e.preventDefault();
+          e.detail.path.objectId = window.crypto.randomUUID();
+
+          pushCommand(new EraseCommand(c, e.detail));
+          await eraser?.commit(e.detail);
+        };
+
+        eraser = new EraserBrush(c);
+
+        eraser.width = settings.strokeWidth;
+        eraser.on("end", handleEraserEnd);
+
+        c.freeDrawingBrush = eraser;
+      }
+
+      onCleanup(() => {
+        eraser?.dispose();
+      });
     });
 
     onCleanup(handleReset);

@@ -6,6 +6,7 @@
       "name": "example-with-tailwindcss",
       "dependencies": {
         "@ark-ui/solid": "^5.37.1",
+        "@erase2d/fabric": "^1.2.1",
         "@jaames/iro": "^5.5.2",
         "@solid-primitives/resize-observer": "^2.1.5",
         "@solid-primitives/scheduled": "^1.5.3",
@@ -109,6 +110,8 @@
     "@emnapi/runtime": ["@emnapi/runtime@1.11.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw=="],
 
     "@emnapi/wasi-threads": ["@emnapi/wasi-threads@1.2.2", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA=="],
+
+    "@erase2d/fabric": ["@erase2d/fabric@1.2.1", "", { "peerDependencies": { "fabric": ">=6.0.0" } }, "sha512-7VgjhCD5yHDMA8HbHf0cpU0T1q/MKMJQwPajuparLUQXb2tPbnwmczWXvojt0dQ66VS4Rs2caRNVucM9P9FfEA=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.27.3", "", { "os": "aix", "cpu": "ppc64" }, "sha512-9fJMTNFTWZMh5qwrBItuziu834eOCUcEqymSH7pY+zoMVEZg3gcPuBNxH1EvfVYe9h0x/Ptw8KBzv7qxb7l8dg=="],
 
