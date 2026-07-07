@@ -5,10 +5,12 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import { analyzer, unstableRolldownAdapter } from "vite-bundle-analyzer";
 import solid from "vite-plugin-solid";
+import lucidePreprocess from "vite-plugin-lucide-preprocess";
 
 export default defineConfig({
   plugins: [
     unstableRolldownAdapter(analyzer({ analyzerMode: "server" })),
+    lucidePreprocess(),
     devtools(),
     tailwindcss(),
     tanstackStart(),
@@ -34,6 +36,11 @@ export default defineConfig({
             {
               name: "fabric",
               test: /node_modules[\\/]fabric/,
+              priority: 15,
+            },
+            {
+              name: "eyedropper-polyfill",
+              test: /node_modules[\\/]eyedropper-polyfill/,
               priority: 15,
             },
           ],
