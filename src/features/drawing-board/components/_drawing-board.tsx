@@ -141,10 +141,12 @@ export default function DrawingBoard() {
     });
 
     c.on("object:modified", (evt) => {
+      if (!evt.transform) return;
+
       if (!shouldPushModifyCommand) return;
       shouldPushModifyCommand = false;
 
-      pushCommand(new ModifyCommand(c, evt.target, evt.transform?.original));
+      pushCommand(new ModifyCommand(c, evt.transform));
     });
 
     createEffect(() => {
