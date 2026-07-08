@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { ColorPicker, parseColor } from "@ark-ui/solid/color-picker";
+import { parseColor } from "@ark-ui/solid/color-picker";
 import {
   ArrowDownLeftIcon,
   GripVerticalIcon,
@@ -16,7 +16,7 @@ import type {
   PropsWithSettings,
   Size,
 } from "../../types";
-import { FloatingPanel } from "~/features/shared/components/ui";
+import { ColorPicker, FloatingPanel } from "~/features/shared/components/ui";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
@@ -78,7 +78,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
         <FloatingPanel.Content>
           <FloatingPanel.DragTrigger>
             <FloatingPanel.Header>
-              <FloatingPanel.Title class="capitalize">
+              <FloatingPanel.Title>
                 <GripVerticalIcon />
                 Color Settings
               </FloatingPanel.Title>
@@ -99,7 +99,6 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
 
           <FloatingPanel.Body>
             <ColorPicker.Root
-              class="text-base-content flex w-full flex-col gap-5 p-2"
               inline
               value={parseColor(props.settings.color)}
               onValueChange={function handleColorChange(detail) {
@@ -110,37 +109,26 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
               }}
               format={colorFormat()}
             >
-              <ColorPicker.HiddenInput />
-
-              <ColorPicker.Area class="relative h-40 touch-none overflow-hidden rounded-md">
-                <ColorPicker.AreaBackground class="rounded-inherit h-full w-full" />
-                <ColorPicker.AreaThumb class="size-3 translate-x-[-50%] translate-y-[-50%] rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_4px_oklch(var(--p)),0_1px_3px_rgba(0,0,0,0.15)]" />
+              <ColorPicker.Area>
+                <ColorPicker.AreaBackground />
+                <ColorPicker.AreaThumb />
               </ColorPicker.Area>
 
               <div class="flex items-center gap-3">
-                <ColorPicker.EyeDropperTrigger
-                  class="btn btn-sm btn-square [&_svg]:size-4"
-                  disabled={isPolyfillLoading()}
-                >
+                <ColorPicker.EyeDropperTrigger disabled={isPolyfillLoading()}>
                   <PipetteIcon />
                 </ColorPicker.EyeDropperTrigger>
 
                 <div class="flex flex-1 flex-col gap-2.5">
-                  <ColorPicker.ChannelSlider
-                    class="relative h-2.5 flex-1 rounded"
-                    channel="hue"
-                  >
-                    <ColorPicker.ChannelSliderTrack class="h-2.5 rounded" />
-                    <ColorPicker.ChannelSliderThumb class="size-3 translate-x-[-50%] translate-y-[-50%] rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_4px_oklch(var(--p)),0_1px_3px_rgba(0,0,0,0.15)]" />
+                  <ColorPicker.ChannelSlider channel="hue">
+                    <ColorPicker.ChannelSliderTrack />
+                    <ColorPicker.ChannelSliderThumb />
                   </ColorPicker.ChannelSlider>
 
-                  <ColorPicker.ChannelSlider
-                    class="relative h-2.5 flex-1 rounded"
-                    channel="alpha"
-                  >
-                    <ColorPicker.TransparencyGrid class="rounded-inherit h-full w-full" />
-                    <ColorPicker.ChannelSliderTrack class="h-2.5 rounded" />
-                    <ColorPicker.ChannelSliderThumb class="size-3 translate-x-[-50%] translate-y-[-50%] rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_4px_oklch(var(--p)),0_1px_3px_rgba(0,0,0,0.15)]" />
+                  <ColorPicker.ChannelSlider channel="alpha">
+                    <ColorPicker.TransparencyGrid />
+                    <ColorPicker.ChannelSliderTrack />
+                    <ColorPicker.ChannelSliderThumb />
                   </ColorPicker.ChannelSlider>
                 </div>
               </div>
@@ -168,10 +156,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
 
                 <label class="floating-label">
                   <span class="text-sm">Color</span>
-                  <ColorPicker.ChannelInput
-                    class="input input-sm"
-                    channel="css"
-                  />
+                  <ColorPicker.ChannelInput channel="css" />
                 </label>
               </div>
             </ColorPicker.Root>
