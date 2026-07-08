@@ -38,9 +38,11 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
       defaultOpen
       strategy="absolute"
       position={position()}
-      onPositionChange={(p) => setPosition(p.position)}
+      onPositionChange={function handlePositionChange(p) {
+        setPosition(p.position);
+      }}
       size={size()}
-      onSizeChange={(e) => {
+      onSizeChange={function handleSizeChange(e) {
         const width = e.size.width <= MIN_WIDTH ? MIN_WIDTH : e.size.width;
         const height = e.size.height <= MIN_HEIGHT ? MIN_HEIGHT : e.size.height;
         setSize({ width, height });

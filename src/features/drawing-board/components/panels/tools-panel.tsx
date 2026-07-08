@@ -56,9 +56,11 @@ export function ToolsPanel(props: ToolsPanelProps) {
       defaultOpen
       strategy="absolute"
       position={position()}
-      onPositionChange={(p) => setPosition(p.position)}
+      onPositionChange={function handlePositionChange(p) {
+        setPosition(p.position);
+      }}
       size={size()}
-      onSizeChange={(e) => {
+      onSizeChange={function handleSizeChange(e) {
         const isVertical = e.size.width <= MIN_WIDTH_THRESHOLD;
         const width = isVertical ? MIN_WIDTH : e.size.width;
         const height = isVertical

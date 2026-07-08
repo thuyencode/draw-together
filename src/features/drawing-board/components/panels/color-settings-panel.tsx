@@ -59,7 +59,9 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
       defaultOpen
       strategy="absolute"
       position={position()}
-      onPositionChange={(p) => setPosition(p.position)}
+      onPositionChange={function handlePositionChange(p) {
+        setPosition(p.position);
+      }}
       size={size()}
       onSizeChange={function handleSizeChange(detail) {
         const width =
