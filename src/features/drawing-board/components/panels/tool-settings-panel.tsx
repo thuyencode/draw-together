@@ -15,12 +15,18 @@ import type {
 } from "../../types";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
+const MIN_WIDTH = 300;
+const MIN_HEIGHT = 240;
+
 type ToolSettingsPanelsProps = PropsWithSettings &
   PropsWithContainerRef &
   PropsWithDefaultPosition;
 
 export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
-  const [size, setSize] = createSignal<Size>({ width: 300, height: 240 });
+  const [size, setSize] = createSignal<Size>({
+    width: MIN_WIDTH,
+    height: MIN_HEIGHT,
+  });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
@@ -35,11 +41,9 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
       onPositionChange={(p) => setPosition(p.position)}
       size={size()}
       onSizeChange={(e) => {
-        if (e.size.width <= 300) {
-          setSize({ ...e.size, width: 300 });
-        } else {
-          setSize(e.size);
-        }
+        const width = e.size.width <= MIN_WIDTH ? MIN_WIDTH : e.size.width;
+        const height = e.size.height <= MIN_HEIGHT ? MIN_HEIGHT : e.size.height;
+        setSize({ width, height });
       }}
     >
       <FloatingPanel.Positioner

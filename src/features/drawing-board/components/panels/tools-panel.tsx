@@ -24,6 +24,10 @@ import type {
 import type { LucideIcon } from "lucide-solid";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
+const MIN_WIDTH = 54;
+const MIN_HEIGHT = 390;
+const MIN_WIDTH_THRESHOLD = 100;
+
 type ToolsPanelProps = PropsWithSettings &
   PropsWithContainerRef &
   PropsWithDefaultPosition & {
@@ -35,14 +39,17 @@ type ToolsPanelProps = PropsWithSettings &
   };
 
 export function ToolsPanel(props: ToolsPanelProps) {
-  const [size, setSize] = createSignal<Size>({ width: 54, height: 390 });
+  const [size, setSize] = createSignal<Size>({
+    width: MIN_WIDTH,
+    height: MIN_HEIGHT,
+  });
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
     size,
   );
 
-  const shouldBeVertical = () => size().width <= 100;
+  const shouldBeVertical = () => size().width <= MIN_WIDTH_THRESHOLD;
 
   return (
     <FloatingPanel.Root
@@ -52,11 +59,12 @@ export function ToolsPanel(props: ToolsPanelProps) {
       onPositionChange={(p) => setPosition(p.position)}
       size={size()}
       onSizeChange={(e) => {
-        if (e.size.width <= 100) {
-          setSize({ ...e.size, width: 54 });
-        } else {
-          setSize(e.size);
-        }
+        const isVertical = e.size.width <= MIN_WIDTH_THRESHOLD;
+        const width = isVertical ? MIN_WIDTH : e.size.width;
+        const height = isVertical
+          ? Math.max(e.size.height, MIN_HEIGHT)
+          : e.size.height;
+        setSize({ width, height });
       }}
     >
       <FloatingPanel.Positioner
