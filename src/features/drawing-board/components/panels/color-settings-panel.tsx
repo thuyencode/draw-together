@@ -135,7 +135,7 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
                 </div>
               </div>
 
-              <div class="space-y-3">
+              <div class="mt-1 space-y-3">
                 <label class="floating-label">
                   <span class="text-sm">Color format</span>
                   <select

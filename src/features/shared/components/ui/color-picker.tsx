@@ -20,7 +20,7 @@ function ColorPickerRoot(_props: BaseColorPicker.RootProps) {
   return (
     <BaseColorPickerRoot
       class={cn(
-        "text-base-content flex w-full flex-col gap-5 p-2",
+        "text-base-content flex w-full flex-col gap-3 p-2",
         props.class,
       )}
       {...rest}
