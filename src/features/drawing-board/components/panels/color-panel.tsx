@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { parseColor } from "@ark-ui/solid/color-picker";
+import {
+  ColorPickerSwatchGroup,
+  ColorPickerSwatchTrigger,
+  parseColor,
+} from "@ark-ui/solid/color-picker";
 import {
   ArrowDownLeftIcon,
+  ArrowRightLeftIcon,
+  CheckIcon,
   GripVerticalIcon,
-  MinusIcon,
   PipetteIcon,
   XIcon,
 } from "lucide-solid";
-import { Index, createSignal, onMount } from "solid-js";
+import { For, Index, createSignal, onMount } from "solid-js";
+import { DEFAULT_COLORS } from "../../constants";
 import { createPosition } from "../../hooks";
 import type { ColorPickerColorFormat } from "@ark-ui/solid/color-picker";
 import type {
@@ -20,15 +26,21 @@ import { ColorPicker, FloatingPanel } from "~/features/shared/components/ui";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
-  PropsWithSettings;
+  PropsWithSettings & {
+    swapColors: () => void;
+  };
 
 const MIN_WIDTH = 250;
-const MIN_HEIGHT = 375;
-const DEFAULT_COLOR_FORMAT = "rgba" as const satisfies ColorPickerColorFormat;
-const COLOR_FORMATS: ColorPickerColorFormat[] = ["rgba", "hsla", "hsba"];
+const MIN_HEIGHT = 485;
+const DEFAULT_COLOR_FORMAT: ColorPickerColorFormat = "rgba";
+const COLOR_FORMATS: ColorPickerColorFormat[] = ["rgba", "hsla", "rgba"];
+const MAX_SWATCHES = 12;
 
-export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
+export function ColorPanels(props: ColorSettingsPanelsProps) {
   const [isPolyfillLoading, setIsPolyfillLoading] = createSignal(true);
+  const [colorFormat, setColorFormat] =
+    createSignal<ColorPickerColorFormat>(DEFAULT_COLOR_FORMAT);
+  const [swatches, setSwatches] = createSignal<string[]>([]);
   const [size, setSize] = createSignal<Size>({
     width: MIN_WIDTH,
     height: MIN_HEIGHT,
@@ -38,8 +50,6 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
     () => props.containerRef,
     size,
   );
-  const [colorFormat, setColorFormat] =
-    createSignal<ColorPickerColorFormat>(DEFAULT_COLOR_FORMAT);
 
   onMount(() => {
     setIsPolyfillLoading(true);
@@ -51,7 +61,10 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
 
     import("eyedropper-polyfill")
       .then(() => setIsPolyfillLoading(false))
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setIsPolyfillLoading(true);
+      });
   });
 
   return (
@@ -86,9 +99,6 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
-                <FloatingPanel.StageTrigger stage="minimized">
-                  <MinusIcon />
-                </FloatingPanel.StageTrigger>
                 <FloatingPanel.StageTrigger stage="default">
                   <ArrowDownLeftIcon />
                 </FloatingPanel.StageTrigger>
@@ -102,12 +112,23 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
           <FloatingPanel.Body>
             <ColorPicker.Root
               inline
-              value={parseColor(props.settings.color)}
+              class=""
+              value={parseColor(props.settings.colors[0])}
               onValueChange={function handleColorChange(detail) {
                 props.setSettings((prev) => ({
                   ...prev,
-                  color: detail.valueAsString,
+                  colors: [detail.valueAsString, prev.colors[1]],
                 }));
+              }}
+              onValueChangeEnd={function handleColorChangeEnded() {
+                setSwatches((prev) => {
+                  const lastColor = props.settings.colors[0];
+                  if (prev.includes(lastColor)) {
+                    return prev;
+                  }
+
+                  return [lastColor, ...prev].slice(0, MAX_SWATCHES);
+                });
               }}
               format={colorFormat()}
             >
@@ -135,7 +156,41 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
                 </div>
               </div>
 
-              <div class="mt-1 space-y-3">
+              <div class="flex min-h-13 flex-row place-content-between">
+                <button
+                  class="relative aspect-square"
+                  onClick={function handleOnSwapColorsBtnClick() {
+                    props.swapColors();
+                  }}
+                >
+                  <div
+                    class="btn btn-square btn-sm absolute top-0 left-0 z-10 shadow-none"
+                    style={{ "--btn-color": props.settings.colors[0] }}
+                  />
+                  <div
+                    class="btn btn-square btn-sm absolute right-0 bottom-0 z-0 shadow-none"
+                    style={{ "--btn-color": props.settings.colors[1] }}
+                  />
+
+                  <ArrowRightLeftIcon class="absolute bottom-0 left-0 size-3.5" />
+                </button>
+
+                <ColorPickerSwatchGroup class="grid grid-cols-6 grid-rows-2 gap-1">
+                  <For each={swatches()}>
+                    {(color) => (
+                      <ColorPickerSwatchTrigger
+                        value={color}
+                        class="btn btn-xs btn-square data-[state=unchecked]:[&_svg]:hidden"
+                        style={{ "--btn-color": color }}
+                      >
+                        <CheckIcon class="size-3 text-white" />
+                      </ColorPickerSwatchTrigger>
+                    )}
+                  </For>
+                </ColorPickerSwatchGroup>
+              </div>
+
+              <div class="mt-2 space-y-3">
                 <label class="floating-label">
                   <span class="text-sm">Color format</span>
                   <select
@@ -161,6 +216,20 @@ export function ColorSettingsPanels(props: ColorSettingsPanelsProps) {
                   <ColorPicker.ChannelInput channel="css" />
                 </label>
               </div>
+
+              <button
+                type="button"
+                class="btn btn-soft btn-secondary"
+                onClick={function resetColors() {
+                  setSwatches([]);
+                  props.setSettings((prev) => ({
+                    ...prev,
+                    colors: DEFAULT_COLORS,
+                  }));
+                }}
+              >
+                Reset
+              </button>
             </ColorPicker.Root>
           </FloatingPanel.Body>
 

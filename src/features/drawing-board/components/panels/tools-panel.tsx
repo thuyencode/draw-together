@@ -2,7 +2,6 @@ import {
   ArrowDownLeftIcon,
   EraserIcon,
   GripVerticalIcon,
-  MinusIcon,
   MousePointerIcon,
   RedoIcon,
   RotateCwIcon,
@@ -84,9 +83,6 @@ export function ToolsPanel(props: ToolsPanelProps) {
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
-                <FloatingPanel.StageTrigger stage="minimized">
-                  <MinusIcon />
-                </FloatingPanel.StageTrigger>
                 <FloatingPanel.StageTrigger stage="default">
                   <ArrowDownLeftIcon />
                 </FloatingPanel.StageTrigger>

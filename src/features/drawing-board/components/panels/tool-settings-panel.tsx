@@ -1,9 +1,4 @@
-import {
-  ArrowDownLeftIcon,
-  GripVerticalIcon,
-  MinusIcon,
-  XIcon,
-} from "lucide-solid";
+import { ArrowDownLeftIcon, GripVerticalIcon, XIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 import { createPosition } from "../../hooks";
 import { normalizeToolName } from "../../utils";
@@ -63,9 +58,6 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
-                <FloatingPanel.StageTrigger stage="minimized">
-                  <MinusIcon />
-                </FloatingPanel.StageTrigger>
                 <FloatingPanel.StageTrigger stage="default">
                   <ArrowDownLeftIcon />
                 </FloatingPanel.StageTrigger>
@@ -92,7 +84,7 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
                   }));
                 }}
               />
-              <span class="badge badge-info badge-xs">px</span>
+              <span class="badge badge-info badge-soft badge-xs">px</span>
             </label>
           </FloatingPanel.Body>
 

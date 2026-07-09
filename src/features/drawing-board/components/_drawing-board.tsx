@@ -8,7 +8,13 @@ import {
   Rect,
 } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
-import { createEffect, onCleanup, onMount, untrack } from "solid-js";
+import {
+  createEffect,
+  onCleanup,
+  onMount,
+  splitProps,
+  untrack,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
@@ -17,18 +23,22 @@ import {
   getCircleFromPoints,
   getRectFromPoints,
   getTargetOfSelection,
-  rgbaToString,
 } from "../utils";
-import { ColorSettingsPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
-import type { Point, Settings } from "../types";
-import type { ErasingEvent } from "@erase2d/fabric";
+import { DEFAULT_COLORS } from "../constants";
+import { ColorPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
+import type { Point, Settings, StrokeConfig } from "../types";
+import type { ComponentProps } from "solid-js";
 import type { FabricObjectProps } from "fabric";
+import type { ErasingEvent } from "@erase2d/fabric";
+import { cn } from "~/features/shared/utils/cn";
 
 FabricObject.customProperties = ["objectId", "erasable"];
 
-export default function DrawingBoard() {
+export default function DrawingBoard(_props: ComponentProps<"div">) {
   let containerRef!: HTMLDivElement;
   let canvasElementRef!: HTMLCanvasElement;
+
+  const [props, rest] = splitProps(_props, ["class"]);
 
   const canvas = createCanvas(
     () => canvasElementRef,
@@ -40,7 +50,7 @@ export default function DrawingBoard() {
     tool: "brush",
     variant: "plain",
     strokeWidth: 2,
-    color: "#098bfa",
+    colors: DEFAULT_COLORS,
   });
 
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
@@ -59,7 +69,7 @@ export default function DrawingBoard() {
       top: initialPoint.x,
       left: initialPoint.y,
       fill: "transparent",
-      stroke: untrack_settings.color,
+      stroke: untrack_settings.colors[0],
       strokeWidth: untrack_settings.strokeWidth,
       erasable: true,
     });
@@ -177,7 +187,7 @@ export default function DrawingBoard() {
         }
 
         c.freeDrawingBrush.width = settings.strokeWidth;
-        c.freeDrawingBrush.color = settings.color;
+        c.freeDrawingBrush.color = settings.colors[0];
       }
     });
 
@@ -238,14 +248,22 @@ export default function DrawingBoard() {
     c.requestRenderAll();
   };
 
+  const handleSwapColors = () => {
+    setSettings((prev) => ({
+      ...prev,
+      colors: [prev.colors[1], prev.colors[0]],
+    }));
+  };
+
   createHotkey("Mod+Z", handleUndo);
   createHotkey("Mod+Shift+Z", handleRedo);
   createHotkey("Mod+Delete", handleReset);
   createHotkey("Delete", handleDelete);
   createHotkey("Mod+A", handleSelectAll);
+  createHotkey("Mod+X", handleSwapColors);
 
   return (
-    <div class="relative h-full">
+    <div class={cn("relative h-full", props.class)} {...rest}>
       <div class="absolute inset-0" ref={containerRef}>
         <canvas ref={canvasElementRef} />
       </div>
@@ -262,11 +280,12 @@ export default function DrawingBoard() {
         onReset={handleReset}
       />
 
-      <ColorSettingsPanels
+      <ColorPanels
         settings={settings}
         setSettings={setSettings}
         containerRef={containerRef}
         defaultPosition="top-right"
+        swapColors={handleSwapColors}
       />
 
       <ToolSettingsPanels

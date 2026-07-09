@@ -1,4 +1,5 @@
 import { ErrorBoundary, Suspense, lazy } from "solid-js";
+import type { ComponentProps } from "solid-js";
 import {
   LoadingScreen,
   errorBoundaryFallBackProp,
@@ -6,11 +7,13 @@ import {
 
 const LazyDrawingBoard = lazy(() => import("./_drawing-board"));
 
-export default function DrawingBoard() {
+export default function DrawingBoard(
+  props: ComponentProps<typeof LazyDrawingBoard>,
+) {
   return (
     <ErrorBoundary fallback={errorBoundaryFallBackProp}>
       <Suspense fallback={<LoadingScreen message={"Loading canvas..."} />}>
-        <LazyDrawingBoard />
+        <LazyDrawingBoard {...props} />
       </Suspense>
     </ErrorBoundary>
   );
