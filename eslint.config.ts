@@ -3,6 +3,7 @@ import router from "@tanstack/eslint-plugin-router";
 import * as tsParser from "@typescript-eslint/parser";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import solid from "eslint-plugin-solid/configs/typescript";
+import unusedImports from "eslint-plugin-unused-imports";
 
 export default [
   ...tanstackConfig,
@@ -22,6 +23,15 @@ export default [
       parserOptions: {
         project: "tsconfig.json",
       },
+    },
+  },
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    plugins: {
+      "unused-imports": unusedImports,
+    },
+    rules: {
+      "unused-imports/no-unused-imports": "error",
     },
   },
   {

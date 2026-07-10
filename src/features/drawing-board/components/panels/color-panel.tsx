@@ -178,13 +178,9 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                 <ColorPickerSwatchGroup class="grid grid-cols-6 grid-rows-2 gap-1">
                   <For each={swatches()}>
                     {(color) => (
-                      <ColorPickerSwatchTrigger
-                        value={color}
-                        class="btn btn-xs btn-square data-[state=unchecked]:[&_svg]:hidden"
-                        style={{ "--btn-color": color }}
-                      >
-                        <CheckIcon class="size-3 text-white" />
-                      </ColorPickerSwatchTrigger>
+                      <ColorPicker.SwatchTrigger value={color} class="btn-xs">
+                        <CheckIcon />
+                      </ColorPicker.SwatchTrigger>
                     )}
                   </For>
                 </ColorPickerSwatchGroup>
