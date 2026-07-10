@@ -1,9 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import {
-  ColorPickerSwatchGroup,
-  ColorPickerSwatchTrigger,
-  parseColor,
-} from "@ark-ui/solid/color-picker";
+import { parseColor } from "@ark-ui/solid/color-picker";
 import {
   ArrowDownLeftIcon,
   ArrowRightLeftIcon,
@@ -156,7 +152,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                 </div>
               </div>
 
-              <div class="flex min-h-13 flex-row place-content-between">
+              <div class="flex min-h-13 flex-row gap-1">
                 <button
                   class="relative aspect-square"
                   onClick={function handleOnSwapColorsBtnClick() {
@@ -175,7 +171,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                   <ArrowRightLeftIcon class="absolute bottom-0 left-0 size-3.5" />
                 </button>
 
-                <ColorPickerSwatchGroup class="grid grid-cols-6 grid-rows-2 gap-1">
+                <ColorPicker.SwatchGroup class="grid flex-1 grid-cols-6 grid-rows-2 *:self-center *:justify-self-end">
                   <For each={swatches()}>
                     {(color) => (
                       <ColorPicker.SwatchTrigger value={color} class="btn-xs">
@@ -183,7 +179,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                       </ColorPicker.SwatchTrigger>
                     )}
                   </For>
-                </ColorPickerSwatchGroup>
+                </ColorPicker.SwatchGroup>
               </div>
 
               <div class="mt-2 space-y-3">

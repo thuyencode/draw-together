@@ -8,6 +8,8 @@ import {
   ColorPickerChannelSliderTrack as BaseColorPickerChannelSliderTrack,
   ColorPickerEyeDropperTrigger as BaseColorPickerEyeDropperTrigger,
   ColorPickerRoot as BaseColorPickerRoot,
+  ColorPickerSwatchGroup as BaseColorPickerSwatchGroup,
+  ColorPickerSwatchTrigger as BaseColorPickerSwatchTrigger,
   ColorPickerTransparencyGrid as BaseColorPickerTransparencyGrid,
 } from "@ark-ui/solid/color-picker";
 import { splitProps } from "solid-js";
@@ -61,7 +63,7 @@ function ColorPickerAreaThumb(_props: BaseColorPicker.AreaThumbProps) {
   return (
     <BaseColorPickerAreaThumb
       class={cn(
-        "size-3 translate-x-[-50%] translate-y-[-50%] rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_4px_oklch(var(--color-base-content)),0_1px_3px_rgba(0,0,0,0.15)]",
+        "size-3 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_3px_var(--color-info-content),0_1px_3px_rgba(0,0,0,0.15)]",
         props.class,
       )}
       {...rest}
@@ -101,7 +103,7 @@ function ColorPickerChannelSliderThumb(
   return (
     <BaseColorPickerChannelSliderThumb
       class={cn(
-        "size-3 translate-x-[-50%] translate-y-[-50%] rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_4px_oklch(var(--color-base-content)),0_1px_3px_rgba(0,0,0,0.15)]",
+        "size-3 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full shadow-[0_0_0_2px_white,0_0_0_3px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.15)] outline-none focus-visible:shadow-[0_0_0_2px_white,0_0_0_3px_var(--color-info-content),0_1px_3px_rgba(0,0,0,0.15)]",
         props.class,
       )}
       {...rest}
@@ -146,6 +148,22 @@ function ColorPickerEyeDropperTrigger(
   );
 }
 
+function ColorPickerSwatchTrigger(_props: BaseColorPicker.SwatchTriggerProps) {
+  const [props, rest] = splitProps(_props, ["class", "value"]);
+
+  return (
+    <BaseColorPickerSwatchTrigger
+      class={cn(
+        "btn btn-square text-base-300 [&_svg]:size-3 data-[state=unchecked]:[&_svg]:hidden",
+        props.class,
+      )}
+      style={{ "--btn-color": props.value.toString() }}
+      value={props.value}
+      {...rest}
+    />
+  );
+}
+
 export const ColorPicker = {
   Root: ColorPickerRoot,
   Area: ColorPickerArea,
@@ -157,4 +175,6 @@ export const ColorPicker = {
   ChannelInput: ColorPickerChannelInput,
   TransparencyGrid: ColorPickerTransparencyGrid,
   EyeDropperTrigger: ColorPickerEyeDropperTrigger,
+  SwatchGroup: BaseColorPickerSwatchGroup,
+  SwatchTrigger: ColorPickerSwatchTrigger,
 };

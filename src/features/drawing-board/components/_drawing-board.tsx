@@ -26,7 +26,7 @@ import {
 } from "../utils";
 import { DEFAULT_COLORS } from "../constants";
 import { ColorPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
-import type { Point, Settings, StrokeConfig } from "../types";
+import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { FabricObjectProps } from "fabric";
 import type { ErasingEvent } from "@erase2d/fabric";
