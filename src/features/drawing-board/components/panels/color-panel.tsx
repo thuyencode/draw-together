@@ -31,12 +31,15 @@ const MIN_HEIGHT = 485;
 const DEFAULT_COLOR_FORMAT: ColorPickerColorFormat = "rgba";
 const COLOR_FORMATS: ColorPickerColorFormat[] = ["rgba", "hsla", "rgba"];
 const MAX_SWATCHES = 12;
+const DEFAULT_SWATCHES = Array.from<string>({ length: MAX_SWATCHES }).fill(
+  "#fff",
+);
 
 export function ColorPanels(props: ColorSettingsPanelsProps) {
   const [isPolyfillLoading, setIsPolyfillLoading] = createSignal(true);
   const [colorFormat, setColorFormat] =
     createSignal<ColorPickerColorFormat>(DEFAULT_COLOR_FORMAT);
-  const [swatches, setSwatches] = createSignal<string[]>([]);
+  const [swatches, setSwatches] = createSignal(DEFAULT_SWATCHES);
   const [size, setSize] = createSignal<Size>({
     width: MIN_WIDTH,
     height: MIN_HEIGHT,
@@ -213,7 +216,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                 type="button"
                 class="btn btn-soft btn-secondary"
                 onClick={function resetColors() {
-                  setSwatches([]);
+                  setSwatches(DEFAULT_SWATCHES);
                   props.setSettings((prev) => ({
                     ...prev,
                     colors: DEFAULT_COLORS,
