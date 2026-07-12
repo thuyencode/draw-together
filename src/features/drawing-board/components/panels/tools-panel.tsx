@@ -24,7 +24,7 @@ import type { LucideIcon } from "lucide-solid";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
 const MIN_WIDTH = 54;
-const MIN_HEIGHT = 390;
+const MIN_HEIGHT = 365;
 const MIN_WIDTH_THRESHOLD = 100;
 
 type ToolsPanelProps = PropsWithSettings &
