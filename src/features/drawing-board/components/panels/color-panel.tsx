@@ -94,7 +94,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
             <FloatingPanel.Header>
               <FloatingPanel.Title>
                 <GripVerticalIcon />
-                Color Settings
+                Color Picker
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
