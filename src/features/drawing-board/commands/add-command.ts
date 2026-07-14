@@ -19,10 +19,8 @@ export class AddCommand implements Command {
       .getObjects()
       .filter((o) => o.objectId === this.objectData.objectId);
 
-    if (targets.length > 0) {
-      this.canvas.remove(targets[0]);
-      this.canvas.requestRenderAll();
-    }
+    this.canvas.remove(...targets);
+    this.canvas.requestRenderAll();
   }
 
   async execute() {
