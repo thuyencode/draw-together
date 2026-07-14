@@ -6,6 +6,12 @@ import type { LucideIcon } from "lucide-solid";
 import type { PropsWithSettings, ShapeVariant } from "../../types";
 import { Menu } from "~/features/shared/components/ui";
 
+const shapeIconMap: Record<ShapeVariant, LucideIcon> = {
+  circle: CircleIcon,
+  rectangle: SquareIcon,
+};
+const shapes = Object.keys(shapeIconMap) as ShapeVariant[];
+
 type ShapeToolMenuProps = PropsWithSettings & {
   isParentPanelVertical?: boolean;
 };
@@ -62,10 +68,3 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
     </Menu.Root>
   );
 }
-
-const shapeIconMap: Record<ShapeVariant, LucideIcon> = {
-  circle: CircleIcon,
-  rectangle: SquareIcon,
-};
-
-const shapes = Object.keys(shapeIconMap) as ShapeVariant[];

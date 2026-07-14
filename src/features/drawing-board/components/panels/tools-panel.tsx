@@ -27,6 +27,26 @@ const MIN_WIDTH = 54;
 const MIN_HEIGHT = 365;
 const MIN_WIDTH_THRESHOLD = 100;
 
+type ToolItem = ToolConfig & {
+  label: string;
+  icon: LucideIcon;
+};
+
+const tools: ToolItem[] = [
+  {
+    tool: "select",
+    variant: "select",
+    label: "Select",
+    icon: MousePointerIcon,
+  },
+  {
+    tool: "eraser",
+    variant: "plain",
+    label: "Eraser",
+    icon: EraserIcon,
+  },
+];
+
 type ToolsPanelProps = PropsWithSettings &
   PropsWithContainerRef &
   PropsWithDefaultPosition & {
@@ -170,23 +190,3 @@ export function ToolsPanel(props: ToolsPanelProps) {
     </FloatingPanel.Root>
   );
 }
-
-type ToolItem = ToolConfig & {
-  label: string;
-  icon: LucideIcon;
-};
-
-const tools: ToolItem[] = [
-  {
-    tool: "select",
-    variant: "select",
-    label: "Select",
-    icon: MousePointerIcon,
-  },
-  {
-    tool: "eraser",
-    variant: "plain",
-    label: "Eraser",
-    icon: EraserIcon,
-  },
-];

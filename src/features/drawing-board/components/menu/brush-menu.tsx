@@ -7,6 +7,12 @@ import type { BrushVariant, PropsWithSettings } from "../../types";
 import type { LucideIcon } from "lucide-solid";
 import { Menu } from "~/features/shared/components/ui";
 
+const brushIconMap: Record<BrushVariant, LucideIcon> = {
+  plain: StrokePenIcon,
+  pressure: StrokeInkIcon,
+};
+const brushes = Object.keys(brushIconMap) as BrushVariant[];
+
 type BrushToolMenuProps = PropsWithSettings & {
   isParentPanelVertical?: boolean;
 };
@@ -62,10 +68,3 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
     </Menu.Root>
   );
 }
-
-const brushIconMap: Record<BrushVariant, LucideIcon> = {
-  plain: StrokePenIcon,
-  pressure: StrokeInkIcon,
-};
-
-const brushes = Object.keys(brushIconMap) as BrushVariant[];

@@ -13,6 +13,7 @@ export default [
     rules: {
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/naming-convention": "off",
+      "no-use-before-define": "warn",
     },
   },
   {
@@ -36,5 +37,11 @@ export default [
   },
   {
     ignores: [".output/**/*", "./fabricjs-psbrush/**/*"],
+  },
+  {
+    files: ["src/routes/**/*.{ts,tsx}"],
+    rules: {
+      "no-use-before-define": "off",
+    },
   },
 ];
