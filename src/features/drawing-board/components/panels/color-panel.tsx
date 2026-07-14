@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { parseColor } from "@ark-ui/solid/color-picker";
 import {
+  ArrowBigDownDash,
+  ArrowBigUpDash,
   ArrowDownLeftIcon,
   ArrowRightLeftIcon,
   CheckIcon,
@@ -8,7 +10,15 @@ import {
   PipetteIcon,
   XIcon,
 } from "lucide-solid";
-import { For, Index, createSignal, onMount } from "solid-js";
+import {
+  For,
+  Index,
+  Match,
+  Show,
+  Switch,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { DEFAULT_COLORS } from "../../constants";
 import { createPosition } from "../../hooks";
 import type { ColorPickerColorFormat } from "@ark-ui/solid/color-picker";
@@ -26,8 +36,9 @@ type ColorSettingsPanelsProps = PropsWithContainerRef &
     swapColors: () => void;
   };
 
-const MIN_WIDTH = 250;
-const MIN_HEIGHT = 485;
+const MIN_WIDTH = 245;
+const MIN_HEIGHT = 380;
+const MIN_EXPANDED_HEIGHT = 475;
 const DEFAULT_COLOR_FORMAT: ColorPickerColorFormat = "rgba";
 const COLOR_FORMATS: ColorPickerColorFormat[] = ["rgba", "hsla", "rgba"];
 const MAX_SWATCHES = 12;
@@ -40,10 +51,15 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
   const [colorFormat, setColorFormat] =
     createSignal<ColorPickerColorFormat>(DEFAULT_COLOR_FORMAT);
   const [swatches, setSwatches] = createSignal(DEFAULT_SWATCHES);
+
+  const [isExpaned, setIsExpaned] = createSignal(false);
+  const minHeight = () => (isExpaned() ? MIN_EXPANDED_HEIGHT : MIN_HEIGHT);
+
   const [size, setSize] = createSignal<Size>({
     width: MIN_WIDTH,
-    height: MIN_HEIGHT,
+    height: minHeight(),
   });
+
   const [position, setPosition] = createPosition(
     props.defaultPosition,
     () => props.containerRef,
@@ -66,21 +82,28 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
       });
   });
 
+  const handleExpand = () => {
+    const expanded = !isExpaned();
+    const height = expanded ? MIN_EXPANDED_HEIGHT : MIN_HEIGHT;
+    setIsExpaned(expanded);
+    setSize((prev) => ({ ...prev, height }));
+  };
+
   return (
     <FloatingPanel.Root
       defaultOpen
+      minSize={{
+        width: MIN_WIDTH,
+        height: minHeight(),
+      }}
       strategy="absolute"
       position={position()}
-      onPositionChange={function handlePositionChange(p) {
-        setPosition(p.position);
+      onPositionChange={function handlePositionChange(detail) {
+        setPosition(detail.position);
       }}
       size={size()}
       onSizeChange={function handleSizeChange(detail) {
-        const width =
-          detail.size.width <= MIN_WIDTH ? MIN_WIDTH : detail.size.width;
-        const height =
-          detail.size.height <= MIN_HEIGHT ? MIN_HEIGHT : detail.size.height;
-        setSize({ width, height });
+        setSize(detail.size);
       }}
     >
       <FloatingPanel.Positioner
@@ -174,7 +197,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                   <ArrowRightLeftIcon class="absolute bottom-0 left-0 size-3.5" />
                 </button>
 
-                <ColorPicker.SwatchGroup class="grid flex-1 grid-cols-6 grid-rows-2 gap-1 *:self-center *:justify-self-end">
+                <ColorPicker.SwatchGroup class="grid grid-cols-6 grid-rows-2 gap-1 *:self-center *:justify-self-end">
                   <For each={swatches()}>
                     {(color) => (
                       <ColorPicker.SwatchTrigger value={color} class="btn-xs">
@@ -185,46 +208,75 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                 </ColorPicker.SwatchGroup>
               </div>
 
-              <div class="mt-2 space-y-3">
-                <label class="floating-label">
-                  <span class="text-sm">Color format</span>
-                  <select
-                    class="select select-sm uppercase"
-                    value={colorFormat()}
-                    onChange={function handleColorFormatChange(e) {
-                      setColorFormat(e.target.value as ColorPickerColorFormat);
-                    }}
+              <Show when={isExpaned()}>
+                <div class="mt-2 space-y-3">
+                  <label class="floating-label">
+                    <span class="text-sm">Color format</span>
+                    <select
+                      class="select select-sm uppercase"
+                      value={colorFormat()}
+                      onChange={function handleColorFormatChange(e) {
+                        setColorFormat(
+                          e.target.value as ColorPickerColorFormat,
+                        );
+                      }}
+                    >
+                      <option disabled>Pick a format</option>
+                      <Index each={COLOR_FORMATS}>
+                        {(format) => (
+                          <option value={format()}>
+                            {format().toUpperCase()}
+                          </option>
+                        )}
+                      </Index>
+                    </select>
+                  </label>
+
+                  <label class="floating-label">
+                    <span class="text-sm">Color</span>
+                    <ColorPicker.ChannelInput channel="css" />
+                  </label>
+                </div>
+              </Show>
+
+              <Switch>
+                <Match when={isExpaned()}>
+                  <div class="flex gap-1">
+                    <button
+                      type="button"
+                      class="btn btn-soft btn-primary btn-sm flex-1/2"
+                      onClick={function handleResetColors() {
+                        setSwatches(DEFAULT_SWATCHES);
+                        props.setSettings((prev) => ({
+                          ...prev,
+                          colors: DEFAULT_COLORS,
+                        }));
+                      }}
+                    >
+                      Reset
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-soft btn-sm flex-1/2"
+                      onClick={handleExpand}
+                    >
+                      Show less
+                      <ArrowBigUpDash class="size-4" />
+                    </button>
+                  </div>
+                </Match>
+
+                <Match when={!isExpaned()}>
+                  <button
+                    type="button"
+                    class="btn btn-soft btn-primary btn-sm"
+                    onClick={handleExpand}
                   >
-                    <option disabled>Pick a format</option>
-                    <Index each={COLOR_FORMATS}>
-                      {(format) => (
-                        <option value={format()}>
-                          {format().toUpperCase()}
-                        </option>
-                      )}
-                    </Index>
-                  </select>
-                </label>
-
-                <label class="floating-label">
-                  <span class="text-sm">Color</span>
-                  <ColorPicker.ChannelInput channel="css" />
-                </label>
-              </div>
-
-              <button
-                type="button"
-                class="btn btn-soft btn-secondary"
-                onClick={function resetColors() {
-                  setSwatches(DEFAULT_SWATCHES);
-                  props.setSettings((prev) => ({
-                    ...prev,
-                    colors: DEFAULT_COLORS,
-                  }));
-                }}
-              >
-                Reset
-              </button>
+                    Show more
+                    <ArrowBigDownDash class="size-4" />
+                  </button>
+                </Match>
+              </Switch>
             </ColorPicker.Root>
           </FloatingPanel.Body>
 

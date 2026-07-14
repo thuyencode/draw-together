@@ -10,7 +10,7 @@ import type {
 } from "../../types";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
-const MIN_WIDTH = 300;
+const MIN_WIDTH = 245;
 const MIN_HEIGHT = 240;
 
 type ToolSettingsPanelsProps = PropsWithSettings &
@@ -33,14 +33,16 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
       defaultOpen
       strategy="absolute"
       position={position()}
-      onPositionChange={function handlePositionChange(p) {
-        setPosition(p.position);
+      onPositionChange={function handlePositionChange(detail) {
+        setPosition(detail.position);
+      }}
+      minSize={{
+        width: MIN_WIDTH,
+        height: MIN_HEIGHT,
       }}
       size={size()}
-      onSizeChange={function handleSizeChange(e) {
-        const width = e.size.width <= MIN_WIDTH ? MIN_WIDTH : e.size.width;
-        const height = e.size.height <= MIN_HEIGHT ? MIN_HEIGHT : e.size.height;
-        setSize({ width, height });
+      onSizeChange={function handleSizeChange(detail) {
+        setSize(detail.size);
       }}
     >
       <FloatingPanel.Positioner

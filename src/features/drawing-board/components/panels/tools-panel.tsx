@@ -23,8 +23,8 @@ import type {
 import type { LucideIcon } from "lucide-solid";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
-const MIN_WIDTH = 54;
-const MIN_HEIGHT = 365;
+const MIN_WIDTH = 45;
+const MIN_HEIGHT = 320;
 const MIN_WIDTH_THRESHOLD = 100;
 
 type ToolItem = ToolConfig & {
@@ -81,11 +81,12 @@ export function ToolsPanel(props: ToolsPanelProps) {
       size={size()}
       onSizeChange={function handleSizeChange(e) {
         const isVertical = e.size.width <= MIN_WIDTH_THRESHOLD;
-        const width = isVertical ? MIN_WIDTH : e.size.width;
-        const height = isVertical
-          ? Math.max(e.size.height, MIN_HEIGHT)
-          : e.size.height;
-        setSize({ width, height });
+        setSize({
+          width: isVertical ? MIN_WIDTH : e.size.width,
+          height: isVertical
+            ? Math.max(e.size.height, MIN_HEIGHT)
+            : e.size.height,
+        });
       }}
     >
       <FloatingPanel.Positioner
@@ -114,7 +115,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
           </FloatingPanel.DragTrigger>
 
           <FloatingPanel.Body
-            class="flex-none flex-row flex-wrap"
+            class="flex-none flex-row flex-wrap gap-1"
             classList={{ "justify-center": shouldBeVertical() }}
           >
             <Index each={tools}>
