@@ -59,7 +59,7 @@ function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
     <BaseFloatingPanelHeader
       data-vertical={props.vertical ? "" : undefined}
       class={cn(
-        "group bg-base-200 border-neutral/40 flex cursor-grab items-center gap-1 rounded-t-lg border-b px-4 py-2 active:cursor-grabbing",
+        "group bg-base-200 border-neutral/40 flex cursor-grab items-center gap-1 rounded-t-lg border-b px-3 py-1 active:cursor-grabbing",
         props.vertical ? "flex-col" : "justify-between",
         props.class,
       )}

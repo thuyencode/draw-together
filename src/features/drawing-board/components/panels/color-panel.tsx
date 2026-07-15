@@ -37,8 +37,8 @@ type ColorSettingsPanelsProps = PropsWithContainerRef &
   };
 
 const MIN_WIDTH = 245;
-const MIN_HEIGHT = 380;
-const MIN_EXPANDED_HEIGHT = 475;
+const MIN_HEIGHT = 370;
+const MIN_EXPANDED_HEIGHT = 470;
 const DEFAULT_COLOR_FORMAT: ColorPickerColorFormat = "rgba";
 const COLOR_FORMATS: ColorPickerColorFormat[] = ["rgba", "hsla", "rgba"];
 const MAX_SWATCHES = 12;

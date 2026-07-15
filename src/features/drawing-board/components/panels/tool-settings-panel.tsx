@@ -11,7 +11,7 @@ import type {
 import { FloatingPanel } from "~/features/shared/components/ui";
 
 const MIN_WIDTH = 245;
-const MIN_HEIGHT = 240;
+const MIN_HEIGHT = 230;
 
 type ToolSettingsPanelsProps = PropsWithSettings &
   PropsWithContainerRef &
