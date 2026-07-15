@@ -36,9 +36,16 @@ export function createCanvasHistory(canvas: () => Canvas | undefined) {
   };
 
   const handleReset = () => {
-    canvas()?.clear();
     setHistory([]);
     setUndone([]);
+
+    const c = canvas();
+
+    if (c) {
+      const { backgroundColor } = c;
+      c.clear();
+      c.set({ backgroundColor });
+    }
   };
 
   return {

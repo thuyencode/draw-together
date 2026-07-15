@@ -16,34 +16,39 @@ import {
   untrack,
 } from "solid-js";
 import { createStore } from "solid-js/store";
+import { isServer } from "solid-js/web";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
+import { DEFAULT_COLORS } from "../constants";
 import { createCanvas, createCanvasHistory } from "../hooks";
 import {
   getCircleFromPoints,
   getRectFromPoints,
   getTargetOfSelection,
 } from "../utils";
-import { DEFAULT_COLORS } from "../constants";
 import { ColorPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
-import type { FabricObjectProps } from "fabric";
+import type { CanvasOptions, FabricObjectProps } from "fabric";
 import type { ErasingEvent } from "@erase2d/fabric";
 import { cn } from "~/features/shared/utils/cn";
 
 FabricObject.customProperties = ["objectId", "erasable"];
 
-export default function DrawingBoard(_props: ComponentProps<"div">) {
+interface DrawingBoardProps extends ComponentProps<"div"> {
+  options?: Partial<CanvasOptions>;
+}
+
+export default function DrawingBoard(_props: DrawingBoardProps) {
   let containerRef!: HTMLDivElement;
   let canvasElementRef!: HTMLCanvasElement;
 
-  const [props, rest] = splitProps(_props, ["class"]);
+  const [props, rest] = splitProps(_props, ["class", "options"]);
 
   const canvas = createCanvas(
     () => canvasElementRef,
-    () => containerRef,
-    { enablePointerEvents: true },
+    // eslint-disable-next-line solid/reactivity
+    props.options,
   );
 
   const [settings, setSettings] = createStore<Settings>({
@@ -264,8 +269,19 @@ export default function DrawingBoard(_props: ComponentProps<"div">) {
 
   return (
     <div class={cn("relative h-full", props.class)} {...rest}>
-      <div class="absolute inset-0" ref={containerRef}>
-        <canvas ref={canvasElementRef} />
+      <div
+        class="absolute inset-0 flex items-center justify-center overflow-scroll bg-neutral-600"
+        ref={containerRef}
+      >
+        <canvas
+          ref={canvasElementRef}
+          test-id="canvas"
+          style={{
+            "background-color": isServer
+              ? props.options?.backgroundColor?.toString()
+              : undefined,
+          }}
+        />
       </div>
 
       <ToolsPanel

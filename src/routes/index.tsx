@@ -8,7 +8,13 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <main class="h-full">
-      <DrawingBoard />
+      <DrawingBoard
+        options={{
+          width: 600,
+          height: 600,
+          backgroundColor: "#fff",
+        }}
+      />
     </main>
   );
 }
