@@ -6,7 +6,7 @@ import type { CanvasOptions } from "fabric";
 
 export function createCanvas(
   canvasElementRef: Accessor<HTMLCanvasElement | undefined>,
-  options?: Partial<CanvasOptions>,
+  options?: Accessor<Partial<CanvasOptions | undefined>>,
 ) {
   const [canvas, setCanvas] = createSignal<Canvas>();
 
@@ -14,7 +14,9 @@ export function createCanvas(
     const el = canvasElementRef();
     if (!el) return;
 
-    const canvasInstance = isServer ? undefined : new Canvas(el, options);
+    const opts = options?.();
+
+    const canvasInstance = isServer ? undefined : new Canvas(el, opts);
     canvasInstance?.renderAll();
     setCanvas(canvasInstance);
   });

@@ -47,8 +47,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
   const canvas = createCanvas(
     () => canvasElementRef,
-    // eslint-disable-next-line solid/reactivity
-    props.options,
+    () => props.options,
   );
 
   const [settings, setSettings] = createStore<Settings>({
@@ -276,11 +275,20 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         <canvas
           ref={canvasElementRef}
           test-id="canvas"
-          style={{
-            "background-color": isServer
-              ? props.options?.backgroundColor?.toString()
-              : undefined,
-          }}
+          style={
+            isServer && props.options
+              ? {
+                  "background-color":
+                    props.options.backgroundColor?.toString() ?? undefined,
+                  width: props.options.width
+                    ? `${props.options.width}px`
+                    : undefined,
+                  height: props.options.height
+                    ? `${props.options.height}px`
+                    : undefined,
+                }
+              : undefined
+          }
         />
       </div>
 
