@@ -1,14 +1,9 @@
 import { EraserBrush } from "@erase2d/fabric";
 import { createHotkey } from "@tanstack/solid-hotkeys";
-import {
-  ActiveSelection,
-  Circle,
-  FabricObject,
-  PencilBrush,
-  Rect,
-} from "fabric";
+import { ActiveSelection, Circle, PencilBrush, Rect } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
 import {
+  Show,
   createEffect,
   onCleanup,
   onMount,
@@ -16,7 +11,6 @@ import {
   untrack,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-import { isServer } from "solid-js/web";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
 import { DEFAULT_COLORS } from "../constants";
@@ -29,11 +23,10 @@ import {
 import { ColorPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
-import type { CanvasOptions, FabricObjectProps } from "fabric";
+import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
 import type { ErasingEvent } from "@erase2d/fabric";
 import { cn } from "~/features/shared/utils/cn";
-
-FabricObject.customProperties = ["objectId", "erasable"];
+import { useIsClient } from "~/features/shared/hooks";
 
 interface DrawingBoardProps extends ComponentProps<"div"> {
   options?: Partial<CanvasOptions>;
@@ -49,16 +42,15 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     () => canvasElementRef,
     () => props.options,
   );
-
   const [settings, setSettings] = createStore<Settings>({
     tool: "brush",
     variant: "plain",
     strokeWidth: 2,
     colors: DEFAULT_COLORS,
   });
-
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
     createCanvasHistory(canvas);
+  const isClient = useIsClient();
 
   onMount(() => {
     const c = canvas();
@@ -272,24 +264,23 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         class="absolute inset-0 flex items-center justify-center overflow-scroll bg-neutral-600"
         ref={containerRef}
       >
-        <canvas
-          ref={canvasElementRef}
-          test-id="canvas"
-          style={
-            isServer && props.options
-              ? {
-                  "background-color":
-                    props.options.backgroundColor?.toString() ?? undefined,
-                  width: props.options.width
-                    ? `${props.options.width}px`
-                    : undefined,
-                  height: props.options.height
-                    ? `${props.options.height}px`
-                    : undefined,
-                }
-              : undefined
-          }
-        />
+        <Show when={!isClient()}>
+          <div
+            class="absolute mx-auto"
+            style={{
+              "background-color": props.options?.backgroundColor
+                ? props.options.backgroundColor.toString()
+                : undefined,
+              width: props.options?.width
+                ? `${props.options.width}px`
+                : undefined,
+              height: props.options?.height
+                ? `${props.options.height}px`
+                : undefined,
+            }}
+          />
+        </Show>
+        <canvas ref={canvasElementRef} />
       </div>
 
       <ToolsPanel

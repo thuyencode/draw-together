@@ -1,8 +1,7 @@
-import { Canvas } from "fabric";
+import { Canvas, FabricObject } from "fabric";
 import { createSignal, onCleanup, onMount } from "solid-js";
-import { isServer } from "solid-js/web";
-import type { Accessor } from "solid-js";
 import type { CanvasOptions } from "fabric";
+import type { Accessor } from "solid-js";
 
 export function createCanvas(
   canvasElementRef: Accessor<HTMLCanvasElement | undefined>,
@@ -14,10 +13,12 @@ export function createCanvas(
     const el = canvasElementRef();
     if (!el) return;
 
-    const opts = options?.();
+    FabricObject.customProperties = ["objectId", "erasable"];
 
-    const canvasInstance = isServer ? undefined : new Canvas(el, opts);
-    canvasInstance?.renderAll();
+    const opts = options?.();
+    const canvasInstance = new Canvas(el, opts);
+
+    canvasInstance.renderAll();
     setCanvas(canvasInstance);
   });
 
