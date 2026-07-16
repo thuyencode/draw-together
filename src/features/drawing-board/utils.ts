@@ -119,3 +119,20 @@ export function getTargetOfSelection(canvas: Canvas) {
 
   return target;
 }
+
+/**
+ * Get relevant style values for the given element
+ * @see https://stackoverflow.com/a/64654744/13221239
+ */
+export function getTransformVals(el: HTMLElement) {
+  const style = window.getComputedStyle(el);
+  const matrix = new DOMMatrixReadOnly(style.transform);
+  return {
+    scaleX: matrix.m11,
+    scaleY: matrix.m22,
+    translateX: matrix.m41,
+    translateY: matrix.m42,
+    width: el.getBoundingClientRect().width,
+    height: el.getBoundingClientRect().height,
+  };
+}

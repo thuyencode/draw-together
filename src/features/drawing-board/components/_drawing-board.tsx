@@ -14,7 +14,11 @@ import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
 import { DEFAULT_COLORS } from "../constants";
-import { createCanvas, createCanvasHistory } from "../hooks";
+import {
+  createCanvas,
+  createCanvasHistory,
+  useCanvasDragAndZoom,
+} from "../hooks";
 import {
   getCircleFromPoints,
   getRectFromPoints,
@@ -24,20 +28,19 @@ import { ColorPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
-import type { ErasingEvent } from "@erase2d/fabric";
 import { cn } from "~/features/shared/utils/cn";
 import { useIsClient } from "~/features/shared/hooks";
 
-interface DrawingBoardProps extends ComponentProps<"div"> {
+interface DrawingBoardProps extends Omit<ComponentProps<"div">, "ref"> {
   options?: Partial<CanvasOptions>;
 }
 
 export default function DrawingBoard(_props: DrawingBoardProps) {
   let containerRef!: HTMLDivElement;
+  let canvasContainerRef!: HTMLDivElement;
   let canvasElementRef!: HTMLCanvasElement;
 
   const [props, rest] = splitProps(_props, ["class", "options"]);
-
   const canvas = createCanvas(
     () => canvasElementRef,
     () => props.options,
@@ -51,10 +54,25 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
     createCanvasHistory(canvas);
   const isClient = useIsClient();
+  const dragAndZoom = useCanvasDragAndZoom(canvas, () => canvasContainerRef);
+
+  createEffect(function onToolChange() {
+    dragAndZoom.setSettings({
+      drag: settings.tool === "grab",
+      zoom: true,
+    });
+  });
 
   onMount(() => {
     const c = canvas();
     if (!c) return;
+
+    // center canvas inside the container
+    const containerRect = canvasContainerRef.getBoundingClientRect();
+    const canvasRect = c.wrapperEl.getBoundingClientRect();
+    const centerX = (containerRect.width - canvasRect.width) / 2;
+    const centerY = (containerRect.height - canvasRect.height) / 2;
+    c.wrapperEl.style.transform = `translate(${centerX}px, ${centerY}px) scale(1)`;
 
     const untrack_settings = untrack(() => settings);
     const initialPoint: Point = { x: 0, y: 0 };
@@ -70,12 +88,12 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       erasable: true,
     });
 
-    c.on("mouse:down", (evt) => {
+    c.on("mouse:down", function setInitialPoint(evt) {
       initialPoint.x = evt.scenePoint.x;
       initialPoint.y = evt.scenePoint.y;
     });
 
-    c.on("path:created", (evt) => {
+    c.on("path:created", function finalizeFreeDrawing(evt) {
       evt.path.objectId = window.crypto.randomUUID();
       evt.path.erasable = true;
 
@@ -84,7 +102,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       }
     });
 
-    c.on("mouse:down", () => {
+    c.on("mouse:down", function setPreviewObject() {
       if (untrack_settings.tool === "shape") {
         switch (untrack_settings.variant) {
           case "circle":
@@ -101,7 +119,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       }
     });
 
-    c.on("mouse:move", (evt) => {
+    c.on("mouse:move", function updatePreviewObject(evt) {
       if (untrack_settings.tool === "shape" && previewObject) {
         switch (untrack_settings.variant) {
           case "circle":
@@ -119,7 +137,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       }
     });
 
-    c.on("mouse:up", () => {
+    c.on("mouse:up", function finalizePreviewObject() {
       if (previewObject) {
         const command = new AddCommand(c, previewObject);
         pushCommand(command);
@@ -130,23 +148,16 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       }
     });
 
-    c.on("object:moving", () => {
+    const setFlagForModifyCommand = () => {
       shouldPushModifyCommand = true;
-    });
+    };
 
-    c.on("object:scaling", () => {
-      shouldPushModifyCommand = true;
-    });
+    c.on("object:moving", setFlagForModifyCommand);
+    c.on("object:scaling", setFlagForModifyCommand);
+    c.on("object:rotating", setFlagForModifyCommand);
+    c.on("object:skewing", setFlagForModifyCommand);
 
-    c.on("object:rotating", () => {
-      shouldPushModifyCommand = true;
-    });
-
-    c.on("object:skewing", () => {
-      shouldPushModifyCommand = true;
-    });
-
-    c.on("object:modified", (evt) => {
+    c.on("object:modified", function finalizedObjectModification(evt) {
       if (!evt.transform) return;
 
       if (!shouldPushModifyCommand) return;
@@ -155,14 +166,14 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       pushCommand(new ModifyCommand(c, evt.transform));
     });
 
-    createEffect(() => {
+    createEffect(function onSelect() {
       const isSelecting = settings.tool === "select";
 
       c.selection = isSelecting;
       c.skipTargetFind = !isSelecting;
     });
 
-    createEffect(() => {
+    createEffect(function onSetFreeDrawing() {
       const isFreeDrawing =
         settings.tool === "brush" || settings.tool === "eraser";
       c.isDrawingMode = isFreeDrawing;
@@ -170,7 +181,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       if (!isFreeDrawing) c.freeDrawingBrush = undefined;
     });
 
-    createEffect(() => {
+    createEffect(function onBrush() {
       if (settings.tool === "brush") {
         switch (settings.variant) {
           case "plain":
@@ -187,22 +198,20 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       }
     });
 
-    createEffect(() => {
+    createEffect(function onEraser() {
       let eraser: EraserBrush | undefined;
 
       if (settings.tool === "eraser") {
-        const handleEraserEnd = async (e: ErasingEvent<"end">) => {
+        eraser = new EraserBrush(c);
+
+        eraser.width = settings.strokeWidth;
+        eraser.on("end", function finalizeEraser(e) {
           // prevent from committing erasing to the tree
           e.preventDefault();
 
           pushCommand(new EraseCommand(c, e.detail));
-          await eraser?.commit(e.detail);
-        };
-
-        eraser = new EraserBrush(c);
-
-        eraser.width = settings.strokeWidth;
-        eraser.on("end", handleEraserEnd);
+          eraser?.commit(e.detail);
+        });
 
         c.freeDrawingBrush = eraser;
       }
@@ -259,14 +268,18 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   createHotkey("Mod+X", handleSwapColors);
 
   return (
-    <div class={cn("relative h-full", props.class)} {...rest}>
+    <div
+      class={cn("relative h-full", props.class)}
+      {...rest}
+      ref={containerRef}
+    >
       <div
-        class="absolute inset-0 flex items-center justify-center overflow-scroll bg-neutral-600"
-        ref={containerRef}
+        class="absolute inset-0 overflow-hidden bg-neutral-600"
+        ref={canvasContainerRef}
       >
         <Show when={!isClient()}>
           <div
-            class="absolute mx-auto"
+            class="absolute inset-0 m-auto"
             style={{
               "background-color": props.options?.backgroundColor
                 ? props.options.backgroundColor.toString()

@@ -4,20 +4,33 @@ import type { SetStoreFunction } from "solid-js/store";
 export type { Point, Size } from "@zag-js/rect-utils";
 
 export type Tool =
-  "shape" | "brush" | "eraser" | "straight-line" | "history" | "select";
+  | "shape"
+  | "brush"
+  | "grab"
+  | "eraser"
+  | "straight-line"
+  | "history"
+  | "select";
 
 export type ShapeVariant = "circle" | "rectangle";
 export type BrushVariant = "plain" | "pressure";
+type GrabVariant = "grab";
 type EraserVariant = "plain";
 type HistoryVariant = "undo" | "redo" | "clear";
 type SelectVariant = "select";
 
 export type Variant =
-  ShapeVariant | BrushVariant | EraserVariant | HistoryVariant | SelectVariant;
+  | ShapeVariant
+  | BrushVariant
+  | GrabVariant
+  | EraserVariant
+  | HistoryVariant
+  | SelectVariant;
 
 export type ToolConfig =
   | { tool: Extract<Tool, "shape">; variant: ShapeVariant }
   | { tool: Extract<Tool, "brush">; variant: BrushVariant }
+  | { tool: Extract<Tool, "grab">; variant: GrabVariant }
   | { tool: Extract<Tool, "eraser">; variant: EraserVariant }
   | { tool: Extract<Tool, "history">; variant: HistoryVariant }
   | { tool: Extract<Tool, "select">; variant: SelectVariant };

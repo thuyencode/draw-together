@@ -2,6 +2,7 @@ import {
   ArrowDownLeftIcon,
   EraserIcon,
   GripVerticalIcon,
+  HandIcon,
   MousePointerIcon,
   RedoIcon,
   RotateCwIcon,
@@ -24,7 +25,7 @@ import type { LucideIcon } from "lucide-solid";
 import { FloatingPanel } from "~/features/shared/components/ui";
 
 const MIN_WIDTH = 45;
-const MIN_HEIGHT = 310;
+const MIN_HEIGHT = 350;
 const MIN_WIDTH_THRESHOLD = 100;
 
 type ToolItem = ToolConfig & {
@@ -38,6 +39,12 @@ const tools: ToolItem[] = [
     variant: "select",
     label: "Select",
     icon: MousePointerIcon,
+  },
+  {
+    tool: "grab",
+    variant: "grab",
+    label: "Grab",
+    icon: HandIcon,
   },
   {
     tool: "eraser",
