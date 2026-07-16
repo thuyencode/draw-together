@@ -48,9 +48,9 @@ function FloatingPanelContent(_props: BaseFloatingPanel.ContentProps) {
   );
 }
 
-type FloatingPanelHeaderProps = BaseFloatingPanel.HeaderProps & {
+interface FloatingPanelHeaderProps extends BaseFloatingPanel.HeaderProps {
   vertical?: boolean;
-};
+}
 
 function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
   const [props, rest] = splitProps(_props, ["class", "vertical"]);
