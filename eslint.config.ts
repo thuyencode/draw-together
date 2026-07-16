@@ -13,7 +13,6 @@ export default [
     rules: {
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/naming-convention": "off",
-      "no-use-before-define": "warn",
     },
   },
   {
