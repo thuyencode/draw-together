@@ -6,7 +6,7 @@ export type { Point, Size } from "@zag-js/rect-utils";
 export type Tool =
   | "shape"
   | "brush"
-  | "grab"
+  | "drag"
   | "eraser"
   | "straight-line"
   | "history"
@@ -14,7 +14,7 @@ export type Tool =
 
 export type ShapeVariant = "circle" | "rectangle";
 export type BrushVariant = "plain" | "pressure";
-type GrabVariant = "grab";
+type DragVariant = "drag";
 type EraserVariant = "plain";
 type HistoryVariant = "undo" | "redo" | "clear";
 type SelectVariant = "select";
@@ -22,7 +22,7 @@ type SelectVariant = "select";
 export type Variant =
   | ShapeVariant
   | BrushVariant
-  | GrabVariant
+  | DragVariant
   | EraserVariant
   | HistoryVariant
   | SelectVariant;
@@ -30,7 +30,7 @@ export type Variant =
 export type ToolConfig =
   | { tool: Extract<Tool, "shape">; variant: ShapeVariant }
   | { tool: Extract<Tool, "brush">; variant: BrushVariant }
-  | { tool: Extract<Tool, "grab">; variant: GrabVariant }
+  | { tool: Extract<Tool, "drag">; variant: DragVariant }
   | { tool: Extract<Tool, "eraser">; variant: EraserVariant }
   | { tool: Extract<Tool, "history">; variant: HistoryVariant }
   | { tool: Extract<Tool, "select">; variant: SelectVariant };

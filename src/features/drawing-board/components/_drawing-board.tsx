@@ -63,7 +63,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
   createEffect(function onToolChange() {
     dragAndZoom.setEnabled({
-      drag: settings.tool === "grab",
+      drag: settings.tool === "drag",
       zoom: true,
     });
   });
@@ -279,6 +279,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         settings={settings}
         setSettings={setSettings}
         onZoomValueChange={dragAndZoom.setZoom}
+        resetZoomValue={dragAndZoom.reset}
       />
 
       <div class="relative flex-1" {...rest} ref={containerRef}>

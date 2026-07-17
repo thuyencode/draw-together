@@ -41,9 +41,9 @@ const tools: ToolItem[] = [
     icon: MousePointerIcon,
   },
   {
-    tool: "grab",
-    variant: "grab",
-    label: "Grab",
+    tool: "drag",
+    variant: "drag",
+    label: "drag",
     icon: HandIcon,
   },
   {

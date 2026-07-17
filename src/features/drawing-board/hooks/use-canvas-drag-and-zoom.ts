@@ -23,6 +23,7 @@ export interface UseCanvasDragAndZoomReturn {
   setEnabled: (v: DragAndZoomEnabledSettings) => void;
   zoom: Accessor<number>;
   setZoom: Setter<number>;
+  reset: () => void;
 }
 
 export function useCanvasDragAndZoom(
@@ -38,6 +39,11 @@ export function useCanvasDragAndZoom(
     dragAndZoomSettings?.zoom ?? DEFAULT_ZOOM,
   );
 
+  let initialWidth = 0;
+  let initialHeight = 0;
+  let initialCenterX = 0;
+  let initialCenterY = 0;
+
   onMount(() => {
     const c = canvas();
     if (!c) return;
@@ -47,6 +53,16 @@ export function useCanvasDragAndZoom(
     let initialDistance = 0;
     const lastPos: Point = { x: 0, y: 0 };
     const { wrapperEl } = c;
+
+    initialWidth = c.getWidth();
+    initialHeight = c.getHeight();
+    const wrapper = wrapperRef();
+    initialCenterX = wrapper
+      ? (wrapper.getBoundingClientRect().width - initialWidth) / 2
+      : 0;
+    initialCenterY = wrapper
+      ? (wrapper.getBoundingClientRect().height - initialHeight) / 2
+      : 0;
 
     /**
      * Calculates and caps the container offset relative to the wrapper
@@ -349,5 +365,25 @@ export function useCanvasDragAndZoom(
     });
   });
 
-  return { enabled, setEnabled, zoom, setZoom };
+  const reset = () => {
+    setZoom(1);
+
+    const c = canvas();
+    if (!c) return;
+
+    c.setDimensions({
+      width: initialWidth,
+      height: initialHeight,
+    });
+    c.setZoom(1);
+    c.viewportTransform = [1, 0, 0, 1, 0, 0];
+    c.setViewportTransform(c.viewportTransform);
+
+    c.wrapperEl.style.transform = `translate(${initialCenterX}px, ${initialCenterY}px) scale(1)`;
+    c.wrapperEl.style.transformOrigin = ``;
+
+    c.requestRenderAll();
+  };
+
+  return { enabled, setEnabled, zoom, setZoom, reset };
 }
