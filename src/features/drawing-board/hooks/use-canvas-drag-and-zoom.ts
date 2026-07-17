@@ -19,8 +19,8 @@ interface DragAndZoomEnabledSettings {
 }
 
 export interface CanvasDragAndZoomControls {
-  enableds: Accessor<DragAndZoomEnabledSettings>;
-  setEnableds: (v: DragAndZoomEnabledSettings) => void;
+  enabled: Accessor<DragAndZoomEnabledSettings>;
+  setEnabled: (v: DragAndZoomEnabledSettings) => void;
   zoom: Accessor<number>;
   setZoom: (level: number) => void;
 }
@@ -30,7 +30,7 @@ export function useCanvasDragAndZoom(
   wrapperRef: Accessor<HTMLElement | undefined>,
   dragAndZoomSettings?: DragAndZoomSettings,
 ): CanvasDragAndZoomControls {
-  const [enableds, setEnableds] = createSignal({
+  const [enabled, setEnabled] = createSignal({
     drag: true,
     zoom: true,
   });
@@ -248,7 +248,7 @@ export function useCanvasDragAndZoom(
     };
 
     createEffect(function registerDragListeners() {
-      if (!enableds().drag) return;
+      if (!enabled().drag) return;
 
       const ac = new AbortController();
 
@@ -282,7 +282,7 @@ export function useCanvasDragAndZoom(
     });
 
     createEffect(function registerZoomListeners() {
-      if (!enableds().zoom) return;
+      if (!enabled().zoom) return;
 
       const ac = new AbortController();
 
@@ -353,5 +353,5 @@ export function useCanvasDragAndZoom(
     });
   });
 
-  return { enableds, setEnableds, zoom, setZoom };
+  return { enabled, setEnabled, zoom, setZoom };
 }

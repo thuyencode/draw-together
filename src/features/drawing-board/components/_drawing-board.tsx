@@ -62,7 +62,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   );
 
   createEffect(function onToolChange() {
-    dragAndZoom.setEnableds({
+    dragAndZoom.setEnabled({
       drag: settings.tool === "grab",
       zoom: true,
     });
