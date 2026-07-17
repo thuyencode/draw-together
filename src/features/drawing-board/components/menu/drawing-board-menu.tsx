@@ -1,7 +1,10 @@
 import { ZOOM_MAX, ZOOM_MIN } from "../../constants";
+import type { UseCanvasDragAndZoomReturn } from "../../hooks";
 import type { PropsWithSettings } from "../../types";
 
-type DrawingBoardMenuProps = PropsWithSettings;
+interface DrawingBoardMenuProps extends PropsWithSettings {
+  onZoomValueChange: UseCanvasDragAndZoomReturn["setZoom"];
+}
 
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
@@ -14,9 +17,9 @@ export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
           step="1"
           value={props.settings.strokeWidth}
           onChange={(e) => {
-            props.setSettings(
-              "strokeWidth",
-              Number.parseInt(e.target.value, 10),
+            const parsed = Number.parseInt(e.target.value, 10);
+            props.setSettings("strokeWidth", (prev) =>
+              Number.isNaN(parsed) ? prev : parsed,
             );
           }}
         />
@@ -32,7 +35,10 @@ export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
           step="1"
           value={Math.round(props.settings.zoom * 100)}
           onChange={(e) => {
-            props.setSettings("zoom", Number.parseFloat(e.target.value) / 100);
+            const parsed = Number.parseFloat(e.target.value);
+            props.onZoomValueChange((prev) =>
+              Number.isNaN(parsed) ? prev : parsed / 100,
+            );
           }}
         />
         <span class="badge badge-xs badge-soft">%</span>

@@ -1,9 +1,9 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { debounce, throttle } from "@solid-primitives/scheduled";
-import { getTransformVals } from "../utils";
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { DEFAULT_ZOOM, ZOOM_MAX, ZOOM_MIN } from "../constants";
+import { getTransformVals } from "../utils";
 import type { Canvas } from "fabric";
-import type { Accessor } from "solid-js";
+import type { Accessor, Setter } from "solid-js";
 import type { DragAndZoomSettings, Point } from "../types";
 
 const FRAME_16_MS = 16;
@@ -18,18 +18,18 @@ interface DragAndZoomEnabledSettings {
   zoom: boolean;
 }
 
-export interface CanvasDragAndZoomControls {
+export interface UseCanvasDragAndZoomReturn {
   enabled: Accessor<DragAndZoomEnabledSettings>;
   setEnabled: (v: DragAndZoomEnabledSettings) => void;
   zoom: Accessor<number>;
-  setZoom: (level: number) => void;
+  setZoom: Setter<number>;
 }
 
 export function useCanvasDragAndZoom(
   canvas: Accessor<Canvas | undefined>,
   wrapperRef: Accessor<HTMLElement | undefined>,
   dragAndZoomSettings?: DragAndZoomSettings,
-): CanvasDragAndZoomControls {
+): UseCanvasDragAndZoomReturn {
   const [enabled, setEnabled] = createSignal({
     drag: true,
     zoom: true,
@@ -37,10 +37,6 @@ export function useCanvasDragAndZoom(
   const [zoom, setZoom] = createSignal(
     dragAndZoomSettings?.zoom ?? DEFAULT_ZOOM,
   );
-
-  createEffect(() => {
-    console.log(zoom());
-  });
 
   onMount(() => {
     const c = canvas();

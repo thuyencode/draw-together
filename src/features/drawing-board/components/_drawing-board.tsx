@@ -69,7 +69,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   });
 
   createEffect(function onZoomChange() {
-    dragAndZoom.setZoom(settings.zoom);
+    setSettings("zoom", dragAndZoom.zoom);
   });
 
   onMount(() => {
@@ -275,7 +275,11 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
   return (
     <div class="flex h-full flex-col bg-neutral-600">
-      <DrawingBoardMenu settings={settings} setSettings={setSettings} />
+      <DrawingBoardMenu
+        settings={settings}
+        setSettings={setSettings}
+        onZoomValueChange={dragAndZoom.setZoom}
+      />
 
       <div class="relative flex-1" {...rest} ref={containerRef}>
         <div class="absolute inset-0 overflow-hidden" ref={canvasContainerRef}>
