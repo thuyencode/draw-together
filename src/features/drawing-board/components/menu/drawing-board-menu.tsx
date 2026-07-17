@@ -14,10 +14,10 @@ export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
           step="1"
           value={props.settings.strokeWidth}
           onChange={(e) => {
-            props.setSettings((prev) => ({
-              ...prev,
-              strokeWidth: Number.parseInt(e.target.value, 10),
-            }));
+            props.setSettings(
+              "strokeWidth",
+              Number.parseInt(e.target.value, 10),
+            );
           }}
         />
         <span class="badge badge-xs badge-soft">px</span>
@@ -32,10 +32,7 @@ export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
           step="1"
           value={Math.round(props.settings.zoom * 100)}
           onChange={(e) => {
-            props.setSettings((prev) => ({
-              ...prev,
-              zoom: Number.parseFloat(e.target.value) / 100,
-            }));
+            props.setSettings("zoom", Number.parseFloat(e.target.value) / 100);
           }}
         />
         <span class="badge badge-xs badge-soft">%</span>

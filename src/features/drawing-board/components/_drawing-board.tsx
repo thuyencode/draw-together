@@ -263,10 +263,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   };
 
   const handleSwapColors = () => {
-    setSettings((prev) => ({
-      ...prev,
-      colors: [prev.colors[1], prev.colors[0]],
-    }));
+    setSettings("colors", [settings.colors[1], settings.colors[0]]);
   };
 
   createHotkey("Mod+Z", handleUndo);

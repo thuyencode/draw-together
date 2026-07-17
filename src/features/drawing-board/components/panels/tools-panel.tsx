@@ -135,7 +135,6 @@ export function ToolsPanel(props: ToolsPanelProps) {
                   }
                   onClick={() =>
                     // @ts-ignore - The ToolConfig type is already satisfied but the TS compiler doesn't know that
-                    // eslint-disable-next-line solid/reactivity
                     props.setSettings((prev) => ({
                       ...prev,
                       tool: t().tool,

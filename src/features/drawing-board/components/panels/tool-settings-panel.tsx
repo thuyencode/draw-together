@@ -80,10 +80,10 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
                 step="1"
                 value={props.settings.strokeWidth}
                 onChange={(e) => {
-                  props.setSettings((prev) => ({
-                    ...prev,
-                    strokeWidth: Number.parseInt(e.target.value, 10),
-                  }));
+                  props.setSettings(
+                    "strokeWidth",
+                    Number.parseInt(e.target.value, 10),
+                  );
                 }}
               />
               <span class="badge badge-info badge-soft badge-xs">px</span>

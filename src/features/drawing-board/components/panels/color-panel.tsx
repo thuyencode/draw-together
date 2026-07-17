@@ -137,10 +137,10 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
               class=""
               value={parseColor(props.settings.colors[0])}
               onValueChange={function handleColorChange(detail) {
-                props.setSettings((prev) => ({
-                  ...prev,
-                  colors: [detail.valueAsString, prev.colors[1]],
-                }));
+                props.setSettings("colors", [
+                  detail.valueAsString,
+                  props.settings.colors[1],
+                ]);
               }}
               onValueChangeEnd={function handleColorChangeEnded() {
                 setSwatches((prev) => {
@@ -247,10 +247,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                       class="btn btn-soft btn-primary btn-sm flex-1/2"
                       onClick={function handleResetColors() {
                         setSwatches(DEFAULT_SWATCHES);
-                        props.setSettings((prev) => ({
-                          ...prev,
-                          colors: DEFAULT_COLORS,
-                        }));
+                        props.setSettings("colors", DEFAULT_COLORS);
                       }}
                     >
                       Reset
