@@ -41,7 +41,11 @@ export interface StrokeConfig {
   colors: [string, string];
 }
 
-export type Settings = ToolConfig & StrokeConfig;
+export interface DragAndZoomSettings {
+  zoom: number;
+}
+
+export type Settings = ToolConfig & StrokeConfig & DragAndZoomSettings;
 
 type CenteredPosition = "center";
 type HorizontalPosition = "left" | "right";

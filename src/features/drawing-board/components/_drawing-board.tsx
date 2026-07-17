@@ -13,7 +13,7 @@ import {
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
-import { DEFAULT_COLORS } from "../constants";
+import { DEFAULT_COLORS, DEFAULT_ZOOM } from "../constants";
 import {
   createCanvas,
   createCanvasHistory,
@@ -24,11 +24,11 @@ import {
   getRectFromPoints,
   getTargetOfSelection,
 } from "../utils";
-import { ColorPanels, ToolSettingsPanels, ToolsPanel } from "./panels";
+import { DrawingBoardMenu } from "./menu";
+import { ColorPanels, ToolsPanel } from "./panels";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
-import { cn } from "~/features/shared/utils/cn";
 import { useIsClient } from "~/features/shared/hooks";
 
 interface DrawingBoardProps extends Omit<ComponentProps<"div">, "ref"> {
@@ -50,17 +50,26 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     variant: "plain",
     strokeWidth: 2,
     colors: DEFAULT_COLORS,
+    zoom: DEFAULT_ZOOM,
   });
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
     createCanvasHistory(canvas);
   const isClient = useIsClient();
-  const dragAndZoom = useCanvasDragAndZoom(canvas, () => canvasContainerRef);
+  const dragAndZoom = useCanvasDragAndZoom(
+    canvas,
+    () => canvasContainerRef,
+    settings,
+  );
 
   createEffect(function onToolChange() {
-    dragAndZoom.setSettings({
+    dragAndZoom.setEnableds({
       drag: settings.tool === "grab",
       zoom: true,
     });
+  });
+
+  createEffect(function onZoomChange() {
+    dragAndZoom.setZoom(settings.zoom);
   });
 
   onMount(() => {
@@ -268,60 +277,50 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   createHotkey("Mod+X", handleSwapColors);
 
   return (
-    <div
-      class={cn("relative h-full", props.class)}
-      {...rest}
-      ref={containerRef}
-    >
-      <div
-        class="absolute inset-0 overflow-hidden bg-neutral-600"
-        ref={canvasContainerRef}
-      >
-        <Show when={!isClient()}>
-          <div
-            class="absolute inset-0 m-auto"
-            style={{
-              "background-color": props.options?.backgroundColor
-                ? props.options.backgroundColor.toString()
-                : undefined,
-              width: props.options?.width
-                ? `${props.options.width}px`
-                : undefined,
-              height: props.options?.height
-                ? `${props.options.height}px`
-                : undefined,
-            }}
-          />
-        </Show>
-        <canvas ref={canvasElementRef} />
+    <div class="flex h-full flex-col bg-neutral-600">
+      <DrawingBoardMenu settings={settings} setSettings={setSettings} />
+
+      <div class="relative flex-1" {...rest} ref={containerRef}>
+        <div class="absolute inset-0 overflow-hidden" ref={canvasContainerRef}>
+          <Show when={!isClient()}>
+            <div
+              class="absolute inset-0 m-auto"
+              style={{
+                "background-color": props.options?.backgroundColor
+                  ? props.options.backgroundColor.toString()
+                  : undefined,
+                width: props.options?.width
+                  ? `${props.options.width}px`
+                  : undefined,
+                height: props.options?.height
+                  ? `${props.options.height}px`
+                  : undefined,
+              }}
+            />
+          </Show>
+          <canvas ref={canvasElementRef} />
+        </div>
+
+        <ToolsPanel
+          settings={settings}
+          setSettings={setSettings}
+          containerRef={containerRef}
+          defaultPosition="top-left"
+          isUndoAvailable={history().length !== 0}
+          isRedoAvailable={undone().length !== 0}
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          onReset={handleReset}
+        />
+
+        <ColorPanels
+          settings={settings}
+          setSettings={setSettings}
+          containerRef={containerRef}
+          defaultPosition="top-right"
+          swapColors={handleSwapColors}
+        />
       </div>
-
-      <ToolsPanel
-        settings={settings}
-        setSettings={setSettings}
-        containerRef={containerRef}
-        defaultPosition="top-left"
-        isUndoAvailable={history().length !== 0}
-        isRedoAvailable={undone().length !== 0}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
-        onReset={handleReset}
-      />
-
-      <ColorPanels
-        settings={settings}
-        setSettings={setSettings}
-        containerRef={containerRef}
-        defaultPosition="top-right"
-        swapColors={handleSwapColors}
-      />
-
-      <ToolSettingsPanels
-        settings={settings}
-        setSettings={setSettings}
-        containerRef={containerRef}
-        defaultPosition="bottom-right"
-      />
     </div>
   );
 }

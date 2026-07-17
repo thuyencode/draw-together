@@ -1,36 +1,45 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { debounce, throttle } from "@solid-primitives/scheduled";
 import { getTransformVals } from "../utils";
+import { DEFAULT_ZOOM, ZOOM_MAX, ZOOM_MIN } from "../constants";
 import type { Canvas } from "fabric";
 import type { Accessor } from "solid-js";
-import type { Point } from "../types";
+import type { DragAndZoomSettings, Point } from "../types";
 
 const FRAME_16_MS = 16;
-const ZOOM_MIN = 0.5;
-const ZOOM_MAX = 2;
 const WHEEL_ZOOM_FACTOR = 0.999;
 const PINCH_SLOW_DOWN = 20;
 const DEBOUNCE_MS = 1000;
 const CAP_OFFSET_RATIO = 0.5;
 const TWO = 2;
 
-export interface DragAndZoomSettings {
+interface DragAndZoomEnabledSettings {
   drag: boolean;
   zoom: boolean;
 }
 
 export interface CanvasDragAndZoomControls {
-  readonly settings: Accessor<DragAndZoomSettings>;
-  setSettings: (v: DragAndZoomSettings) => void;
+  enableds: Accessor<DragAndZoomEnabledSettings>;
+  setEnableds: (v: DragAndZoomEnabledSettings) => void;
+  zoom: Accessor<number>;
+  setZoom: (level: number) => void;
 }
 
 export function useCanvasDragAndZoom(
   canvas: Accessor<Canvas | undefined>,
   wrapperRef: Accessor<HTMLElement | undefined>,
+  dragAndZoomSettings?: DragAndZoomSettings,
 ): CanvasDragAndZoomControls {
-  const [settings, setSettings] = createSignal<DragAndZoomSettings>({
+  const [enableds, setEnableds] = createSignal({
     drag: true,
     zoom: true,
+  });
+  const [zoom, setZoom] = createSignal(
+    dragAndZoomSettings?.zoom ?? DEFAULT_ZOOM,
+  );
+
+  createEffect(() => {
+    console.log(zoom());
   });
 
   onMount(() => {
@@ -71,6 +80,7 @@ export function useCanvasDragAndZoom(
       const offsetY = tVals.translateY + (event.clientY - lastPos.y);
 
       const wrapper = wrapperRef();
+
       if (wrapper) {
         const viewBox = wrapper.getBoundingClientRect();
         const cappedX = capCanvasOffset(offsetX, tVals.width, viewBox.width);
@@ -97,8 +107,8 @@ export function useCanvasDragAndZoom(
      * Convert zoom to CSS scale which visually zooms the canvas
      * @see https://medium.com/@Fjonan/performant-drag-and-zoom-using-fabric-js-3f320492f24b
      */
-    const scaleCanvas = (zoom: number, aroundPoint: Point) => {
-      const clampedZoom = Math.min(Math.max(zoom, ZOOM_MIN), ZOOM_MAX);
+    const scaleCanvas = (level: number, aroundPoint: Point) => {
+      const clampedZoom = Math.min(Math.max(level, ZOOM_MIN), ZOOM_MAX);
 
       if (clampedZoom === touchZoom) return;
 
@@ -109,6 +119,7 @@ export function useCanvasDragAndZoom(
       c.wrapperEl.style.transform = `translate(${tVals.translateX}px, ${tVals.translateY}px) scale(${scaleFactor})`;
 
       touchZoom = clampedZoom;
+      setZoom(clampedZoom);
     };
 
     const throttledTranslateCanvas = throttle(translateCanvas, FRAME_16_MS);
@@ -237,7 +248,7 @@ export function useCanvasDragAndZoom(
     };
 
     createEffect(function registerDragListeners() {
-      if (!settings().drag) return;
+      if (!enableds().drag) return;
 
       const ac = new AbortController();
 
@@ -271,7 +282,7 @@ export function useCanvasDragAndZoom(
     });
 
     createEffect(function registerZoomListeners() {
-      if (!settings().zoom) return;
+      if (!enableds().zoom) return;
 
       const ac = new AbortController();
 
@@ -284,11 +295,11 @@ export function useCanvasDragAndZoom(
         function handleZoomCanvasMouseWheel(e) {
           const delta = e.deltaY;
           const point: Point = { x: e.offsetX, y: e.offsetY };
-          let zoom = touchZoom;
+          let zoomLevel = touchZoom;
 
-          zoom *= WHEEL_ZOOM_FACTOR ** delta;
+          zoomLevel *= WHEEL_ZOOM_FACTOR ** delta;
 
-          throttledScaleCanvas(zoom, point);
+          throttledScaleCanvas(zoomLevel, point);
           canvasScaleToZoom();
         },
         { signal: ac.signal },
@@ -319,10 +330,28 @@ export function useCanvasDragAndZoom(
       });
     });
 
+    createEffect(function onSetZoom() {
+      const level = zoom();
+      if (level === touchZoom) return;
+
+      const wrapper = wrapperRef();
+      if (!wrapper) return;
+
+      const viewBox = wrapper.getBoundingClientRect();
+      const tVals = getTransformVals(c.wrapperEl);
+      const point: Point = {
+        x: viewBox.width / 2 - tVals.translateX,
+        y: viewBox.height / 2 - tVals.translateY,
+      };
+
+      scaleCanvas(level, point);
+      canvasScaleToZoom();
+    });
+
     onCleanup(() => {
       canvasScaleToZoom.clear();
     });
   });
 
-  return { settings, setSettings };
+  return { enableds, setEnableds, zoom, setZoom };
 }
