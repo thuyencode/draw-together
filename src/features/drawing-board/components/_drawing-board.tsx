@@ -301,6 +301,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   createHotkey("Delete", handleDelete);
   createHotkey("Mod+A", handleSelectAll);
   createHotkey("Mod+X", handleSwapColors);
+  createHotkey("Mod+0", dragAndZoom.reset);
 
   return (
     <div class="flex h-full flex-col bg-neutral-600">
