@@ -6,7 +6,7 @@ import type {
   FabricObject,
   RectProps,
 } from "fabric";
-import type { Point, Position, Size, Tool } from "./types";
+import type { Point, Position, Size, StrokeConfig, Tool } from "./types";
 
 const GAP = 20;
 
@@ -124,6 +124,13 @@ export function getTargetOfSelection(canvas: Canvas) {
  * Get relevant style values for the given element
  * @see https://stackoverflow.com/a/64654744/13221239
  */
+export function getSvgCursor(
+  svg: string,
+  strokeWidth: StrokeConfig["strokeWidth"],
+) {
+  return `url(data:image/svg+xml;base64,${window.btoa(svg)}) ${strokeWidth} ${strokeWidth}, auto`;
+}
+
 export function getTransformVals(el: HTMLElement) {
   const style = window.getComputedStyle(el);
   const matrix = new DOMMatrixReadOnly(style.transform);

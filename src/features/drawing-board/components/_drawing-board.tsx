@@ -22,10 +22,12 @@ import {
 import {
   getCircleFromPoints,
   getRectFromPoints,
+  getSvgCursor,
   getTargetOfSelection,
 } from "../utils";
 import { DrawingBoardMenu } from "./menu";
 import { ColorPanels, ToolsPanel } from "./panels";
+import { getBrushIcon, getEraserIcon } from "./icons";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
@@ -48,7 +50,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   const [settings, setSettings] = createStore<Settings>({
     tool: "brush",
     variant: "plain",
-    strokeWidth: 2,
+    strokeWidth: 5,
     colors: DEFAULT_COLORS,
     zoom: DEFAULT_ZOOM,
   });
@@ -208,10 +210,8 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     });
 
     createEffect(function onEraser() {
-      let eraser: EraserBrush | undefined;
-
       if (settings.tool === "eraser") {
-        eraser = new EraserBrush(c);
+        const eraser = new EraserBrush(c);
 
         eraser.width = settings.strokeWidth;
         eraser.on("end", function finalizeEraser(e) {
@@ -219,15 +219,44 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
           e.preventDefault();
 
           pushCommand(new EraseCommand(c, e.detail));
-          eraser?.commit(e.detail);
+          eraser.commit(e.detail);
         });
 
         c.freeDrawingBrush = eraser;
       }
+    });
 
-      onCleanup(() => {
-        eraser?.dispose();
-      });
+    createEffect(function changeCursor() {
+      switch (settings.tool) {
+        case "drag":
+          c.defaultCursor = "grabbing";
+          break;
+
+        case "eraser":
+          c.freeDrawingCursor = getSvgCursor(
+            getEraserIcon(
+              settings.strokeWidth,
+              settings.colors[0],
+              settings.zoom,
+            ),
+            settings.strokeWidth,
+          );
+          break;
+
+        case "brush":
+          c.freeDrawingCursor = getSvgCursor(
+            getBrushIcon(
+              settings.strokeWidth,
+              settings.colors[0],
+              settings.zoom,
+            ),
+            settings.strokeWidth,
+          );
+          break;
+
+        default:
+          c.defaultCursor = "default";
+      }
     });
 
     onCleanup(handleReset);
