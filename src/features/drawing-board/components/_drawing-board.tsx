@@ -27,7 +27,7 @@ import {
 } from "../utils";
 import { DrawingBoardMenu } from "./menu";
 import { ColorPanels, ToolsPanel } from "./panels";
-import { getBrushIcon, getEraserIcon } from "./icons";
+import { makeIcon } from "./icons";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
@@ -227,6 +227,12 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     });
 
     createEffect(function changeCursor() {
+      const getIcon = makeIcon(
+        settings.strokeWidth,
+        settings.colors[0],
+        settings.zoom,
+      );
+
       switch (settings.tool) {
         case "drag":
           c.defaultCursor = "grabbing";
@@ -234,22 +240,14 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
         case "eraser":
           c.freeDrawingCursor = getSvgCursor(
-            getEraserIcon(
-              settings.strokeWidth,
-              settings.colors[0],
-              settings.zoom,
-            ),
+            getIcon("eraser"),
             settings.strokeWidth,
           );
           break;
 
         case "brush":
           c.freeDrawingCursor = getSvgCursor(
-            getBrushIcon(
-              settings.strokeWidth,
-              settings.colors[0],
-              settings.zoom,
-            ),
+            getIcon("brush"),
             settings.strokeWidth,
           );
           break;
