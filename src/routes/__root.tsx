@@ -8,7 +8,7 @@ import {
 import { Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
-import { ErrorComponent, NotFound } from "~/features/shared/components";
+import { ErrorComponent, Header, NotFound } from "~/features/shared/components";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -42,7 +42,7 @@ function RootComponent() {
         <HeadContent />
       </head>
       <body class="h-dvh min-h-dvh">
-        {/* <Header />*/}
+        <Header />
         <Suspense>
           <Outlet />
         </Suspense>
