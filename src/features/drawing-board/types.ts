@@ -10,13 +10,15 @@ export type Tool =
   | "eraser"
   | "straight-line"
   | "history"
-  | "select";
+  | "select"
+  | "text";
 
 export type ShapeVariant = "circle" | "rectangle";
 export type BrushVariant = "plain" | "pressure";
 type DragVariant = "drag";
 type EraserVariant = "plain";
 type HistoryVariant = "undo" | "redo" | "clear";
+type TextVariant = "text";
 type SelectVariant = "select";
 
 export type Variant =
@@ -25,7 +27,8 @@ export type Variant =
   | DragVariant
   | EraserVariant
   | HistoryVariant
-  | SelectVariant;
+  | SelectVariant
+  | TextVariant;
 
 export type ToolConfig =
   | { tool: Extract<Tool, "shape">; variant: ShapeVariant }
@@ -33,7 +36,8 @@ export type ToolConfig =
   | { tool: Extract<Tool, "drag">; variant: DragVariant }
   | { tool: Extract<Tool, "eraser">; variant: EraserVariant }
   | { tool: Extract<Tool, "history">; variant: HistoryVariant }
-  | { tool: Extract<Tool, "select">; variant: SelectVariant };
+  | { tool: Extract<Tool, "select">; variant: SelectVariant }
+  | { tool: Extract<Tool, "text">; variant: TextVariant };
 
 export interface StrokeConfig {
   strokeWidth: number;
@@ -41,11 +45,21 @@ export interface StrokeConfig {
   colors: [string, string];
 }
 
+export interface TextSettings {
+  fontSize: number;
+  fontWeight: "normal" | "bold";
+  fontStyle: "normal" | "italic";
+  underline: boolean;
+}
+
 export interface DragAndZoomSettings {
   zoom: number;
 }
 
-export type Settings = ToolConfig & StrokeConfig & DragAndZoomSettings;
+export type Settings = ToolConfig &
+  StrokeConfig &
+  TextSettings &
+  DragAndZoomSettings;
 
 type CenteredPosition = "center";
 type HorizontalPosition = "left" | "right";

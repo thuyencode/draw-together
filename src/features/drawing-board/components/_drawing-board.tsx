@@ -1,6 +1,6 @@
 import { EraserBrush } from "@erase2d/fabric";
 import { createHotkey } from "@tanstack/solid-hotkeys";
-import { ActiveSelection, Circle, PencilBrush, Rect } from "fabric";
+import { ActiveSelection, Circle, IText, PencilBrush, Rect } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
 import {
   Show,
@@ -13,7 +13,7 @@ import {
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
-import { DEFAULT_COLORS, DEFAULT_ZOOM } from "../constants";
+import { DEFAULT_COLORS, DEFAULT_FONT_SIZE, DEFAULT_ZOOM } from "../constants";
 import {
   createCanvas,
   createCanvasHistory,
@@ -52,6 +52,10 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     variant: "plain",
     strokeWidth: 5,
     colors: DEFAULT_COLORS,
+    fontSize: DEFAULT_FONT_SIZE,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    underline: false,
     zoom: DEFAULT_ZOOM,
   });
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
@@ -128,6 +132,24 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         previewObject.objectId = window.crypto.randomUUID();
         c.add(previewObject);
       }
+
+      if (untrack_settings.tool === "text") {
+        previewObject = new IText("", {
+          left: initialPoint.x,
+          top: initialPoint.y,
+          fill: untrack_settings.colors[0],
+          fontSize: untrack_settings.fontSize,
+          fontWeight: untrack_settings.fontWeight,
+          fontStyle: untrack_settings.fontStyle,
+          underline: untrack_settings.underline,
+          erasable: true,
+          objectId: window.crypto.randomUUID(),
+        });
+
+        c.add(previewObject);
+        c.setActiveObject(previewObject);
+        (previewObject as IText).enterEditing();
+      }
     });
 
     c.on("mouse:move", function updatePreviewObject(evt) {
@@ -149,6 +171,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     });
 
     c.on("mouse:up", function finalizePreviewObject() {
+      if (untrack_settings.tool === "text") return;
       if (previewObject) {
         const command = new AddCommand(c, previewObject);
         pushCommand(command);
@@ -157,6 +180,17 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         previewObject = undefined;
         command.execute();
       }
+    });
+
+    c.on("text:editing:exited", function finalizeText(evt) {
+      const textObject = evt.target;
+      if (textObject.text === "") {
+        c.remove(textObject);
+        c.requestRenderAll();
+        return;
+      }
+
+      pushCommand(new AddCommand(c, textObject));
     });
 
     const setFlagForModifyCommand = () => {
@@ -190,6 +224,28 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       c.isDrawingMode = isFreeDrawing;
 
       if (!isFreeDrawing) c.freeDrawingBrush = undefined;
+    });
+
+    createEffect(function onTextTool() {
+      if (settings.tool === "text") {
+        c.selection = false;
+        c.skipTargetFind = true;
+      }
+    });
+
+    createEffect(function onTextSettingsChange() {
+      if (settings.tool !== "text") return;
+
+      const active = c.getActiveObject();
+      if (!active || !(active instanceof IText)) return;
+
+      active.set({
+        fontSize: settings.fontSize,
+        fontWeight: settings.fontWeight,
+        fontStyle: settings.fontStyle,
+        underline: settings.underline,
+      });
+      c.requestRenderAll();
     });
 
     createEffect(function onBrush() {
@@ -250,6 +306,10 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
             getIcon("brush"),
             settings.strokeWidth,
           );
+          break;
+
+        case "text":
+          c.defaultCursor = "text";
           break;
 
         default:
