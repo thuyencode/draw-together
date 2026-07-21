@@ -41,7 +41,7 @@ export type ToolConfig =
 
 export interface StrokeConfig {
   strokeWidth: number;
-  /** [primary, reserved] — primary is the active canvas color, reserved is swapped in on Mod+X */
+  /** [primary, reserved] — primary is the active canvas color, reserved is swapped in on `Mod`+`X` */
   colors: [string, string];
 }
 

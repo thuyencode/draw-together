@@ -137,20 +137,12 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
               class=""
               value={parseColor(props.settings.colors[0])}
               onValueChange={function handleColorChange(detail) {
-                props.setSettings("colors", [
-                  detail.valueAsString,
-                  props.settings.colors[1],
-                ]);
+                props.setSettings("colors", 0, detail.valueAsString);
               }}
-              onValueChangeEnd={function handleColorChangeEnded() {
-                setSwatches((prev) => {
-                  const lastColor = props.settings.colors[0];
-                  if (prev.includes(lastColor)) {
-                    return prev;
-                  }
-
-                  return [lastColor, ...prev].slice(0, MAX_SWATCHES);
-                });
+              onValueChangeEnd={function handleColorChangeEnded(detail) {
+                const color = detail.valueAsString;
+                if (swatches().includes(color)) return;
+                setSwatches((prev) => [color, ...prev].slice(0, MAX_SWATCHES));
               }}
               format={colorFormat()}
             >
