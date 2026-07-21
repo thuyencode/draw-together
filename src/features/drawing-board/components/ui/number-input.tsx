@@ -32,7 +32,7 @@ export function NumberInput(_props: NumberInputProps) {
   };
 
   return (
-    <label class={cn("input input-sm max-w-50", props.class)}>
+    <label class={cn("input input-sm max-w-50 text-sm", props.class)}>
       <Show when={props.label}>
         <span class="label">{props.label}</span>
       </Show>

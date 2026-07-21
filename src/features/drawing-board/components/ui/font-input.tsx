@@ -79,7 +79,7 @@ export function FontInput(_props: FontInputProps) {
     >
       <Select.Control>
         <Select.Trigger
-          class="input-sm max-w-50"
+          class="input-sm max-w-50 text-sm"
           classList={classList()}
           style={
             fontCollection.items.find((i) => i.value === props.value)?.style
