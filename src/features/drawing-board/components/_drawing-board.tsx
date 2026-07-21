@@ -5,6 +5,7 @@ import { PSBrush } from "fabricjs-psbrush";
 import {
   Show,
   createEffect,
+  on,
   onCleanup,
   onMount,
   splitProps,
@@ -53,6 +54,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     strokeWidth: 5,
     colors: DEFAULT_COLORS,
     fontSize: DEFAULT_FONT_SIZE,
+    fontFamily: "sans-serif",
     fontWeight: "normal",
     fontStyle: "normal",
     underline: false,
@@ -139,6 +141,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
           top: initialPoint.y,
           fill: untrack_settings.colors[0],
           fontSize: untrack_settings.fontSize,
+          fontFamily: untrack_settings.fontFamily,
           fontWeight: untrack_settings.fontWeight,
           fontStyle: untrack_settings.fontStyle,
           underline: untrack_settings.underline,
@@ -233,20 +236,32 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       }
     });
 
-    createEffect(function onTextSettingsChange() {
-      if (settings.tool !== "text") return;
+    createEffect(
+      on(
+        [
+          () => settings.tool,
+          () => settings.fontSize,
+          () => settings.fontFamily,
+          () => settings.fontWeight,
+          () => settings.fontStyle,
+          () => settings.underline,
+        ],
+        function onTextSettingsChange() {
+          if (settings.tool !== "text") return;
+          const active = c.getActiveObject();
+          if (!active || !(active instanceof IText)) return;
 
-      const active = c.getActiveObject();
-      if (!active || !(active instanceof IText)) return;
-
-      active.set({
-        fontSize: settings.fontSize,
-        fontWeight: settings.fontWeight,
-        fontStyle: settings.fontStyle,
-        underline: settings.underline,
-      });
-      c.requestRenderAll();
-    });
+          active.set({
+            fontSize: settings.fontSize,
+            fontFamily: settings.fontFamily,
+            fontWeight: settings.fontWeight,
+            fontStyle: settings.fontStyle,
+            underline: settings.underline,
+          });
+          c.requestRenderAll();
+        },
+      ),
+    );
 
     createEffect(function onBrush() {
       if (settings.tool === "brush") {

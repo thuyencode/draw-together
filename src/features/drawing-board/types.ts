@@ -47,6 +47,7 @@ export interface StrokeConfig {
 
 export interface TextSettings {
   fontSize: number;
+  fontFamily: string;
   fontWeight: "normal" | "bold";
   fontStyle: "normal" | "italic";
   underline: boolean;

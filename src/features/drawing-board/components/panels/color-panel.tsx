@@ -172,7 +172,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                   <Index each={props.settings.colors}>
                     {(color, index) => (
                       <div
-                        class="btn btn-square btn-sm absolute z-10 border-2 border-white shadow-none"
+                        class="btn btn-square btn-sm border-base-content absolute z-10 border shadow-none"
                         classList={{
                           "top-0 left-0": index === 0,
                           "right-0 bottom-0": index === 1,

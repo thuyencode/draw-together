@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+@import "@fontsource-variable/roboto";
+@import "@fontsource-variable/noto-serif";
+@import "@fontsource-variable/arima";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/caveat";
+
+@theme inline {
+  --font-sans: "Roboto Variable", sans-serif;
+  --font-serif: "Noto Serif Variable", serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+}
+
 @layer base {
   h1 {
     @apply text-5xl font-bold;

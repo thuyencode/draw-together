@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-solid";
 import { ZOOM_MAX, ZOOM_MIN } from "../../constants";
-import { NumberInput, ToolButton } from "../ui";
+import { FontInput, NumberInput, ToolButton } from "../ui";
 import { ZoomResetIcon } from "../icons";
 import type { UseCanvasDragAndZoomReturn } from "../../hooks";
 import type { PropsWithSettings } from "../../types";
@@ -13,16 +13,16 @@ interface DrawingBoardMenuProps extends PropsWithSettings {
 
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
-    <ul class="menu lg:menu-horizontal bg-base-100 w-full gap-2">
+    <div class="bg-base-100 border-neutral/40 flex flex-wrap gap-2 border-b p-2">
       <ZoomSettings {...props} />
 
       <Show
         when={props.settings.tool === "text"}
         fallback={<StrokeSettings {...props} />}
       >
-        <FontSettings {...props} />
+        <TextSettings {...props} />
       </Show>
-    </ul>
+    </div>
   );
 }
 
@@ -61,7 +61,7 @@ function StrokeSettings(props: PropsWithSettings) {
   );
 }
 
-function FontSettings(props: PropsWithSettings) {
+function TextSettings(props: PropsWithSettings) {
   return (
     <>
       <NumberInput
@@ -116,6 +116,14 @@ function FontSettings(props: PropsWithSettings) {
           <span class="sr-only">Underline</span>
         </ToolButton>
       </div>
+
+      <FontInput
+        value={props.settings.fontFamily}
+        onChange={(v) => props.setSettings("fontFamily", v)}
+        fontWeight={props.settings.fontWeight}
+        fontStyle={props.settings.fontStyle}
+        underline={props.settings.underline}
+      />
     </>
   );
 }
