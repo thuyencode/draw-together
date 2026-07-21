@@ -1,5 +1,9 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes:
+    valentine --default,
+    dracula --prefersdark;
+}
 
 @import "@fontsource-variable/roboto";
 @import "@fontsource-variable/noto-serif";
