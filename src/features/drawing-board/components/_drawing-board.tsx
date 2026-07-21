@@ -245,6 +245,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
           () => settings.fontWeight,
           () => settings.fontStyle,
           () => settings.underline,
+          () => settings.colors[0],
         ],
         function onTextSettingsChange() {
           if (settings.tool !== "text") return;
@@ -257,6 +258,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
             fontWeight: settings.fontWeight,
             fontStyle: settings.fontStyle,
             underline: settings.underline,
+            fill: settings.colors[0],
           });
           c.requestRenderAll();
         },
