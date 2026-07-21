@@ -73,6 +73,14 @@ function TextSettings(props: PropsWithSettings) {
         unit="px"
       />
 
+      <FontInput
+        value={props.settings.fontFamily}
+        onChange={(v) => props.setSettings("fontFamily", v)}
+        fontWeight={props.settings.fontWeight}
+        fontStyle={props.settings.fontStyle}
+        underline={props.settings.underline}
+      />
+
       <div class="join">
         <ToolButton
           class="join-item rounded-sm"
@@ -116,14 +124,6 @@ function TextSettings(props: PropsWithSettings) {
           <span class="sr-only">Underline</span>
         </ToolButton>
       </div>
-
-      <FontInput
-        value={props.settings.fontFamily}
-        onChange={(v) => props.setSettings("fontFamily", v)}
-        fontWeight={props.settings.fontWeight}
-        fontStyle={props.settings.fontStyle}
-        underline={props.settings.underline}
-      />
     </>
   );
 }
