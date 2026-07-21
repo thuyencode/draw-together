@@ -10,15 +10,7 @@ import {
   PipetteIcon,
   XIcon,
 } from "lucide-solid";
-import {
-  For,
-  Index,
-  Match,
-  Show,
-  Switch,
-  createSignal,
-  onMount,
-} from "solid-js";
+import { Index, Match, Show, Switch, createSignal, onMount } from "solid-js";
 import { DEFAULT_COLORS } from "../../constants";
 import { createPosition } from "../../hooks";
 import type { ColorPickerColorFormat } from "@ark-ui/solid/color-picker";
@@ -177,26 +169,30 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                     props.swapColors();
                   }}
                 >
-                  <div
-                    class="btn btn-square btn-sm absolute top-0 left-0 z-10 border-2 shadow-none"
-                    style={{ "--btn-color": props.settings.colors[0] }}
-                  />
-                  <div
-                    class="btn btn-square btn-sm absolute right-0 bottom-0 z-0 border-2 shadow-none"
-                    style={{ "--btn-color": props.settings.colors[1] }}
-                  />
+                  <Index each={props.settings.colors}>
+                    {(color, index) => (
+                      <div
+                        class="btn btn-square btn-sm absolute z-10 border-2 border-white shadow-none"
+                        classList={{
+                          "top-0 left-0": index === 0,
+                          "right-0 bottom-0": index === 1,
+                        }}
+                        style={{ "--btn-color": color() }}
+                      />
+                    )}
+                  </Index>
 
                   <ArrowRightLeftIcon class="absolute bottom-0 left-0 size-3.5" />
                 </button>
 
                 <ColorPicker.SwatchGroup class="grid grid-cols-6 grid-rows-2 gap-1 *:self-center *:justify-self-end">
-                  <For each={swatches()}>
+                  <Index each={swatches()}>
                     {(color) => (
-                      <ColorPicker.SwatchTrigger value={color} class="btn-xs">
+                      <ColorPicker.SwatchTrigger value={color()} class="btn-xs">
                         <CheckIcon />
                       </ColorPicker.SwatchTrigger>
                     )}
-                  </For>
+                  </Index>
                 </ColorPicker.SwatchGroup>
               </div>
 
