@@ -187,6 +187,8 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
     c.on("text:editing:exited", function finalizeText(evt) {
       const textObject = evt.target;
+      previewObject = undefined;
+
       if (textObject.text === "") {
         c.remove(textObject);
         c.requestRenderAll();
@@ -207,7 +209,6 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
     c.on("object:modified", function finalizedObjectModification(evt) {
       if (!evt.transform) return;
-
       if (!shouldPushModifyCommand) return;
       shouldPushModifyCommand = false;
 
@@ -227,13 +228,6 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       c.isDrawingMode = isFreeDrawing;
 
       if (!isFreeDrawing) c.freeDrawingBrush = undefined;
-    });
-
-    createEffect(function onTextTool() {
-      if (settings.tool === "text") {
-        c.selection = false;
-        c.skipTargetFind = true;
-      }
     });
 
     createEffect(
@@ -366,6 +360,23 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     c.requestRenderAll();
   };
 
+  const handleEnterOnSelect = () => {
+    const c = canvas();
+    if (!c) return;
+
+    const active = c.getActiveObject();
+    if (!active || !(active instanceof IText)) return;
+
+    setSettings((prev) => ({
+      ...prev,
+      tool: "text",
+      variant: "text",
+    }));
+
+    active.enterEditing();
+    c.requestRenderAll();
+  };
+
   const handleSwapColors = () => {
     setSettings("colors", [settings.colors[1], settings.colors[0]]);
   };
@@ -374,6 +385,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   createHotkey("Mod+Shift+Z", handleRedo);
   createHotkey("Mod+Delete", handleReset);
   createHotkey("Delete", handleDelete);
+  createHotkey("Enter", handleEnterOnSelect);
   createHotkey("Mod+A", handleSelectAll);
   createHotkey("Mod+X", handleSwapColors);
   createHotkey("Mod+0", dragAndZoom.reset);
