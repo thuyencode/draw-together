@@ -41,8 +41,8 @@ const DEFAULT_FONTS: DefaultFontItem[] = [
     style: { "font-family": "JetBrains Mono Variable, monospace" },
   },
   {
-    label: "Playerpen Sans",
-    value: "Playerpen Sans Variable",
+    label: "Playpen Sans",
+    value: "Playpen Sans Variable",
     style: { "font-family": "Playpen Sans Variable, sans-serif" },
   },
 ];
