@@ -13,6 +13,7 @@ import {
 import { Index, Match, Show, Switch, createSignal, onMount } from "solid-js";
 import { DEFAULT_COLORS } from "../../constants";
 import { createPosition } from "../../hooks";
+import { generateRandomColor } from "../../utils";
 import type { ColorPickerColorFormat } from "@ark-ui/solid/color-picker";
 import type {
   PropsWithContainerRef,
@@ -34,8 +35,8 @@ const MIN_EXPANDED_HEIGHT = 470;
 const DEFAULT_COLOR_FORMAT: ColorPickerColorFormat = "rgba";
 const COLOR_FORMATS: ColorPickerColorFormat[] = ["rgba", "hsla", "rgba"];
 const MAX_SWATCHES = 12;
-const DEFAULT_SWATCHES = Array.from<string>({ length: MAX_SWATCHES }).fill(
-  "#fff",
+const DEFAULT_SWATCHES = Array.from({ length: MAX_SWATCHES }).map(
+  generateRandomColor,
 );
 
 export function ColorPanels(props: ColorSettingsPanelsProps) {

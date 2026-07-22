@@ -143,3 +143,17 @@ export function getTransformVals(el: HTMLElement) {
     height: el.getBoundingClientRect().height,
   };
 }
+
+/**
+ * Posted by Anatoliy, modified by community. See post 'Timeline' for change history
+ * Retrieved 2026-07-22, License - CC BY-SA 3.0
+ * @see https://stackoverflow.com/a/1484514
+ */
+export function generateRandomColor() {
+  let color = "#";
+  const letters = "0123456789ABCDEF";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
