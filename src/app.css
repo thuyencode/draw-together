@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui" {
   themes:
-    valentine --default,
+    light --default,
     dracula --prefersdark;
 }
 
@@ -9,7 +9,7 @@
 @import "@fontsource-variable/noto-serif";
 @import "@fontsource-variable/arima";
 @import "@fontsource-variable/jetbrains-mono";
-@import "@fontsource-variable/caveat";
+@import "@fontsource-variable/playpen-sans";
 
 @theme inline {
   --font-sans: "Roboto Variable", sans-serif;

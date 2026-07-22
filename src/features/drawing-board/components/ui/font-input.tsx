@@ -43,9 +43,9 @@ const defaultFonts: DefaultFontItem[] = [
     style: { "font-family": "JetBrains Mono Variable, monospace" },
   },
   {
-    label: "Caveat",
-    value: "Caveat Variable",
-    style: { "font-family": "Caveat Variable, cursive" },
+    label: "Playerpen Sans",
+    value: "Playerpen Sans Variable",
+    style: { "font-family": "Playpen Sans Variable, sans-serif" },
   },
 ];
 
