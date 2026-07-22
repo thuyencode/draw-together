@@ -154,7 +154,7 @@ function ColorPickerSwatchTrigger(_props: BaseColorPicker.SwatchTriggerProps) {
   return (
     <BaseColorPickerSwatchTrigger
       class={cn(
-        "btn btn-square btn-neutral border-2 [&_svg]:size-3 data-[state=unchecked]:[&_svg]:hidden",
+        "btn btn-square btn-neutral [&_svg]:size-4 data-[state=unchecked]:[&_svg]:hidden",
         props.class,
       )}
       style={{ "--btn-color": props.value.toString() }}
