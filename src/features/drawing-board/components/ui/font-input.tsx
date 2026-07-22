@@ -4,7 +4,6 @@ import { createListCollection } from "@ark-ui/solid/select";
 import type { JSX } from "solid-js";
 import type { TextSettings } from "../../types";
 import { Select } from "~/features/shared/components/ui";
-import { cn } from "~/features/shared/utils/cn";
 
 interface FontInputProps {
   value: TextSettings["fontFamily"];
@@ -12,7 +11,6 @@ interface FontInputProps {
   fontWeight: TextSettings["fontWeight"];
   fontStyle: TextSettings["fontStyle"];
   underline: TextSettings["underline"];
-  class?: string;
 }
 
 interface DefaultFontItem {
@@ -21,7 +19,7 @@ interface DefaultFontItem {
   style: JSX.CSSProperties;
 }
 
-const defaultFonts: DefaultFontItem[] = [
+const DEFAULT_FONTS: DefaultFontItem[] = [
   {
     label: "Roboto",
     value: "Roboto",
@@ -56,10 +54,9 @@ export function FontInput(_props: FontInputProps) {
     "fontWeight",
     "fontStyle",
     "underline",
-    "class",
   ]);
 
-  const fontCollection = createListCollection({ items: defaultFonts });
+  const fontCollection = createListCollection({ items: DEFAULT_FONTS });
 
   const classList = (): JSX.ClassList => ({
     "font-bold": props.fontWeight === "bold",
@@ -67,9 +64,12 @@ export function FontInput(_props: FontInputProps) {
     underline: props.underline,
   });
 
+  const currentFont = () =>
+    fontCollection.items.find((i) => i.value === props.value);
+
   return (
     <Select.Root
-      class={cn("max-w-50", props.class)}
+      class="max-w-56"
       collection={fontCollection}
       value={[props.value]}
       onValueChange={(e) => {
@@ -79,11 +79,9 @@ export function FontInput(_props: FontInputProps) {
     >
       <Select.Control>
         <Select.Trigger
-          class="input-sm max-w-50 text-sm"
+          class="input-sm text-sm"
           classList={classList()}
-          style={
-            fontCollection.items.find((i) => i.value === props.value)?.style
-          }
+          style={currentFont()?.style}
         >
           <Select.ValueText
             class="flex-1 text-left"

@@ -39,7 +39,7 @@ export function NumberInput(_props: NumberInputProps) {
       <input
         type="number"
         value={props.value}
-        onChange={(e) => props.onChange(parseValue(e.currentTarget.value))}
+        onChange={(e) => props.onChange(parseValue(e.target.value))}
         inputmode="numeric"
         pattern="[0-9]*"
         {...rest}

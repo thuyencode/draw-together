@@ -30,7 +30,7 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
   return (
     <div class="join">
       <NumberInput
-        class="join-item max-w-45"
+        class="join-item"
         label="Zoom"
         value={Math.round(props.settings.zoom * 100)}
         onChange={(v) => props.onZoomValueChange(() => v / 100)}
@@ -40,7 +40,11 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
         parse="float"
         unit="%"
       />
-      <ToolButton class="join-item" onClick={props.resetZoomValue}>
+      <ToolButton
+        class="join-item"
+        noTransparent
+        onClick={props.resetZoomValue}
+      >
         <span class="sr-only">Reset zoom level</span>
         <ZoomResetIcon />
       </ToolButton>
@@ -83,7 +87,7 @@ function TextSettings(props: PropsWithSettings) {
 
       <div class="join">
         <ToolButton
-          class="join-item rounded-sm"
+          class="join-item"
           data-current-tool={props.settings.fontWeight === "bold"}
           onMouseDown={(e) => {
             e.preventDefault();
@@ -98,7 +102,7 @@ function TextSettings(props: PropsWithSettings) {
         </ToolButton>
 
         <ToolButton
-          class="join-item rounded-sm"
+          class="join-item"
           data-current-tool={props.settings.fontStyle === "italic"}
           onMouseDown={(e) => {
             e.preventDefault();
@@ -113,7 +117,7 @@ function TextSettings(props: PropsWithSettings) {
         </ToolButton>
 
         <ToolButton
-          class="join-item rounded-sm"
+          class="join-item"
           data-current-tool={props.settings.underline}
           onMouseDown={(e) => {
             e.preventDefault();
