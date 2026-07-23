@@ -4,14 +4,7 @@ import type { SetStoreFunction } from "solid-js/store";
 export type { Point, Size } from "@zag-js/rect-utils";
 
 export type Tool =
-  | "shape"
-  | "brush"
-  | "drag"
-  | "eraser"
-  | "straight-line"
-  | "history"
-  | "select"
-  | "text";
+  "shape" | "brush" | "drag" | "eraser" | "history" | "select" | "text";
 
 export type ShapeVariant = "circle" | "rectangle";
 export type BrushVariant = "plain" | "pressure";
