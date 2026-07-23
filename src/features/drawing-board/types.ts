@@ -53,6 +53,12 @@ export interface TextSettings {
   underline: boolean;
 }
 
+export type ShapeFill = "outline" | "solid" | "secondary";
+
+interface ShapeSettings {
+  shapeFill: ShapeFill;
+}
+
 export interface DragAndZoomSettings {
   zoom: number;
 }
@@ -60,6 +66,7 @@ export interface DragAndZoomSettings {
 export type Settings = ToolConfig &
   StrokeConfig &
   TextSettings &
+  ShapeSettings &
   DragAndZoomSettings;
 
 type CenteredPosition = "center";

@@ -1,5 +1,6 @@
-import { Show } from "solid-js";
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-solid";
+import { Index, Show } from "solid-js";
+import { BoldIcon, ItalicIcon, SquareIcon, UnderlineIcon } from "lucide-solid";
+import type { ShapeFill, Tool } from "../../types";
 import { ZOOM_MAX, ZOOM_MIN } from "../../constants";
 import { FontInput, NumberInput, ToolButton } from "../ui";
 import { ZoomResetIcon } from "../icons";
@@ -11,16 +12,23 @@ interface DrawingBoardMenuProps extends PropsWithSettings {
   resetZoomValue: UseCanvasDragAndZoomReturn["reset"];
 }
 
+const strokeRelatedTools: Tool[] = ["brush", "eraser", "shape"];
+
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
     <div class="bg-base-100 border-neutral/40 flex flex-wrap gap-2 border-b p-2">
       <ZoomSettings {...props} />
 
-      <Show
-        when={props.settings.tool === "text"}
-        fallback={<StrokeSettings {...props} />}
-      >
+      <Show when={strokeRelatedTools.includes(props.settings.tool)}>
+        <StrokeSettings {...props} />
+      </Show>
+
+      <Show when={props.settings.tool === "text"}>
         <TextSettings {...props} />
+      </Show>
+
+      <Show when={props.settings.tool === "shape"}>
+        <ShapeSettings {...props} />
       </Show>
     </div>
   );
@@ -129,5 +137,37 @@ function TextSettings(props: PropsWithSettings) {
         </ToolButton>
       </div>
     </>
+  );
+}
+
+const shapeFillOptions: { value: ShapeFill; label: string }[] = [
+  { value: "outline", label: "Outline only" },
+  { value: "solid", label: "Solid fill" },
+  { value: "secondary", label: "Secondary fill" },
+];
+
+function ShapeSettings(props: PropsWithSettings) {
+  return (
+    <div class="space-x-0.5">
+      <Index each={shapeFillOptions}>
+        {(option) => (
+          <ToolButton
+            data-current-tool={props.settings.shapeFill === option().value}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              props.setSettings("shapeFill", option().value);
+            }}
+          >
+            <SquareIcon
+              classList={{
+                "fill-current": option().value === "solid",
+                "fill-secondary-content": option().value === "secondary",
+              }}
+            />
+            <span class="sr-only">{option().label}</span>
+          </ToolButton>
+        )}
+      </Index>
+    </div>
   );
 }

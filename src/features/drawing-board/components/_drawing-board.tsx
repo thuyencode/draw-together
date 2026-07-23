@@ -58,6 +58,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     fontWeight: "normal",
     fontStyle: "normal",
     underline: false,
+    shapeFill: "outline",
     zoom: DEFAULT_ZOOM,
   });
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
@@ -99,7 +100,12 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     const initialShapeProps = (): Partial<FabricObjectProps> => ({
       top: initialPoint.x,
       left: initialPoint.y,
-      fill: "transparent",
+      fill:
+        untrack_settings.shapeFill === "outline"
+          ? "transparent"
+          : untrack_settings.shapeFill === "solid"
+            ? untrack_settings.colors[0]
+            : untrack_settings.colors[1],
       stroke: untrack_settings.colors[0],
       strokeWidth: untrack_settings.strokeWidth,
       erasable: true,
