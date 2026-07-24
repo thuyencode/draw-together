@@ -3,7 +3,6 @@ import { createHotkey } from "@tanstack/solid-hotkeys";
 import { ActiveSelection, Circle, IText, PencilBrush, Rect } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
 import {
-  Show,
   createEffect,
   on,
   onCleanup,
@@ -29,10 +28,10 @@ import {
 import { DrawingBoardMenu } from "./menu";
 import { ColorPanels, ToolsPanel } from "./panels";
 import { makeIcon } from "./icons";
+import { CanvasSkeleton } from "./ui";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
-import { useIsClient } from "~/features/shared/hooks";
 
 interface DrawingBoardProps extends Omit<ComponentProps<"div">, "ref"> {
   options?: Partial<CanvasOptions>;
@@ -63,7 +62,6 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   });
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
     createCanvasHistory(canvas);
-  const isClient = useIsClient();
   const dragAndZoom = useCanvasDragAndZoom(
     canvas,
     () => canvasContainerRef,
@@ -425,22 +423,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
 
       <div class="relative flex-1" {...rest} ref={containerRef}>
         <div class="absolute inset-0 overflow-hidden" ref={canvasContainerRef}>
-          <Show when={!isClient()}>
-            <div
-              class="absolute inset-0 m-auto"
-              style={{
-                "background-color": props.options?.backgroundColor
-                  ? props.options.backgroundColor.toString()
-                  : undefined,
-                width: props.options?.width
-                  ? `${props.options.width}px`
-                  : undefined,
-                height: props.options?.height
-                  ? `${props.options.height}px`
-                  : undefined,
-              }}
-            />
-          </Show>
+          <CanvasSkeleton options={props.options} />
           <canvas ref={canvasElementRef} />
         </div>
 
