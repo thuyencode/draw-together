@@ -24,7 +24,7 @@ export function ToolButton<T extends ValidComponent = "button">(
     <Dynamic
       component={props.as ?? "button"}
       class={cn(
-        "btn btn-sm btn-square data-[current-tool=true]:btn-soft data-[current-tool=true]:btn-primary border-0 shadow-none [&>svg]:size-4.5",
+        "btn btn-sm btn-square data-[current-tool=true]:btn-soft data-[current-tool=true]:btn-primary shadow-none [&>svg]:size-4.5",
         { "btn-ghost": !props.noTransparent },
         props.class,
       )}
