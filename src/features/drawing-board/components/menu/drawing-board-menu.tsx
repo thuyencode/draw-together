@@ -1,13 +1,19 @@
 import { Index, Show } from "solid-js";
-import { BoldIcon, ItalicIcon, SquareIcon, UnderlineIcon } from "lucide-solid";
-import type { ShapeFill, Tool } from "../../types";
+import {
+  BoldIcon,
+  DownloadIcon,
+  ItalicIcon,
+  SquareIcon,
+  UnderlineIcon,
+} from "lucide-solid";
 import { ZOOM_MAX, ZOOM_MIN } from "../../constants";
 import { FontInput, NumberInput, ToolButton } from "../ui";
 import { ZoomResetIcon } from "../icons";
+import type { PropsWithSettings, ShapeFill, Tool } from "../../types";
 import type { UseCanvasDragAndZoomReturn } from "../../hooks";
-import type { PropsWithSettings } from "../../types";
 
 interface DrawingBoardMenuProps extends PropsWithSettings {
+  onExportAsPng: () => void;
   onZoomValueChange: UseCanvasDragAndZoomReturn["setZoom"];
   resetZoomValue: UseCanvasDragAndZoomReturn["reset"];
 }
@@ -17,6 +23,11 @@ const strokeRelatedTools: Tool[] = ["brush", "eraser", "shape"];
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
     <div class="bg-base-100 border-neutral/40 flex flex-wrap gap-2 border-b p-2">
+      <ToolButton onClick={() => props.onExportAsPng()}>
+        <DownloadIcon />
+        <span class="sr-only">Export as Image</span>
+      </ToolButton>
+
       <ZoomSettings {...props} />
 
       <Show when={strokeRelatedTools.includes(props.settings.tool)}>

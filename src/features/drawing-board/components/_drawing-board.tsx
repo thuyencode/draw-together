@@ -387,6 +387,22 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     setSettings("colors", [settings.colors[1], settings.colors[0]]);
   };
 
+  const handleExportAsPng = () => {
+    const c = canvas();
+    if (!c) return;
+
+    const dataUrl = c.toDataURL({
+      format: "png",
+      multiplier: 1 / settings.zoom,
+    });
+    const link = document.createElement("a");
+    link.download = "drawing.png";
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   createHotkey("Mod+Z", handleUndo);
   createHotkey("Mod+Shift+Z", handleRedo);
   createHotkey("Mod+Delete", handleReset);
@@ -395,10 +411,12 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   createHotkey("Mod+A", handleSelectAll);
   createHotkey("Mod+X", handleSwapColors);
   createHotkey("Mod+0", dragAndZoom.reset);
+  createHotkey("Mod+S", handleExportAsPng);
 
   return (
     <div class="flex h-full flex-col bg-neutral-600">
       <DrawingBoardMenu
+        onExportAsPng={handleExportAsPng}
         settings={settings}
         setSettings={setSettings}
         onZoomValueChange={dragAndZoom.setZoom}

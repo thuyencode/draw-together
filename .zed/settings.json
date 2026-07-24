@@ -1,7 +1,7 @@
 {
   "formatter": "prettier",
-  "language_servers": ["!biome", "!typescript-language-server", "..."],
+  "language_servers": ["eslint", "!biome", "..."],
   "code_actions_on_format": {
-    "source.fixAll.eslint": true
-  }
+    "source.fixAll.eslint": true,
+  },
 }
