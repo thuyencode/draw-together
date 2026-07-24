@@ -16,7 +16,10 @@ export function createCanvas(
     FabricObject.customProperties = ["objectId", "erasable"];
 
     const opts = options?.();
-    const canvasInstance = new Canvas(el, opts);
+    const canvasInstance = new Canvas(el, {
+      enablePointerEvents: true,
+      ...opts,
+    });
 
     canvasInstance.renderAll();
     setCanvas(canvasInstance);
