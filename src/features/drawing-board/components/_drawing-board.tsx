@@ -407,7 +407,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         zoomMin={dragAndZoom.zoomMin}
       />
 
-      <div class="relative flex-1" {...rest} ref={containerRef}>
+      <div class="relative flex-1 overflow-hidden" {...rest} ref={containerRef}>
         <div class="absolute inset-0 overflow-hidden" ref={canvasContainerRef}>
           <CanvasSkeleton options={props.options} />
           <canvas ref={canvasElementRef} />
