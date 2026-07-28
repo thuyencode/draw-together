@@ -21,7 +21,7 @@ interface DragAndZoomEnabledSettings {
 
 export interface UseCanvasDragAndZoomReturn {
   enabled: Accessor<DragAndZoomEnabledSettings>;
-  setEnabled: (v: DragAndZoomEnabledSettings) => void;
+  setEnabled: Setter<DragAndZoomEnabledSettings>;
   zoom: Accessor<number>;
   setZoom: Setter<number>;
   zoomMin: Accessor<number>;
@@ -55,7 +55,6 @@ export function useCanvasDragAndZoom(
     let initialDistance = 0;
     const lastPos: Point = { x: 0, y: 0 };
     const { wrapperEl } = c;
-    const ac = new AbortController();
 
     initialWidth = c.getWidth();
     initialHeight = c.getHeight();
@@ -288,6 +287,8 @@ export function useCanvasDragAndZoom(
     createEffect(function registerDragListeners() {
       if (!enabled().drag) return;
 
+      const ac = new AbortController();
+
       wrapperEl.addEventListener("mousedown", dragCanvasStart, {
         signal: ac.signal,
       });
@@ -311,10 +312,16 @@ export function useCanvasDragAndZoom(
         },
         { signal: ac.signal },
       );
+
+      onCleanup(() => {
+        ac.abort();
+      });
     });
 
     createEffect(function registerZoomListeners() {
       if (!enabled().zoom) return;
+
+      const ac = new AbortController();
 
       wrapperEl.addEventListener(
         "wheel",
@@ -341,24 +348,18 @@ export function useCanvasDragAndZoom(
         { signal: ac.signal },
       );
 
-      wrapperEl.addEventListener(
-        "touchstart",
-        function handleTouchStart(e) {
-          pinchCanvasStart(e);
-        },
-        { signal: ac.signal },
-      );
-
-      wrapperEl.addEventListener(
-        "touchmove",
-        function handleTouchMove(e) {
-          pinchCanvas(e);
-        },
-        { signal: ac.signal },
-      );
-
+      wrapperEl.addEventListener("touchstart", pinchCanvasStart, {
+        signal: ac.signal,
+      });
+      wrapperEl.addEventListener("touchmove", pinchCanvas, {
+        signal: ac.signal,
+      });
       wrapperEl.addEventListener("touchend", pinchCanvasEnd, {
         signal: ac.signal,
+      });
+
+      onCleanup(() => {
+        ac.abort();
       });
     });
 
@@ -383,7 +384,6 @@ export function useCanvasDragAndZoom(
     });
 
     onCleanup(() => {
-      ac.abort();
       canvasScaleToZoom.clear();
     });
   });
