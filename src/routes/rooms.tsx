@@ -1,17 +1,20 @@
 import { createFileRoute } from "@tanstack/solid-router";
 import DrawingBoard from "~/features/drawing-board/components";
+import { NewDrawingOptionsSchema } from "~/features/drawing-board/schema";
 
 export const Route = createFileRoute("/rooms")({
-  component: RouteComponent,
+  validateSearch: NewDrawingOptionsSchema,
+  component: RoomPage,
 });
 
-function RouteComponent() {
+function RoomPage() {
+  const search = Route.useSearch();
+
   return (
     <main class="h-full">
       <DrawingBoard
         options={{
-          width: 700,
-          height: 700,
+          ...search(),
           backgroundColor: "#fff",
         }}
       />

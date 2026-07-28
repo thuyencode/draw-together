@@ -49,7 +49,8 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
   return (
     <div class="join">
       <NumberInput
-        class="join-item"
+        class="input-sm join-item max-w-50"
+
         label="Zoom"
         value={Math.round(props.settings.zoom * 100)}
         onChange={(v) => props.onZoomValueChange(() => v / 100)}
@@ -74,6 +75,7 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
 function StrokeSettings(props: PropsWithSettings) {
   return (
     <NumberInput
+      class="input-sm max-w-50"
       label="Stroke size"
       value={props.settings.strokeWidth}
       onChange={(v) => props.setSettings("strokeWidth", v)}
@@ -88,6 +90,7 @@ function TextSettings(props: PropsWithSettings) {
   return (
     <>
       <NumberInput
+        class="input-sm max-w-50"
         label="Font size"
         value={props.settings.fontSize}
         onChange={(v) => props.setSettings("fontSize", v)}

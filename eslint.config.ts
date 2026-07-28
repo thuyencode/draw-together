@@ -14,6 +14,7 @@ export default [
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/naming-convention": "off",
       "no-shadow": "off",
+      "jsx-a11y/label-has-associated-control": "off",
     },
   },
   {

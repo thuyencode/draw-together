@@ -29,12 +29,13 @@ import { DrawingBoardMenu } from "./menu";
 import { ColorPanels, ToolsPanel } from "./panels";
 import { makeIcon } from "./icons";
 import { CanvasSkeleton } from "./ui";
+import type { NewDrawingOptions } from "../schema";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
 
 interface DrawingBoardProps extends Omit<ComponentProps<"div">, "ref"> {
-  options?: Partial<CanvasOptions>;
+  options?: Partial<CanvasOptions> & Pick<NewDrawingOptions, "title">;
 }
 
 export default function DrawingBoard(_props: DrawingBoardProps) {
@@ -394,7 +395,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
       multiplier: 1 / settings.zoom,
     });
     const link = document.createElement("a");
-    link.download = "drawing.png";
+    link.download = `${props.options?.title ?? "Untitled"}.png`;
     link.href = dataUrl;
     document.body.appendChild(link);
     link.click();
