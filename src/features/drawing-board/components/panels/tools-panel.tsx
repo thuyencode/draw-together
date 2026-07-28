@@ -6,7 +6,7 @@ import {
   HeadingIcon,
   MousePointerIcon,
   RedoIcon,
-  RotateCwIcon,
+  Trash2Icon,
   UndoIcon,
   XIcon,
 } from "lucide-solid";
@@ -187,7 +187,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
             </ToolButton>
 
             <ToolButton type="button" onClick={props.onReset}>
-              <RotateCwIcon />
+              <Trash2Icon />
               <span class="sr-only">Clear</span>
             </ToolButton>
           </FloatingPanel.Body>

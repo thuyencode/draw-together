@@ -8,11 +8,6 @@ export function ZoomResetIcon(props: LucideProps) {
       xmlns:xlink="http://www.w3.org/1999/xlink"
       aria-hidden="true"
       role="img"
-      style={{
-        color: "rgb(74, 85, 101)",
-        opacity: "1",
-        transform: "rotate(0deg)",
-      }}
       width="64"
       height="64"
       viewBox="0 0 32 32"
