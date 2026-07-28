@@ -86,7 +86,7 @@ function StrokeSettings(props: PropsWithSettings) {
       class="input-sm max-w-50"
       label="Stroke size"
       value={props.settings.strokeWidth}
-      onChange={(v) => props.setSettings("strokeWidth", v)}
+      onInput={(v) => props.setSettings("strokeWidth", v)}
       min="1"
       step="1"
       unit="px"
@@ -101,7 +101,7 @@ function TextSettings(props: PropsWithSettings) {
         class="input-sm max-w-50"
         label="Font size"
         value={props.settings.fontSize}
-        onChange={(v) => props.setSettings("fontSize", v)}
+        onInput={(v) => props.setSettings("fontSize", v)}
         min="1"
         step="1"
         unit="px"
