@@ -2,10 +2,12 @@ import { Index, Show } from "solid-js";
 import {
   BoldIcon,
   DownloadIcon,
+  HouseIcon,
   ItalicIcon,
   SquareIcon,
   UnderlineIcon,
 } from "lucide-solid";
+import { Link } from "@tanstack/solid-router";
 import { ZOOM_MAX } from "../../constants";
 import { FontInput, NumberInput, ToolButton } from "../ui";
 import { ZoomResetIcon } from "../icons";
@@ -24,6 +26,11 @@ const strokeRelatedTools: Tool[] = ["brush", "eraser", "shape"];
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
     <div class="bg-base-100 border-neutral/40 flex flex-wrap gap-2 border-b p-2">
+      <ToolButton to="/" as={Link}>
+        <HouseIcon />
+        <span class="sr-only">Export as Image</span>
+      </ToolButton>
+
       <ToolButton onClick={() => props.onExportAsPng()}>
         <DownloadIcon />
         <span class="sr-only">Export as Image</span>

@@ -2,14 +2,7 @@ import { EraserBrush } from "@erase2d/fabric";
 import { createHotkey } from "@tanstack/solid-hotkeys";
 import { ActiveSelection, Circle, IText, PencilBrush, Rect } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
-import {
-  createEffect,
-  on,
-  onCleanup,
-  onMount,
-  splitProps,
-  untrack,
-} from "solid-js";
+import { createEffect, on, onMount, splitProps, untrack } from "solid-js";
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
@@ -325,8 +318,6 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
           c.defaultCursor = "default";
       }
     });
-
-    onCleanup(handleReset);
   });
 
   const handleDelete = () => {

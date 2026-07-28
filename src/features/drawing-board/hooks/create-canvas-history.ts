@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, onCleanup } from "solid-js";
 import type { Canvas } from "fabric";
 import type { Command } from "../commands";
 
@@ -47,6 +47,8 @@ export function createCanvasHistory(canvas: () => Canvas | undefined) {
       c.set({ backgroundColor });
     }
   };
+
+  onCleanup(handleReset);
 
   return {
     history,
