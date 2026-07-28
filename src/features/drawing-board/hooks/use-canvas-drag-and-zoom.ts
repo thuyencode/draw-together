@@ -11,7 +11,6 @@ const WHEEL_ZOOM_FACTOR = 0.999;
 const PINCH_SLOW_DOWN = 20;
 const DEBOUNCE_MS = 1000;
 const CAP_OFFSET_RATIO = 0.5;
-const TWO = 2;
 
 interface DragAndZoomEnabledSettings {
   drag: boolean;
