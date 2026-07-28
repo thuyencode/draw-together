@@ -76,9 +76,9 @@ flowchart TD
     D --> P2
 ```
 
-**Phase 1** (`throttledScaleCanvas`) runs during active interaction. It applies `scale()` to the wrapper's CSS transform, giving instant visual feedback at 60 fps.
+**Phase 1** (`throttledScaleCanvas`) runs during active interaction. It applies `scale()` to the wrapper's CSS transform, giving instant visual feedback at 60 fps. The mouse wheel handler only triggers Phase 1 — it never calls `canvasScaleToZoom` directly.
 
-**Phase 2** (`canvasScaleToZoom`) fires 1000 ms after the user stops interacting. It reads the final bounding box of the scaled wrapper, calls `canvas.setZoom(touchZoom)`, and resets the CSS transform to `scale(1)` — preserving the visual position so the user sees no jump.
+**Phase 2** (`canvasScaleToZoom`) fires 1000 ms after the user stops interacting, but only when triggered by a pinch-end or an external zoom change (menu input, reset). It reads the final bounding box of the scaled wrapper, calls `canvas.setZoom(touchZoom)`, and resets the CSS transform to `scale(1)` — preserving the visual position so the user sees no jump.
 
 ---
 
@@ -122,7 +122,107 @@ When the hook writes a transform like `translate(100px, 50px) scale(2)`, the bro
 
 ---
 
-## 5. Drag: Translating the Canvas
+## 5. `transformOrigin` Is Always `0px 0px`
+
+A crucial design decision: the CSS `transformOrigin` is **always** set to `0px 0px` and never changes after initialization.
+
+### Why not use `transformOrigin` for zoom anchoring?
+
+Using `transformOrigin` to anchor zoom to the cursor seems intuitive — set the origin to the cursor position and the browser handles the rest. In practice this causes problems:
+
+- **Cumulative drift** — changing `transformOrigin` on every tick repeatedly shifts the element's visual anchor point, causing the canvas to drift toward the top-left corner.
+- **Coordinate mismatch** — `offsetX`/`offsetY` from mouse events are in screen pixels relative to the scaled bounding box, but `transformOrigin` expects local CSS pixel coordinates. These diverge when the element is scaled.
+
+### The solution: translate compensation
+
+With `transformOrigin` fixed at `0px 0px`, zooming toward a point is achieved by **adjusting the translate** to keep that point visually fixed:
+
+```
+newTranslateX = oldTranslateX + aroundPoint.x × (oldScaleX − newScaleFactor)
+newTranslateY = oldTranslateY + aroundPoint.y × (oldScaleY − newScaleFactor)
+```
+
+```ts
+const newTranslateX =
+  tVals.translateX + aroundPoint.x * (tVals.scaleX - scaleFactor);
+const newTranslateY =
+  tVals.translateY + aroundPoint.y * (tVals.scaleY - scaleFactor);
+
+c.wrapperEl.style.transformOrigin = `0px 0px`;
+c.wrapperEl.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${scaleFactor})`;
+```
+
+The `aroundPoint` must be in **local CSS pixel coordinates** — the same coordinate system the element uses before any scale is applied. When the cursor position comes from mouse events, it must be converted from screen pixels:
+
+```
+localX = offsetX / currentScaleX
+localY = offsetY / currentScaleY
+```
+
+---
+
+## 6. Initial Fit-to-Viewport Zoom
+
+On mount, the hook computes a **fit zoom** so the canvas never overflows the viewport at startup. This is critical because users can create canvases much larger than the viewport (e.g. 2480×1748 px).
+
+```ts
+const fitZoom = Math.min(
+  viewportWidth / initialWidth,
+  viewportHeight / initialHeight,
+  1,
+);
+```
+
+The formula picks the smaller of the two axis ratios, then caps at `1` so the canvas never zooms in past 100 % on load:
+
+```
+viewportWidth  = 1200px
+viewportHeight = 800px
+canvasWidth    = 2480px
+canvasHeight   = 1748px
+
+fitZoom = min(1200/2480, 800/1748, 1)
+        = min(0.484, 0.458, 1)
+        = 0.458  (≈ 46 %)
+```
+
+The canvas is also **centered** in the viewport. Because `transformOrigin` is `0px 0px`, the centering translate must account for the scaled canvas size, not the unscaled one:
+
+```ts
+initialCenterX = (viewportWidth - initialWidth * fitZoom) / 2;
+initialCenterY = (viewportHeight - initialHeight * fitZoom) / 2;
+```
+
+The initial transform is applied with `transformOrigin` set to `0px 0px`:
+
+```ts
+c.wrapperEl.style.transformOrigin = `0px 0px`;
+c.wrapperEl.style.transform = `translate(${initialCenterX}px, ${initialCenterY}px) scale(${fitZoom})`;
+```
+
+Both centering values are stored as module-level variables so the `reset()` function can restore them later.
+
+### Dynamic zoom minimum
+
+The minimum zoom is no longer a hardcoded constant. It is computed relative to the fit zoom so the user can always zoom out to a reasonable fraction of the initial view:
+
+```ts
+const ZOOM_MIN_ABSOLUTE = 0.05;
+const ZOOM_MIN_FIT_RATIO = 0.25;
+
+setZoomMin(Math.max(ZOOM_MIN_ABSOLUTE, fitZoom * ZOOM_MIN_FIT_RATIO));
+```
+
+This means:
+
+- A canvas that fits at 100 % → `zoomMin = max(0.05, 0.25) = 0.25` (25 %)
+- A canvas that fits at 46 % → `zoomMin = max(0.05, 0.115) = 0.115` (≈ 11.5 %)
+
+The floor of `ZOOM_MIN_ABSOLUTE` (5 %) prevents the zoom from going so far that the canvas becomes unusably small.
+
+---
+
+## 7. Drag: Translating the Canvas
 
 ### Delta accumulation
 
@@ -210,7 +310,7 @@ const throttledTranslateCanvas = throttle(translateCanvas, FRAME_16_MS);
 
 ---
 
-## 6. Mouse-Wheel Zoom: Exponential Scaling
+## 8. Mouse-Wheel Zoom: Exponential Scaling + Translate Compensation
 
 ### The formula
 
@@ -252,25 +352,46 @@ zoom by a constant factor, so the curve steepens as zoom increases.
 
 ### Zooming toward the cursor
 
-The hook sets `transformOrigin` to the cursor's offset position before scaling:
+Because `transformOrigin` is always `0px 0px`, the cursor position from the event must be converted from screen pixels to local CSS pixels before it can be used in the translate compensation formula:
 
 ```ts
-c.wrapperEl.style.transformOrigin = `${aroundPoint.x}px ${aroundPoint.y}px`;
+function handleZoomCanvasMouseWheel(e) {
+  e.preventDefault();
+  const delta = e.deltaY;
+  const tVals = getTransformVals(c.wrapperEl);
+
+  // Convert screen-space offset to local CSS pixels
+  const point: Point = {
+    x: e.offsetX / tVals.scaleX,
+    y: e.offsetY / tVals.scaleY,
+  };
+  let zoomLevel = touchZoom;
+
+  zoomLevel *= WHEEL_ZOOM_FACTOR ** delta;
+
+  throttledScaleCanvas(zoomLevel, point);
+}
 ```
 
-This makes the point under the cursor stay fixed — the canvas zooms _into_ the cursor rather than the center of the viewport. This is the expected behavior in tools like Figma, Photoshop, and map applications.
+The division by `tVals.scaleX`/`tVals.scaleY` converts the mouse offset from the scaled visual coordinate system back to the element's local coordinate system. This is necessary because `offsetX`/`offsetY` are measured against the element's **visual** bounding box (after CSS transforms are applied).
+
+The `scaleCanvas` function then uses this point in the translate compensation formula (see §5) to keep the cursor position stationary during the zoom.
+
+Note that the wheel handler **does not** call `canvasScaleToZoom()` — Phase 2 only fires for pinch-end and external zoom changes. This avoids constant debounce rescheduling and stale bounding rect reads during rapid scrolling.
 
 ### Clamping
 
-The zoom level is clamped to `[ZOOM_MIN, ZOOM_MAX]` = `[0.5, 3.0]`:
+The zoom level is clamped to `[zoomMin(), ZOOM_MAX]` = `[dynamic, 3.0]`:
 
 ```ts
-const clampedZoom = Math.min(Math.max(level, ZOOM_MIN), ZOOM_MAX);
+const clampedZoom = Math.min(Math.max(level, zoomMin()), ZOOM_MAX);
 ```
+
+The lower bound is the dynamic `zoomMin` signal (see §6), not a hardcoded constant.
 
 ---
 
-## 7. Pinch Zoom: Touch Geometry
+## 9. Pinch Zoom: Touch Geometry
 
 Pinch zoom uses two fingers. The math has three parts: distance, center, and slow-down.
 
@@ -318,7 +439,7 @@ pinchCenter = {
 };
 ```
 
-Subtracting `translateX`/`translateY` converts from screen coordinates to canvas-content coordinates. Without this adjustment, the zoom center would drift as the canvas is panned.
+Subtracting `translateX`/`translateY` converts from screen coordinates to canvas-content coordinates in the **local** CSS pixel space. With `transformOrigin` fixed at `0px 0px`, no division by scale is needed here because `clientX`/`clientY` are already in screen pixels and the translate is also in screen pixels — they share the same coordinate base.
 
 ### Slow-down factor
 
@@ -361,13 +482,13 @@ flowchart LR
 
     subgraph Compute["Zoom computation"]
         Z["zoom *= WHEEL_ZOOM_FACTOR ** deltaY<br>or<br>scale = 1 + (ratio - 1) / PINCH_SLOW_DOWN"]
-        C["clampedZoom = clamp(zoom, ZOOM_MIN, ZOOM_MAX)"]
+        C["clampedZoom = clamp(zoom, zoomMin(), ZOOM_MAX)"]
         S["scaleFactor = (scaleX / touchZoom) * clampedZoom"]
     end
 
     subgraph Apply["CSS Transform"]
-        O["transform-origin: (x, y)"]
-        T["transform: translate(...) scale(scaleFactor)"]
+        O["transform-origin: 0px 0px"]
+        T["newTx = oldTx + aroundPoint.x * (scaleX - scaleFactor)<br>transform: translate(newTx, newTy) scale(scaleFactor)"]
     end
 
     Input --> Compute --> Apply
@@ -375,7 +496,7 @@ flowchart LR
 
 ---
 
-## 8. The Blur Problem: Migrating CSS Scale to Fabric.js Zoom
+## 10. The Blur Problem: Migrating CSS Scale to Fabric.js Zoom
 
 ### Why it gets blurry
 
@@ -383,7 +504,7 @@ CSS `scale()` is a **raster operation** — it stretches the existing pixel buff
 
 ### The solution: `canvasScaleToZoom`
 
-After the user stops zooming (debounced at 1000 ms), we **migrate** the CSS transform into Fabric.js's own zoom system:
+After the user stops zooming — triggered by pinch-end or an external zoom change — we **migrate** the CSS transform into Fabric.js's own zoom system:
 
 ```mermaid
 flowchart TD
@@ -424,24 +545,55 @@ const canvasScaleToZoom = debounce(() => {
 
 After migration, Fabric.js redraws all objects at the correct resolution — the image becomes sharp again.
 
+The wheel handler does **not** trigger this migration — it only runs Phase 1. This avoids constant debounce rescheduling during rapid scrolling.
+
 ---
 
-## 9. Programmatic Zoom
+## 11. Programmatic Zoom & Reset
 
-The hook exposes `setZoom(level)` which allows external controls (e.g., zoom buttons) to set the zoom level. The `onSetZoom` effect detects changes to the `zoom` signal and computes the zoom center as the **center of the visible viewport**:
+### Programmatic zoom
+
+The hook exposes `setZoom(level)` which allows external controls (e.g., zoom buttons or an input field) to set the zoom level. The `onSetZoom` effect detects changes to the `zoom` signal and computes the zoom center as the **center of the visible viewport**, converted to local CSS pixels:
 
 ```ts
 const point: Point = {
-  x: viewBox.width / 2 - tVals.translateX,
-  y: viewBox.height / 2 - tVals.translateY,
+  x: (viewBox.width / 2 - tVals.translateX) / tVals.scaleX,
+  y: (viewBox.height / 2 - tVals.translateY) / tVals.scaleY,
 };
 ```
 
+Dividing by `tVals.scaleX`/`tVals.scaleY` converts the viewport center from screen pixels to local CSS pixels — the same conversion the wheel handler does for cursor position.
+
 This ensures that programmatic zoom always centers on the middle of what the user sees.
+
+### Reset
+
+The `reset()` function restores the canvas to its initial fit-to-viewport state:
+
+```ts
+const reset = () => {
+  setZoom(initialFitZoom);
+
+  const c = canvas();
+  if (!c) return;
+
+  c.setDimensions({ width: initialWidth, height: initialHeight });
+  c.setZoom(1);
+  c.viewportTransform = [1, 0, 0, 1, 0, 0];
+  c.setViewportTransform(c.viewportTransform);
+
+  c.wrapperEl.style.transform = `translate(${initialCenterX}px, ${initialCenterY}px) scale(${initialFitZoom})`;
+  c.wrapperEl.style.transformOrigin = `0px 0px`;
+
+  c.requestRenderAll();
+};
+```
+
+It resets Fabric.js dimensions and zoom, restores the viewport transform, sets `transformOrigin` back to `0px 0px`, and reapplies the initial centered fit zoom — the same state the canvas had on mount.
 
 ---
 
-## 10. Event Registration
+## 12. Event Registration
 
 Listeners are registered inside SolidJS `createEffect` blocks, making them reactive to the `enabled` signal:
 
@@ -469,7 +621,7 @@ Each effect creates an `AbortController` and cleans up on disposal, so toggling 
 
 ---
 
-## 11. Performance: Throttling & Debouncing
+## 13. Performance: Throttling & Debouncing
 
 ### Throttle at 16 ms (~60 fps)
 
@@ -496,7 +648,7 @@ const canvasScaleToZoom = debounce(() => {
 
 The expensive Fabric.js re-render (Phase 2) is debounced: it only fires **1000 ms after the user stops interacting**. This prevents:
 
-- Re-rendering on every scroll tick during rapid zooming.
+- Re-rendering on every scroll tick during rapid zooming (the wheel handler doesn't call it at all).
 - Layout thrashing from repeated `getBoundingClientRect()` calls.
 - Object flickering as Fabric.js recalculates positions mid-gesture.
 
@@ -512,7 +664,7 @@ onCleanup(() => {
 
 ---
 
-## 12. API Reference
+## 14. API Reference
 
 ### `useCanvasDragAndZoom`
 
@@ -521,7 +673,7 @@ function useCanvasDragAndZoom(
   canvas: Accessor<Canvas | undefined>,
   wrapperRef: Accessor<HTMLElement | undefined>,
   dragAndZoomSettings?: DragAndZoomSettings,
-): CanvasDragAndZoomControls;
+): UseCanvasDragAndZoomReturn;
 ```
 
 | Parameter             | Type                                 | Description                                                           |
@@ -530,14 +682,16 @@ function useCanvasDragAndZoom(
 | `wrapperRef`          | `Accessor<HTMLElement \| undefined>` | Reactive reference to the wrapper element that constrains drag bounds |
 | `dragAndZoomSettings` | `DragAndZoomSettings` (optional)     | Initial settings, currently only `{ zoom: number }`                   |
 
-### Return: `CanvasDragAndZoomControls`
+### Return: `UseCanvasDragAndZoomReturn`
 
 ```ts
-interface CanvasDragAndZoomControls {
-  enabled: Accessor<DragAndZoomEnabledSettings>;
-  setEnabled: (v: DragAndZoomEnabledSettings) => void;
+interface UseCanvasDragAndZoomReturn {
+  enabled: Accessor<{ drag: boolean; zoom: boolean }>;
+  setEnabled: (v: { drag: boolean; zoom: boolean }) => void;
   zoom: Accessor<number>;
-  setZoom: (level: number) => void;
+  setZoom: Setter<number>;
+  zoomMin: Accessor<number>;
+  reset: () => void;
 }
 ```
 
@@ -545,31 +699,38 @@ interface CanvasDragAndZoomControls {
 | ------------ | -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | `enabled`    | `Accessor<{ drag: boolean, zoom: boolean }>` | Reactive signal — individually toggles drag and zoom                                           |
 | `setEnabled` | `(v) => void`                                | Update which interactions are active                                                           |
-| `zoom`       | `Accessor<number>`                           | Current zoom level (clamped to `[0.5, 3.0]`)                                                   |
-| `setZoom`    | `(level) => void`                            | Programmatically set zoom level. Triggers the same two-phase flow (CSS scale → Fabric.js zoom) |
+| `zoom`       | `Accessor<number>`                           | Current zoom level (clamped to `[zoomMin(), ZOOM_MAX]`)                                        |
+| `setZoom`    | `Setter<number>`                             | Programmatically set zoom level. Triggers the same two-phase flow (CSS scale → Fabric.js zoom) |
+| `zoomMin`    | `Accessor<number>`                           | Dynamic minimum zoom, computed as `max(ZOOM_MIN_ABSOLUTE, fitZoom * ZOOM_MIN_FIT_RATIO)`       |
+| `reset`      | `() => void`                                 | Restores canvas to initial fit-to-viewport position and zoom                                   |
 
 ### Constants
 
-| Constant            | Value   | Description                                            |
-| ------------------- | ------- | ------------------------------------------------------ |
-| `DEFAULT_ZOOM`      | `1`     | Default zoom level (100 %)                             |
-| `ZOOM_MIN`          | `0.5`   | Minimum zoom (50 %)                                    |
-| `ZOOM_MAX`          | `3`     | Maximum zoom (300 %)                                   |
-| `WHEEL_ZOOM_FACTOR` | `0.999` | Exponential base for mouse-wheel zoom                  |
-| `PINCH_SLOW_DOWN`   | `20`    | Divisor that attenuates pinch-zoom sensitivity         |
-| `CAP_OFFSET_RATIO`  | `0.5`   | Maximum drag offset as a fraction of wrapper dimension |
-| `FRAME_16_MS`       | `16`    | Throttle interval (~60 fps)                            |
-| `DEBOUNCE_MS`       | `1000`  | Debounce interval before committing Fabric.js zoom     |
+| Constant             | Value   | Description                                            |
+| -------------------- | ------- | ------------------------------------------------------ |
+| `ZOOM_MAX`           | `3`     | Maximum zoom (300 %)                                   |
+| `ZOOM_MIN_ABSOLUTE`  | `0.05`  | Absolute floor for minimum zoom (5 %)                  |
+| `ZOOM_MIN_FIT_RATIO` | `0.25`  | Fraction of fit zoom used as dynamic minimum floor     |
+| `WHEEL_ZOOM_FACTOR`  | `0.999` | Exponential base for mouse-wheel zoom                  |
+| `PINCH_SLOW_DOWN`    | `20`    | Divisor that attenuates pinch-zoom sensitivity         |
+| `CAP_OFFSET_RATIO`   | `0.5`   | Maximum drag offset as a fraction of wrapper dimension |
+| `FRAME_16_MS`        | `16`    | Throttle interval (~60 fps)                            |
+| `DEBOUNCE_MS`        | `1000`  | Debounce interval before committing Fabric.js zoom     |
+
+Note: `DEFAULT_ZOOM` and `ZOOM_MIN` were removed from `constants.ts`. The initial zoom is now computed dynamically as a fit-to-viewport value, and the minimum zoom is derived from it at runtime.
 
 ---
 
-## 13. Summary
+## 15. Summary
 
 The hook's design follows a clear set of principles:
 
 1. **CSS transforms first** — all interactions manipulate `transform: translate() scale()` for GPU-composited 60 fps feedback.
 2. **Fabric.js zoom second** — after the user pauses, the visual state is committed to Fabric.js's internal coordinate system for crisp rendering.
-3. **Exponential zoom** — `WHEEL_ZOOM_FACTOR ** deltaY` provides perceptually uniform mouse-wheel zoom.
-4. **Euclidean pinch geometry** — standard distance and midpoint math, with a slow-down factor for touch ergonomics.
-5. **Coordinate capping** — drag is bounded to 50 % of the viewport past center, preventing the canvas from disappearing.
-6. **Throttle + debounce** — cheap CSS updates run at frame rate; expensive re-renders wait for quiescence.
+3. **Fixed `transformOrigin: 0px 0px`** — never changes after init; zoom-around-point is achieved by compensating the translate, avoiding cumulative drift and coordinate mismatch.
+4. **Fit-to-viewport on mount** — the initial zoom is computed so the entire canvas is visible, regardless of its dimensions.
+5. **Dynamic zoom minimum** — `zoomMin` is derived from the fit zoom, ensuring the user can always zoom out to a reasonable fraction of the initial view.
+6. **Exponential zoom** — `WHEEL_ZOOM_FACTOR ** deltaY` provides perceptually uniform mouse-wheel zoom.
+7. **Euclidean pinch geometry** — standard distance and midpoint math, with a slow-down factor for touch ergonomics.
+8. **Coordinate capping** — drag is bounded to 50 % of the viewport past center, preventing the canvas from disappearing.
+9. **Throttle + debounce** — cheap CSS updates run at frame rate; expensive re-renders wait for quiescence.

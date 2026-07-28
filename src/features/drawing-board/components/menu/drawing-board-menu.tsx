@@ -6,7 +6,7 @@ import {
   SquareIcon,
   UnderlineIcon,
 } from "lucide-solid";
-import { ZOOM_MAX, ZOOM_MIN } from "../../constants";
+import { ZOOM_MAX } from "../../constants";
 import { FontInput, NumberInput, ToolButton } from "../ui";
 import { ZoomResetIcon } from "../icons";
 import type { PropsWithSettings, ShapeFill, Tool } from "../../types";
@@ -16,6 +16,7 @@ interface DrawingBoardMenuProps extends PropsWithSettings {
   onExportAsPng: () => void;
   onZoomValueChange: UseCanvasDragAndZoomReturn["setZoom"];
   resetZoomValue: UseCanvasDragAndZoomReturn["reset"];
+  zoomMin: UseCanvasDragAndZoomReturn["zoomMin"];
 }
 
 const strokeRelatedTools: Tool[] = ["brush", "eraser", "shape"];
@@ -50,11 +51,11 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
     <div class="join">
       <NumberInput
         class="input-sm join-item max-w-50"
-
         label="Zoom"
         value={Math.round(props.settings.zoom * 100)}
+        onInput={(v) => props.onZoomValueChange(() => v / 100)}
         onChange={(v) => props.onZoomValueChange(() => v / 100)}
-        min={ZOOM_MIN * 100}
+        min={Math.round(props.zoomMin() * 100)}
         max={ZOOM_MAX * 100}
         step="1"
         parse="float"

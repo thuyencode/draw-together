@@ -13,7 +13,7 @@ import {
 import { createStore } from "solid-js/store";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
-import { DEFAULT_COLORS, DEFAULT_FONT_SIZE, DEFAULT_ZOOM } from "../constants";
+import { DEFAULT_COLORS, DEFAULT_FONT_SIZE } from "../constants";
 import {
   createCanvas,
   createCanvasHistory,
@@ -59,7 +59,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     fontStyle: "normal",
     underline: false,
     shapeFill: "outline",
-    zoom: DEFAULT_ZOOM,
+    zoom: 1,
   });
   const { history, undone, pushCommand, handleUndo, handleRedo, handleReset } =
     createCanvasHistory(canvas);
@@ -83,13 +83,6 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
   onMount(() => {
     const c = canvas();
     if (!c) return;
-
-    // center canvas inside the container
-    const containerRect = canvasContainerRef.getBoundingClientRect();
-    const canvasRect = c.wrapperEl.getBoundingClientRect();
-    const centerX = (containerRect.width - canvasRect.width) / 2;
-    const centerY = (containerRect.height - canvasRect.height) / 2;
-    c.wrapperEl.style.transform = `translate(${centerX}px, ${centerY}px) scale(1)`;
 
     const untrack_settings = untrack(() => settings);
     const initialPoint: Point = { x: 0, y: 0 };
@@ -420,6 +413,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         setSettings={setSettings}
         onZoomValueChange={dragAndZoom.setZoom}
         resetZoomValue={dragAndZoom.reset}
+        zoomMin={dragAndZoom.zoomMin}
       />
 
       <div class="relative flex-1" {...rest} ref={containerRef}>
