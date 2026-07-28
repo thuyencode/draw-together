@@ -23,10 +23,13 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
       onBlur: NewDrawingOptionsFormSchema,
     },
     onSubmit: (data) => {
-      const { dimension, title } = data.value;
+      const {
+        dimension: [width, height],
+        title,
+      } = data.value;
       navigate({
-        to: "/rooms",
-        search: { width: dimension[0], height: dimension[1], title },
+        to: "/rooms/trial",
+        search: { width, height, title },
       });
     },
   }));

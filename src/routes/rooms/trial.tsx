@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/solid-router";
 import DrawingBoard from "~/features/drawing-board/components";
 import { NewDrawingOptionsSchema } from "~/features/drawing-board/schema";
 
-export const Route = createFileRoute("/rooms")({
+export const Route = createFileRoute("/rooms/trial")({
   validateSearch: NewDrawingOptionsSchema,
-  component: RoomPage,
+  component: TrialPage,
 });
 
-function RoomPage() {
+function TrialPage() {
   const search = Route.useSearch();
 
   return (
