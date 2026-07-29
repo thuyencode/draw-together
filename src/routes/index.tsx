@@ -20,12 +20,12 @@ function HomePage() {
           <kbd class="kbd kbd-sm">N</kbd>
         </Modal.Trigger>
         <Modal.Root>
-          <Modal.Box class="space-y-4">
-            <h1 class="text-center text-xl font-semibold">
+          <Modal.Box class="space-y-3">
+            <h3 class="text-center text-lg font-medium">
               Create a new drawing
-            </h1>
+            </h3>
 
-            <NewDrawingForm class="space-y-4">
+            <NewDrawingForm class="space-y-3">
               <div class="modal-action">
                 <button class="btn btn-primary" type="submit">
                   Create

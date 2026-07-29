@@ -118,13 +118,11 @@ function ModalBox(_props: ParentProps<ComponentProps<"div">>) {
 }
 
 function ModalCloser(_props: ParentProps<ComponentProps<"button">>) {
-  const [props, rest] = splitProps(_props, ["class", "children"]);
+  const [props, rest] = splitProps(_props, ["class"]);
 
   return (
     <form method="dialog">
-      <button class={cn("btn", props.class)} {...rest}>
-        {props.children}
-      </button>
+      <button class={cn("btn", props.class)} {...rest} />
     </form>
   );
 }
