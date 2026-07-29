@@ -21,9 +21,9 @@ function HomePage() {
         </Modal.Trigger>
         <Modal.Root>
           <Modal.Box class="space-y-3">
-            <h3 class="text-center text-lg font-medium">
+            <h2 class="text-center text-lg font-medium">
               Create a new drawing
-            </h3>
+            </h2>
 
             <NewDrawingForm class="space-y-3">
               <div class="modal-action">

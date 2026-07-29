@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { parseColor } from "@ark-ui/solid/color-picker";
 import {
   ArrowBigDownDash,
@@ -127,7 +126,6 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
           <FloatingPanel.Body>
             <ColorPicker.Root
               inline
-              class=""
               value={parseColor(props.settings.colors[0])}
               onValueChange={function handleColorChange(detail) {
                 props.setSettings("colors", 0, detail.valueAsString);

@@ -39,12 +39,6 @@
   }
 }
 
-@layer components {
-  .js-draw.imageEditorContainer {
-    @apply w-full;
-  }
-}
-
 @keyframes pulse {
   0%,
   100% {

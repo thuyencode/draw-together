@@ -7,7 +7,7 @@ const registeredGrouped = Object.groupBy(
   (s) => s.category,
 );
 
-const CANVAS_BUILTIN_SHORTCUTS = [
+const canvasBuiltinShortcuts = [
   {
     hotkey: "ArrowUp",
     description: "Nudge selected object by 1px",
@@ -44,7 +44,7 @@ const CANVAS_BUILTIN_SHORTCUTS = [
 ];
 
 const builtinGrouped = Object.groupBy(
-  CANVAS_BUILTIN_SHORTCUTS,
+  canvasBuiltinShortcuts,
   (s) => s.category,
 );
 

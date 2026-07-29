@@ -455,9 +455,9 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
             <span class="sr-only">Close dialog</span>
           </Modal.Closer>
 
-          <h3 class="mb-3 text-center text-lg font-medium">
+          <h2 class="mb-3 text-center text-lg font-medium">
             Keyboard shortcuts
-          </h3>
+          </h2>
 
           <ShortcutsMenu />
         </Modal.Box>
