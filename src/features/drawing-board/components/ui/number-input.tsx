@@ -44,7 +44,7 @@ export function NumberInput(_props: NumberInputProps) {
         onChange={(e) => props.onChange?.(parseValue(e.currentTarget.value))}
         onInput={(e) => props.onInput?.(parseValue(e.currentTarget.value))}
         inputmode="numeric"
-        pattern="[0-9]*"
+        pattern={props.parse === "float" ? "[0-9]*.?[0-9]*" : "[0-9]*"}
         {...rest}
       />
       <Show when={props.unit}>
