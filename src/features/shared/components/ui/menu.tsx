@@ -36,7 +36,7 @@ function MenuContent(_props: BaseMenu.ContentProps) {
   return (
     <BaseMenuContent
       class={cn(
-        "bg-base-100 border-neutral/40 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 rounded-lg border p-1 shadow-md outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
+        "bg-base-100 rounded-box border-neutral/30 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 border p-1 shadow-lg outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
       {...rest}
@@ -61,7 +61,7 @@ function MenuSeparator(_props: BaseMenu.SeparatorProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseMenuSeparator
-      class={cn("bg-base-content/25 my-1 h-px border-0", props.class)}
+      class={cn("bg-base-content/25 my-1 h-px border-none", props.class)}
       {...rest}
     />
   );

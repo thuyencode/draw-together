@@ -4,6 +4,7 @@ import { ActiveSelection, Circle, IText, PencilBrush, Rect } from "fabric";
 import { PSBrush } from "fabricjs-psbrush";
 import { createEffect, on, onMount, splitProps, untrack } from "solid-js";
 import { createStore } from "solid-js/store";
+import { XIcon } from "lucide-solid";
 import { AddCommand, ModifyCommand, RemoveCommand } from "../commands";
 import { EraseCommand } from "../commands/erase-command";
 import { DEFAULT_COLORS, DEFAULT_FONT_SIZE } from "../constants";
@@ -15,6 +16,7 @@ import {
 import {
   getCircleFromPoints,
   getRectFromPoints,
+  getShortcut,
   getSvgCursor,
   getTargetOfSelection,
 } from "../utils";
@@ -22,10 +24,12 @@ import { DrawingBoardMenu } from "./menu";
 import { ColorPanels, ToolsPanel } from "./panels";
 import { makeIcon } from "./icons";
 import { CanvasSkeleton } from "./ui";
+import { ShortcutsMenu } from "./shortcuts-menu";
 import type { NewDrawingOptions } from "../schema";
 import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
+import { Modal } from "~/features/shared/components/ui";
 
 interface DrawingBoardProps extends Omit<ComponentProps<"div">, "ref"> {
   options?: Partial<CanvasOptions> & Pick<NewDrawingOptions, "title">;
@@ -386,53 +390,79 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     document.body.removeChild(link);
   };
 
-  createHotkey("Mod+Z", handleUndo);
-  createHotkey("Mod+Shift+Z", handleRedo);
-  createHotkey("Mod+Delete", handleReset);
-  createHotkey("Delete", handleDelete);
-  createHotkey("Enter", handleEnterOnSelect);
-  createHotkey("Mod+A", handleSelectAll);
-  createHotkey("Mod+X", handleSwapColors);
-  createHotkey("Mod+0", dragAndZoom.reset);
-  createHotkey("Mod+S", handleExportAsPng);
+  createHotkey(getShortcut("delete-object").hotkey, handleDelete);
+  createHotkey(getShortcut("edit-text").hotkey, handleEnterOnSelect);
+  createHotkey(getShortcut("swap-colors").hotkey, handleSwapColors);
+  createHotkey(getShortcut("undo").hotkey, handleUndo);
+  createHotkey(getShortcut("redo").hotkey, handleRedo);
+  createHotkey(getShortcut("reset").hotkey, handleReset);
+  createHotkey(getShortcut("select-all").hotkey, handleSelectAll);
+  createHotkey(getShortcut("zoom-to-100").hotkey, () => dragAndZoom.setZoom(1));
+  createHotkey(getShortcut("fit-to-view").hotkey, dragAndZoom.reset);
+  createHotkey(getShortcut("export").hotkey, handleExportAsPng);
 
   return (
-    <div class="flex h-full flex-col bg-neutral-600">
-      <DrawingBoardMenu
-        onExportAsPng={handleExportAsPng}
-        settings={settings}
-        setSettings={setSettings}
-        onZoomValueChange={dragAndZoom.setZoom}
-        resetZoomValue={dragAndZoom.reset}
-        zoomMin={dragAndZoom.zoomMin}
-      />
+    <Modal.Provider hotkey={getShortcut("show-shortcuts").hotkey}>
+      <div class="flex h-full flex-col bg-neutral-600">
+        <DrawingBoardMenu
+          onExportAsPng={handleExportAsPng}
+          settings={settings}
+          setSettings={setSettings}
+          onZoomValueChange={dragAndZoom.setZoom}
+          resetZoomValue={dragAndZoom.reset}
+          zoomMin={dragAndZoom.zoomMin}
+        />
 
-      <div class="relative flex-1 overflow-hidden" {...rest} ref={containerRef}>
-        <div class="absolute inset-0 overflow-hidden" ref={canvasContainerRef}>
-          <CanvasSkeleton options={props.options} />
-          <canvas ref={canvasElementRef} />
+        <div
+          class="relative flex-1 overflow-hidden"
+          {...rest}
+          ref={containerRef}
+        >
+          <div
+            class="absolute inset-0 overflow-hidden"
+            ref={canvasContainerRef}
+          >
+            <CanvasSkeleton options={props.options} />
+            <canvas ref={canvasElementRef} />
+          </div>
+
+          <ToolsPanel
+            settings={settings}
+            setSettings={setSettings}
+            containerRef={containerRef}
+            defaultPosition="top-left"
+            isUndoAvailable={history().length !== 0}
+            isRedoAvailable={undone().length !== 0}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            onReset={handleReset}
+          />
+
+          <ColorPanels
+            settings={settings}
+            setSettings={setSettings}
+            containerRef={containerRef}
+            defaultPosition="top-right"
+            swapColors={handleSwapColors}
+          />
         </div>
-
-        <ToolsPanel
-          settings={settings}
-          setSettings={setSettings}
-          containerRef={containerRef}
-          defaultPosition="top-left"
-          isUndoAvailable={history().length !== 0}
-          isRedoAvailable={undone().length !== 0}
-          onUndo={handleUndo}
-          onRedo={handleRedo}
-          onReset={handleReset}
-        />
-
-        <ColorPanels
-          settings={settings}
-          setSettings={setSettings}
-          containerRef={containerRef}
-          defaultPosition="top-right"
-          swapColors={handleSwapColors}
-        />
       </div>
-    </div>
+
+      <Modal.Root>
+        <Modal.Box class="bg-base-200 max-w-md px-2">
+          <Modal.Closer class="btn-xs btn-circle absolute top-2 right-2">
+            <XIcon class="size-3" />
+            <span class="sr-only">Close dialog</span>
+          </Modal.Closer>
+
+          <h3 class="mb-3 text-center text-lg font-medium">
+            Keyboard shortcuts
+          </h3>
+
+          <ShortcutsMenu />
+        </Modal.Box>
+        <Modal.Backdrop />
+      </Modal.Root>
+    </Modal.Provider>
   );
 }

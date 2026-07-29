@@ -4,8 +4,12 @@ import {
   DownloadIcon,
   HouseIcon,
   ItalicIcon,
+  KeyboardIcon,
+  MenuIcon,
+  PaletteIcon,
   SquareIcon,
   UnderlineIcon,
+  WrenchIcon,
 } from "lucide-solid";
 import { Link } from "@tanstack/solid-router";
 import { ZOOM_MAX } from "../../constants";
@@ -13,9 +17,11 @@ import { FontInput, NumberInput, ToolButton } from "../ui";
 import { ZoomResetIcon } from "../icons";
 import type { PropsWithSettings, ShapeFill, Tool } from "../../types";
 import type { UseCanvasDragAndZoomReturn } from "../../hooks";
+import { Menu } from "~/features/shared/components/ui/menu";
+import { Modal } from "~/features/shared/components/ui";
 
-interface DrawingBoardMenuProps extends PropsWithSettings {
-  onExportAsPng: () => void;
+interface DrawingBoardMenuProps
+  extends PropsWithSettings, DrawingBoardDropdownMenuProps {
   onZoomValueChange: UseCanvasDragAndZoomReturn["setZoom"];
   resetZoomValue: UseCanvasDragAndZoomReturn["reset"];
   zoomMin: UseCanvasDragAndZoomReturn["zoomMin"];
@@ -26,15 +32,7 @@ const strokeRelatedTools: Tool[] = ["brush", "eraser", "shape"];
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
     <div class="bg-base-100 border-neutral/40 flex flex-wrap gap-2 border-b p-2">
-      <ToolButton to="/" as={Link}>
-        <HouseIcon />
-        <span class="sr-only">Export as Image</span>
-      </ToolButton>
-
-      <ToolButton onClick={() => props.onExportAsPng()}>
-        <DownloadIcon />
-        <span class="sr-only">Export as Image</span>
-      </ToolButton>
+      <DrawingBoardDropdownMenu onExportAsPng={props.onExportAsPng} />
 
       <ZoomSettings {...props} />
 
@@ -159,6 +157,66 @@ function TextSettings(props: PropsWithSettings) {
         </ToolButton>
       </div>
     </>
+  );
+}
+
+interface DrawingBoardDropdownMenuProps {
+  onExportAsPng: () => void;
+}
+
+function DrawingBoardDropdownMenu(props: DrawingBoardDropdownMenuProps) {
+  const modal = Modal.useModal();
+
+  return (
+    <Menu.Root>
+      <ToolButton as={Menu.Trigger}>
+        <MenuIcon />
+      </ToolButton>
+      <Menu.Positioner>
+        <Menu.Content class="min-w-60">
+          <Menu.ItemGroup id="export">
+            <Menu.ItemGroupLabel>Actions</Menu.ItemGroupLabel>
+            <Menu.Item value="export-png" onSelect={props.onExportAsPng}>
+              <DownloadIcon />
+              <Menu.ItemText>Export as PNG</Menu.ItemText>
+            </Menu.Item>
+          </Menu.ItemGroup>
+
+          <Menu.ItemGroup id="panels">
+            <Menu.ItemGroupLabel>Panels</Menu.ItemGroupLabel>
+            <Menu.Item value="color-picker">
+              <PaletteIcon />
+              <Menu.ItemText>Color Picker</Menu.ItemText>
+            </Menu.Item>
+            <Menu.Item value="tools">
+              <WrenchIcon />
+              <Menu.ItemText>Tools</Menu.ItemText>
+            </Menu.Item>
+          </Menu.ItemGroup>
+
+          <Menu.ItemGroup id="links">
+            <Menu.ItemGroupLabel>Helps</Menu.ItemGroupLabel>
+            <Menu.Item value="keyboard-shortcuts" onClick={modal.openModal}>
+              <KeyboardIcon />
+              <Menu.ItemText>Keyboard Shortcuts</Menu.ItemText>
+            </Menu.Item>
+          </Menu.ItemGroup>
+
+          <Menu.ItemGroup id="links">
+            <Menu.ItemGroupLabel>Links</Menu.ItemGroupLabel>
+            <Menu.Item
+              value="homepage"
+              asChild={(props) => (
+                <Link to="/" {...props()}>
+                  <HouseIcon />
+                  <Menu.ItemText>Go to Homepage</Menu.ItemText>
+                </Link>
+              )}
+            />
+          </Menu.ItemGroup>
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
   );
 }
 

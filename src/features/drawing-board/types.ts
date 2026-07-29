@@ -1,3 +1,4 @@
+import type { RegisterableHotkey } from "@tanstack/solid-hotkeys";
 import type { Canvas } from "fabric";
 import type { SetStoreFunction } from "solid-js/store";
 
@@ -86,3 +87,22 @@ export type PropsWithContainerRef<P = unknown> = P & {
 export type PropsWithDefaultPosition<P = unknown> = P & {
   defaultPosition: Position;
 };
+
+export interface ShortcutEntry {
+  hotkey: RegisterableHotkey;
+  description: string;
+  category: string;
+}
+
+export type ShortcutId =
+  | "delete-object"
+  | "edit-text"
+  | "swap-colors"
+  | "select-all"
+  | "undo"
+  | "redo"
+  | "reset"
+  | "zoom-to-100"
+  | "fit-to-view"
+  | "show-shortcuts"
+  | "export";
