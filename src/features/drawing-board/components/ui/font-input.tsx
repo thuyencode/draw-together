@@ -22,7 +22,7 @@ interface DefaultFontItem {
 const DEFAULT_FONTS: DefaultFontItem[] = [
   {
     label: "Roboto",
-    value: "Roboto",
+    value: "Roboto Variable",
     style: { "font-family": "Roboto Variable, sans-serif" },
   },
   {

@@ -51,7 +51,7 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     strokeWidth: 5,
     colors: DEFAULT_COLORS,
     fontSize: DEFAULT_FONT_SIZE,
-    fontFamily: "Roboto",
+    fontFamily: "Roboto Variable",
     fontWeight: "normal",
     fontStyle: "normal",
     underline: false,
