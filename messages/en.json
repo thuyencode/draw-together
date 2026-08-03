@@ -65,8 +65,6 @@
   "colorPicker_reset": "Reset",
   "colorPicker_showLess": "Show less",
   "colorPicker_showMore": "Show more",
-  "toolSettings_settings": "{tool} Settings",
-  "toolSettings_strokeSize": "Stroke size",
   "error_somethingWentWrong": "Something went wrong.",
   "error_message": "Error: {message}",
   "error_tryAgain": "Try Again",
