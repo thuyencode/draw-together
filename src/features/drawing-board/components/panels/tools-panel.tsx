@@ -24,13 +24,14 @@ import type {
 } from "../../types";
 import type { LucideIcon } from "lucide-solid";
 import { FloatingPanel } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 const MIN_WIDTH = 45;
 const MIN_HEIGHT = 385;
 const MIN_WIDTH_THRESHOLD = 100;
 
 type ToolItem = ToolConfig & {
-  label: string;
+  label: () => string;
   icon: LucideIcon;
 };
 
@@ -38,25 +39,25 @@ const tools: ToolItem[] = [
   {
     tool: "select",
     variant: "select",
-    label: "Select",
+    label: () => m.tools_select(),
     icon: MousePointerIcon,
   },
   {
     tool: "drag",
     variant: "drag",
-    label: "drag",
+    label: () => m.tools_drag(),
     icon: HandIcon,
   },
   {
     tool: "eraser",
     variant: "plain",
-    label: "Eraser",
+    label: () => m.tools_eraser(),
     icon: EraserIcon,
   },
   {
     tool: "text",
     variant: "text",
-    label: "Text",
+    label: () => m.tools_text(),
     icon: HeadingIcon,
   },
 ];
@@ -114,7 +115,9 @@ export function ToolsPanel(props: ToolsPanelProps) {
             <FloatingPanel.Header vertical={shouldBeVertical()}>
               <FloatingPanel.Title>
                 <GripVerticalIcon />
-                <span classList={{ "sr-only": shouldBeVertical() }}>Tool</span>
+                <span classList={{ "sr-only": shouldBeVertical() }}>
+                  {m.tools_tool()}
+                </span>
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
@@ -151,7 +154,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
                   }
                 >
                   <Dynamic component={t().icon} />
-                  <span class="sr-only">{t().label}</span>
+                  <span class="sr-only">{t().label()}</span>
                 </ToolButton>
               )}
             </Index>
@@ -174,7 +177,7 @@ export function ToolsPanel(props: ToolsPanelProps) {
               onClick={props.onUndo}
             >
               <UndoIcon />
-              <span class="sr-only">Undo</span>
+              <span class="sr-only">{m.tools_undo()}</span>
             </ToolButton>
 
             <ToolButton
@@ -183,12 +186,12 @@ export function ToolsPanel(props: ToolsPanelProps) {
               onClick={props.onRedo}
             >
               <RedoIcon />
-              <span class="sr-only">Redo</span>
+              <span class="sr-only">{m.tools_redo()}</span>
             </ToolButton>
 
             <ToolButton type="button" onClick={props.onReset}>
               <Trash2Icon />
-              <span class="sr-only">Clear</span>
+              <span class="sr-only">{m.tools_clear()}</span>
             </ToolButton>
           </FloatingPanel.Body>
 

@@ -1,6 +1,7 @@
 import { BugIcon } from "lucide-solid";
 import { onMount } from "solid-js";
 import type { ErrorComponentProps } from "@tanstack/solid-router";
+import { m } from "~/paraglide/messages";
 
 export function ErrorComponent(props: ErrorComponentProps) {
   onMount(() => {
@@ -14,13 +15,13 @@ export function ErrorComponent(props: ErrorComponentProps) {
     >
       <p class="inline-flex items-center gap-2 text-lg font-bold">
         <BugIcon />
-        Something went wrong.
+        {m.error_somethingWentWrong()}
       </p>
       <p class="text-center text-base text-balance">
-        Error: <span class="font-mono">{props.error.message}</span>
+        {m.error_message({ message: props.error.message })}
       </p>
       <button class="btn btn-primary" onClick={() => props.reset()}>
-        Try Again
+        {m.error_tryAgain()}
       </button>
     </div>
   );

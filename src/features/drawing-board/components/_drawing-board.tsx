@@ -16,7 +16,6 @@ import {
 import {
   getCircleFromPoints,
   getRectFromPoints,
-  getShortcut,
   getSvgCursor,
   getTargetOfSelection,
 } from "../utils";
@@ -30,6 +29,7 @@ import type { Point, Settings } from "../types";
 import type { ComponentProps } from "solid-js";
 import type { CanvasOptions, FabricObject, FabricObjectProps } from "fabric";
 import { Modal } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 interface DrawingBoardProps extends Omit<ComponentProps<"div">, "ref"> {
   options?: Partial<CanvasOptions> & Pick<NewDrawingOptions, "title">;
@@ -390,19 +390,19 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
     document.body.removeChild(link);
   };
 
-  createHotkey(getShortcut("delete-object").hotkey, handleDelete);
-  createHotkey(getShortcut("edit-text").hotkey, handleEnterOnSelect);
-  createHotkey(getShortcut("swap-colors").hotkey, handleSwapColors);
-  createHotkey(getShortcut("undo").hotkey, handleUndo);
-  createHotkey(getShortcut("redo").hotkey, handleRedo);
-  createHotkey(getShortcut("reset").hotkey, handleReset);
-  createHotkey(getShortcut("select-all").hotkey, handleSelectAll);
-  createHotkey(getShortcut("zoom-to-100").hotkey, () => dragAndZoom.setZoom(1));
-  createHotkey(getShortcut("fit-to-view").hotkey, dragAndZoom.reset);
-  createHotkey(getShortcut("export").hotkey, handleExportAsPng);
+  createHotkey("Delete", handleDelete);
+  createHotkey("Enter", handleEnterOnSelect);
+  createHotkey("Shift+X", handleSwapColors);
+  createHotkey("Mod+Z", handleUndo);
+  createHotkey("Mod+Shift+Z", handleRedo);
+  createHotkey("Mod+Delete", handleReset);
+  createHotkey("Mod+A", handleSelectAll);
+  createHotkey("Mod+0", () => dragAndZoom.setZoom(1));
+  createHotkey("Mod+1", dragAndZoom.reset);
+  createHotkey("Mod+S", handleExportAsPng);
 
   return (
-    <Modal.Provider hotkey={getShortcut("show-shortcuts").hotkey}>
+    <Modal.Provider hotkey="H">
       <div class="flex h-full flex-col bg-neutral-600">
         <DrawingBoardMenu
           onExportAsPng={handleExportAsPng}
@@ -452,11 +452,11 @@ export default function DrawingBoard(_props: DrawingBoardProps) {
         <Modal.Box class="bg-base-200 max-w-md px-2">
           <Modal.Closer class="btn-xs btn-circle absolute top-2 right-2">
             <XIcon class="size-3" />
-            <span class="sr-only">Close dialog</span>
+            <span class="sr-only">{m.drawingBoard_closeDialog()}</span>
           </Modal.Closer>
 
           <h2 class="mb-3 text-center text-lg font-medium">
-            Keyboard shortcuts
+            {m.drawingBoard_keyboardShortcuts()}
           </h2>
 
           <ShortcutsMenu />

@@ -4,6 +4,7 @@ import {
   LoadingScreen,
   errorBoundaryFallBackProp,
 } from "~/features/shared/components";
+import { m } from "~/paraglide/messages";
 
 const LazyDrawingBoard = lazy(() => import("./_drawing-board"));
 
@@ -12,7 +13,7 @@ export default function DrawingBoard(
 ) {
   return (
     <ErrorBoundary fallback={errorBoundaryFallBackProp}>
-      <Suspense fallback={<LoadingScreen message={"Loading canvas..."} />}>
+      <Suspense fallback={<LoadingScreen message={m.drawingBoard_loading()} />}>
         <LazyDrawingBoard {...props} />
       </Suspense>
     </ErrorBoundary>

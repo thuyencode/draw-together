@@ -5,10 +5,15 @@ import { ToolButton } from "../ui";
 import type { LucideIcon } from "lucide-solid";
 import type { PropsWithSettings, ShapeVariant } from "../../types";
 import { Menu } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 const shapeIconMap: Record<ShapeVariant, LucideIcon> = {
   circle: CircleIcon,
   rectangle: SquareIcon,
+};
+const shapeLabelMap: Record<ShapeVariant, () => string> = {
+  circle: () => m.tools_shapeCircle(),
+  rectangle: () => m.tools_shapeRectangle(),
 };
 const shapes = Object.keys(shapeIconMap) as ShapeVariant[];
 
@@ -34,7 +39,7 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
             component={shapeIconMap[props.settings.variant as ShapeVariant]}
           />
         </Show>
-        <span class="sr-only">Shapes</span>
+        <span class="sr-only">{m.tools_shapes()}</span>
       </ToolButton>
 
       <Menu.Positioner
@@ -59,7 +64,7 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
                 }
               >
                 <Dynamic component={shapeIconMap[shape()]} />
-                <span class="sr-only">{shape()}</span>
+                <span class="sr-only">{shapeLabelMap[shape()]()}</span>
               </ToolButton>
             )}
           </Index>

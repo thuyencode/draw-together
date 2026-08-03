@@ -1,19 +1,47 @@
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import { analyzer, unstableRolldownAdapter } from "vite-bundle-analyzer";
-import solid from "vite-plugin-solid";
 import lucidePreprocess from "vite-plugin-lucide-preprocess";
+import solid from "vite-plugin-solid";
+import { prerenderRoutes } from "./src/prerender";
 
 export default defineConfig({
   plugins: [
+    paraglideVitePlugin({
+      project: "./project.inlang",
+      outdir: "./src/paraglide",
+      emitTsDeclarations: true,
+      outputStructure: "message-modules",
+      cookieName: "LOCALE",
+      strategy: ["url", "cookie", "preferredLanguage", "baseLocale"],
+      urlPatterns: [
+        {
+          pattern: "/:path(.*)?",
+          localized: [
+            ["en", "/en/:path(.*)?"],
+            ["vi", "/vi/:path(.*)?"],
+          ],
+        },
+      ],
+    }),
     unstableRolldownAdapter(analyzer({ analyzerMode: "server" })),
     lucidePreprocess(),
     devtools(),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        autoSubfolderIndex: true,
+        autoStaticPathsDiscovery: false,
+        crawlLinks: false,
+        failOnError: true,
+      },
+      pages: prerenderRoutes,
+    }),
     solid({ ssr: true }),
     nitro({
       preset: "bun",

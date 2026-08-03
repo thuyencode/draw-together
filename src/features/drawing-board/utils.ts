@@ -1,4 +1,3 @@
-import { SHORTCUTS } from "./constants";
 import type { RgbColor } from "@irojs/iro-core";
 import type {
   ActiveSelection,
@@ -7,14 +6,7 @@ import type {
   FabricObject,
   RectProps,
 } from "fabric";
-import type {
-  Point,
-  Position,
-  ShortcutId,
-  Size,
-  StrokeConfig,
-  Tool,
-} from "./types";
+import type { Point, Position, Size, StrokeConfig, Tool } from "./types";
 
 const GAP = 20;
 
@@ -164,10 +156,4 @@ export function generateRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
-}
-
-export function getShortcut(id: ShortcutId) {
-  const entry = SHORTCUTS.get(id);
-  if (!entry) throw new Error(`Missing shortcut: ${id}`);
-  return entry;
 }

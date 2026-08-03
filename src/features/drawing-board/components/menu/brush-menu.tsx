@@ -6,10 +6,15 @@ import { ToolButton } from "../ui";
 import type { BrushVariant, PropsWithSettings } from "../../types";
 import type { LucideIcon } from "lucide-solid";
 import { Menu } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 const brushIconMap: Record<BrushVariant, LucideIcon> = {
   plain: StrokePenIcon,
   pressure: StrokeInkIcon,
+};
+const brushLabelMap: Record<BrushVariant, () => string> = {
+  plain: () => m.tools_brushPlain(),
+  pressure: () => m.tools_brushPressure(),
 };
 const brushes = Object.keys(brushIconMap) as BrushVariant[];
 
@@ -35,7 +40,7 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
             component={brushIconMap[props.settings.variant as BrushVariant]}
           />
         </Show>
-        <span class="sr-only">Brush</span>
+        <span class="sr-only">{m.tools_brush()}</span>
       </ToolButton>
 
       <Menu.Positioner
@@ -59,7 +64,7 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
                 }
               >
                 <Dynamic component={brushIconMap[brush()]} />
-                <span class="sr-only">{brush()}</span>
+                <span class="sr-only">{brushLabelMap[brush()]()}</span>
               </ToolButton>
             )}
           </Index>

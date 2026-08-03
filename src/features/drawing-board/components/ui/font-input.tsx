@@ -4,6 +4,7 @@ import { createListCollection } from "@ark-ui/solid/select";
 import type { JSX } from "solid-js";
 import type { TextSettings } from "../../types";
 import { Select } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 interface FontInputProps {
   value: TextSettings["fontFamily"];
@@ -85,7 +86,7 @@ export function FontInput(_props: FontInputProps) {
         >
           <Select.ValueText
             class="flex-1 text-left"
-            placeholder="Select a font"
+            placeholder={m.font_selectFont()}
           />
         </Select.Trigger>
         <Select.Indicator>

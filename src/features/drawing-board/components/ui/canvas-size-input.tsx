@@ -3,6 +3,7 @@ import { ArrowLeftRightIcon, PencilIcon, RotateCcwIcon } from "lucide-solid";
 import { createStore } from "solid-js/store";
 import { NumberInput } from "./number-input";
 import type { NewDrawingOptionsInput } from "../../schema";
+import { m } from "~/paraglide/messages";
 
 type Dimension = NewDrawingOptionsInput["dimension"];
 
@@ -68,7 +69,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
           value={paperSizeLabel()}
           onChange={(e) => selectPreset(e.target.value as PaperSizeLabel)}
         >
-          <option disabled={true}>Pick a dimension</option>
+          <option disabled={true}>{m.newDrawing_pickDimension()}</option>
 
           <Index each={Array.from(paperSizeMap.entries())}>
             {(item) => (
@@ -78,7 +79,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
             )}
           </Index>
 
-          <option value="custom">Custom</option>
+          <option value="custom">{m.newDrawing_custom()}</option>
         </select>
 
         <button
@@ -92,13 +93,13 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
           }}
         >
           <PencilIcon class="size-4" />
-          <span class="sr-only">Edit</span>
+          <span class="sr-only">{m.newDrawing_edit()}</span>
         </button>
       </Show>
 
       <Show when={paperSizeLabel() === "custom"}>
         <NumberInput
-          label="Width"
+          label={m.newDrawing_width()}
           unit="px"
           value={Number(dimension[0])}
           onInput={(value) => {
@@ -112,11 +113,11 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
 
         <button type="button" class="btn btn-ghost btn-square" onClick={swap}>
           <ArrowLeftRightIcon class="size-4" />
-          <span class="sr-only">Swap width and height</span>
+          <span class="sr-only">{m.newDrawing_swapWidthHeight()}</span>
         </button>
 
         <NumberInput
-          label="Height"
+          label={m.newDrawing_height()}
           unit="px"
           value={Number(dimension[1])}
           onInput={(value) => {
@@ -137,7 +138,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
           }}
         >
           <RotateCcwIcon class="size-4" />
-          <span class="sr-only">Reset</span>
+          <span class="sr-only">{m.newDrawing_reset()}</span>
         </button>
       </Show>
     </div>

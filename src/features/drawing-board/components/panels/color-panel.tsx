@@ -21,6 +21,7 @@ import type {
   Size,
 } from "../../types";
 import { ColorPicker, FloatingPanel } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 type ColorSettingsPanelsProps = PropsWithContainerRef &
   PropsWithDefaultPosition &
@@ -109,7 +110,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
             <FloatingPanel.Header>
               <FloatingPanel.Title>
                 <GripVerticalIcon />
-                Color Picker
+                {m.colorPicker_title()}
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
@@ -198,7 +199,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
               <Show when={isExpaned()}>
                 <div class="mt-2 space-y-3">
                   <label class="floating-label">
-                    <span class="text-sm">Color format</span>
+                    <span class="text-sm">{m.colorPicker_colorFormat()}</span>
                     <select
                       class="select select-sm uppercase"
                       value={colorFormat()}
@@ -208,7 +209,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                         );
                       }}
                     >
-                      <option disabled>Pick a format</option>
+                      <option disabled>{m.colorPicker_pickFormat()}</option>
                       <Index each={COLOR_FORMATS}>
                         {(format) => (
                           <option value={format()}>
@@ -220,7 +221,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                   </label>
 
                   <label class="floating-label">
-                    <span class="text-sm">Color</span>
+                    <span class="text-sm">{m.colorPicker_color()}</span>
                     <ColorPicker.ChannelInput channel="css" />
                   </label>
                 </div>
@@ -237,14 +238,14 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                         props.setSettings("colors", DEFAULT_COLORS);
                       }}
                     >
-                      Reset
+                      {m.colorPicker_reset()}
                     </button>
                     <button
                       type="button"
                       class="btn btn-soft btn-sm flex-1/2"
                       onClick={handleExpand}
                     >
-                      Show less
+                      {m.colorPicker_showLess()}
                       <ArrowBigUpDash class="size-4" />
                     </button>
                   </div>
@@ -256,7 +257,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                     class="btn btn-soft btn-primary btn-sm"
                     onClick={handleExpand}
                   >
-                    Show more
+                    {m.colorPicker_showMore()}
                     <ArrowBigDownDash class="size-4" />
                   </button>
                 </Match>

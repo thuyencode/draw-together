@@ -10,6 +10,7 @@ import { Portal } from "solid-js/web";
 import { cn } from "../../utils/cn";
 import type { RegisterableHotkey } from "@tanstack/solid-hotkeys";
 import type { ComponentProps, ParentProps } from "solid-js";
+import { m } from "~/paraglide/messages";
 
 interface ModalContextValue {
   id: string;
@@ -132,7 +133,7 @@ function ModalBackdrop(_props: ParentProps<ComponentProps<"form">>) {
 
   return (
     <form method="dialog" class={cn("modal-backdrop", props.class)} {...rest}>
-      <button>close</button>
+      <button>{m.modal_close()}</button>
     </form>
   );
 }

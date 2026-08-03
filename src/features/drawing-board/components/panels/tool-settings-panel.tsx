@@ -9,6 +9,7 @@ import type {
   Size,
 } from "../../types";
 import { FloatingPanel } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 const MIN_WIDTH = 245;
 const MIN_HEIGHT = 230;
@@ -56,7 +57,9 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
             <FloatingPanel.Header>
               <FloatingPanel.Title class="capitalize">
                 <GripVerticalIcon />
-                {normalizeToolName(props.settings.tool)} Settings
+                {m.toolSettings_settings({
+                  tool: normalizeToolName(props.settings.tool),
+                })}
               </FloatingPanel.Title>
 
               <FloatingPanel.Control>
@@ -72,7 +75,9 @@ export function ToolSettingsPanels(props: ToolSettingsPanelsProps) {
 
           <FloatingPanel.Body class="p-2">
             <label class="input">
-              <span class="text-neutral-500">Stroke size</span>
+              <span class="text-neutral-500">
+                {m.toolSettings_strokeSize()}
+              </span>
               <input
                 type="number"
                 class="grow"

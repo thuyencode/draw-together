@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as RoomsIndexRouteImport } from './routes/rooms/index'
 import { Route as RoomsTrialRouteImport } from './routes/rooms/trial'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoomsIndexRoute = RoomsIndexRouteImport.update({
@@ -31,30 +37,34 @@ const RoomsTrialRoute = RoomsTrialRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/$': typeof ApiSplatRoute
   '/rooms/trial': typeof RoomsTrialRoute
   '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/$': typeof ApiSplatRoute
   '/rooms/trial': typeof RoomsTrialRoute
   '/rooms': typeof RoomsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/$': typeof ApiSplatRoute
   '/rooms/trial': typeof RoomsTrialRoute
   '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/rooms/trial' | '/rooms/'
+  fullPaths: '/' | '/api/$' | '/rooms/trial' | '/rooms/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/rooms/trial' | '/rooms'
-  id: '__root__' | '/' | '/rooms/trial' | '/rooms/'
+  to: '/' | '/api/$' | '/rooms/trial' | '/rooms'
+  id: '__root__' | '/' | '/api/$' | '/rooms/trial' | '/rooms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiSplatRoute: typeof ApiSplatRoute
   RoomsTrialRoute: typeof RoomsTrialRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/solid-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rooms/': {
@@ -87,6 +104,7 @@ declare module '@tanstack/solid-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiSplatRoute: ApiSplatRoute,
   RoomsTrialRoute: RoomsTrialRoute,
   RoomsIndexRoute: RoomsIndexRoute,
 }

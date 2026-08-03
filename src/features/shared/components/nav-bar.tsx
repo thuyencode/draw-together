@@ -1,10 +1,11 @@
 import { NavLink } from "./ui";
+import { m } from "~/paraglide/messages";
 
 export function NavBar() {
   return (
     <nav>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/rooms">Room</NavLink>
+      <NavLink to="/">{m.nav_home()}</NavLink>
+      <NavLink to="/rooms">{m.nav_room()}</NavLink>
       {/* @ts-expect-error */}
       <NavLink to="/404">404</NavLink>
     </nav>

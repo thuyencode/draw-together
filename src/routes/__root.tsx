@@ -9,6 +9,8 @@ import { Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
 import { ErrorComponent, Header, NotFound } from "~/features/shared/components";
+import { getLocale } from "~/paraglide/runtime";
+import { m } from "~/paraglide/messages";
 
 export const Route = createRootRouteWithContext()({
   head: () => ({
@@ -22,7 +24,7 @@ export const Route = createRootRouteWithContext()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Draw Together",
+        title: m.app_name(),
       },
       {
         lang: "en",
@@ -36,7 +38,7 @@ export const Route = createRootRouteWithContext()({
 
 function RootComponent() {
   return (
-    <html lang="en">
+    <html lang={getLocale()}>
       <head>
         <HydrationScript />
         <HeadContent />

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/solid-router";
 import { FilePlusCornerIcon } from "lucide-solid";
 import { NewDrawingForm } from "~/features/drawing-board/forms/new-drawing";
 import { Modal } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -10,27 +11,27 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <main class="flex h-full flex-col items-center justify-center gap-5">
-      <h1>Draw Together</h1>
-      <h2 class="font-light">Let's go!</h2>
+      <h1>{m.app_name()}</h1>
+      <h2 class="font-light">{m.home_tagline()}</h2>
 
       <Modal.Provider hotkey="N">
         <Modal.Trigger class="btn-lg btn-primary">
           <FilePlusCornerIcon class="size-5" />
-          Start drawing
+          {m.home_startDrawing()}
           <kbd class="kbd kbd-sm">N</kbd>
         </Modal.Trigger>
         <Modal.Root>
           <Modal.Box class="space-y-3">
             <h2 class="text-center text-lg font-medium">
-              Create a new drawing
+              {m.home_createNewDrawing()}
             </h2>
 
             <NewDrawingForm class="space-y-3">
               <div class="modal-action">
                 <button class="btn btn-primary" type="submit">
-                  Create
+                  {m.home_create()}
                 </button>
-                <Modal.Closer>Close</Modal.Closer>
+                <Modal.Closer>{m.home_close()}</Modal.Closer>
               </div>
             </NewDrawingForm>
           </Modal.Box>

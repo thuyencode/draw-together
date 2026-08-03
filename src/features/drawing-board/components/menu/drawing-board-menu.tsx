@@ -19,6 +19,7 @@ import type { PropsWithSettings, ShapeFill, Tool } from "../../types";
 import type { UseCanvasDragAndZoomReturn } from "../../hooks";
 import { Menu } from "~/features/shared/components/ui/menu";
 import { Modal } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
 
 interface DrawingBoardMenuProps
   extends PropsWithSettings, DrawingBoardDropdownMenuProps {
@@ -56,7 +57,7 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
     <div class="join">
       <NumberInput
         class="input-sm join-item max-w-50"
-        label="Zoom"
+        label={m.menu_zoom()}
         value={Math.round(props.settings.zoom * 100)}
         onInput={(v) => props.onZoomValueChange(() => v / 100)}
         onChange={(v) => props.onZoomValueChange(() => v / 100)}
@@ -71,7 +72,7 @@ function ZoomSettings(props: DrawingBoardMenuProps) {
         noTransparent
         onClick={props.resetZoomValue}
       >
-        <span class="sr-only">Reset zoom level</span>
+        <span class="sr-only">{m.menu_resetZoom()}</span>
         <ZoomResetIcon />
       </ToolButton>
     </div>
@@ -82,7 +83,7 @@ function StrokeSettings(props: PropsWithSettings) {
   return (
     <NumberInput
       class="input-sm max-w-50"
-      label="Stroke size"
+      label={m.menu_strokeSize()}
       value={props.settings.strokeWidth}
       onInput={(v) => props.setSettings("strokeWidth", v)}
       min="1"
@@ -97,7 +98,7 @@ function TextSettings(props: PropsWithSettings) {
     <>
       <NumberInput
         class="input-sm max-w-50"
-        label="Font size"
+        label={m.menu_fontSize()}
         value={props.settings.fontSize}
         onInput={(v) => props.setSettings("fontSize", v)}
         min="1"
@@ -126,7 +127,7 @@ function TextSettings(props: PropsWithSettings) {
           }}
         >
           <BoldIcon />
-          <span class="sr-only">Bold</span>
+          <span class="sr-only">{m.menu_bold()}</span>
         </ToolButton>
 
         <ToolButton
@@ -141,7 +142,7 @@ function TextSettings(props: PropsWithSettings) {
           }}
         >
           <ItalicIcon />
-          <span class="sr-only">Italic</span>
+          <span class="sr-only">{m.menu_italic()}</span>
         </ToolButton>
 
         <ToolButton
@@ -153,7 +154,7 @@ function TextSettings(props: PropsWithSettings) {
           }}
         >
           <UnderlineIcon />
-          <span class="sr-only">Underline</span>
+          <span class="sr-only">{m.menu_underline()}</span>
         </ToolButton>
       </div>
     </>
@@ -175,41 +176,41 @@ function DrawingBoardDropdownMenu(props: DrawingBoardDropdownMenuProps) {
       <Menu.Positioner>
         <Menu.Content class="min-w-60">
           <Menu.ItemGroup id="export">
-            <Menu.ItemGroupLabel>Actions</Menu.ItemGroupLabel>
+            <Menu.ItemGroupLabel>{m.menu_actions()}</Menu.ItemGroupLabel>
             <Menu.Item value="export-png" onSelect={props.onExportAsPng}>
               <DownloadIcon />
-              <Menu.ItemText>Export as PNG</Menu.ItemText>
+              <Menu.ItemText>{m.menu_exportAsPng()}</Menu.ItemText>
             </Menu.Item>
           </Menu.ItemGroup>
 
           <Menu.ItemGroup id="panels">
-            <Menu.ItemGroupLabel>Panels</Menu.ItemGroupLabel>
+            <Menu.ItemGroupLabel>{m.menu_panels()}</Menu.ItemGroupLabel>
             <Menu.Item value="color-picker">
               <PaletteIcon />
-              <Menu.ItemText>Color Picker</Menu.ItemText>
+              <Menu.ItemText>{m.menu_colorPicker()}</Menu.ItemText>
             </Menu.Item>
             <Menu.Item value="tools">
               <WrenchIcon />
-              <Menu.ItemText>Tools</Menu.ItemText>
+              <Menu.ItemText>{m.menu_tools()}</Menu.ItemText>
             </Menu.Item>
           </Menu.ItemGroup>
 
           <Menu.ItemGroup id="links">
-            <Menu.ItemGroupLabel>Helps</Menu.ItemGroupLabel>
+            <Menu.ItemGroupLabel>{m.menu_helps()}</Menu.ItemGroupLabel>
             <Menu.Item value="keyboard-shortcuts" onClick={modal.openModal}>
               <KeyboardIcon />
-              <Menu.ItemText>Keyboard Shortcuts</Menu.ItemText>
+              <Menu.ItemText>{m.menu_keyboardShortcuts()}</Menu.ItemText>
             </Menu.Item>
           </Menu.ItemGroup>
 
           <Menu.ItemGroup id="links">
-            <Menu.ItemGroupLabel>Links</Menu.ItemGroupLabel>
+            <Menu.ItemGroupLabel>{m.menu_links()}</Menu.ItemGroupLabel>
             <Menu.Item
               value="homepage"
               asChild={(props) => (
                 <Link to="/" {...props()}>
                   <HouseIcon />
-                  <Menu.ItemText>Go to Homepage</Menu.ItemText>
+                  <Menu.ItemText>{m.menu_goToHomepage()}</Menu.ItemText>
                 </Link>
               )}
             />
@@ -220,10 +221,10 @@ function DrawingBoardDropdownMenu(props: DrawingBoardDropdownMenuProps) {
   );
 }
 
-const shapeFillOptions: { value: ShapeFill; label: string }[] = [
-  { value: "outline", label: "Outline only" },
-  { value: "solid", label: "Solid fill" },
-  { value: "secondary", label: "Secondary fill" },
+const shapeFillOptions: { value: ShapeFill; label: () => string }[] = [
+  { value: "outline", label: () => m.menu_shapeFillOutline() },
+  { value: "solid", label: () => m.menu_shapeFillSolid() },
+  { value: "secondary", label: () => m.menu_shapeFillSecondary() },
 ];
 
 function ShapeSettings(props: PropsWithSettings) {
@@ -244,7 +245,7 @@ function ShapeSettings(props: PropsWithSettings) {
                 "fill-secondary-content": option().value === "secondary",
               }}
             />
-            <span class="sr-only">{option().label}</span>
+            <span class="sr-only">{option().label()}</span>
           </ToolButton>
         )}
       </Index>
