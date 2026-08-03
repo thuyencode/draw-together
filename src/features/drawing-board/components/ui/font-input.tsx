@@ -106,7 +106,7 @@ export function FontInput(_props: FontInputProps) {
                 <Select.ItemText class="col-span-full">
                   {item().label}
                 </Select.ItemText>
-                <Select.ItemIndicator class="col-span-">
+                <Select.ItemIndicator>
                   <CheckIcon />
                 </Select.ItemIndicator>
               </Select.Item>

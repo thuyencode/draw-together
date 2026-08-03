@@ -14,10 +14,15 @@ export default defineConfig({
     paraglideVitePlugin({
       project: "./project.inlang",
       outdir: "./src/paraglide",
-      emitTsDeclarations: true,
       outputStructure: "message-modules",
       cookieName: "LOCALE",
-      strategy: ["url", "cookie", "preferredLanguage", "baseLocale"],
+      strategy: [
+        "url",
+        "cookie",
+        "preferredLanguage",
+        "baseLocale",
+        "localStorage",
+      ],
       urlPatterns: [
         {
           pattern: "/:path(.*)?",

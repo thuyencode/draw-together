@@ -102,7 +102,7 @@ function SelectContent(_props: BaseSelect.ContentProps) {
   return (
     <BaseSelectContent
       class={cn(
-        "menu bg-base-100 border-neutral/40 rounded-box relative z-[calc(var(--z-index)+var(--layer-index,0))] max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) overflow-y-auto border shadow-md",
+        "menu bg-base-100 border-neutral/20 rounded-box relative z-[calc(var(--z-index)+var(--layer-index,0))] max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) overflow-y-auto border shadow-md",
         "data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
@@ -154,7 +154,10 @@ function SelectItemIndicator(_props: BaseSelect.ItemIndicatorProps) {
 
   return (
     <BaseSelectItemIndicator
-      class={cn("[&_svg]:ml-auto [&_svg]:size-4", props.class)}
+      class={cn(
+        "pointer-events-none [&_svg]:ml-auto [&_svg]:size-4",
+        props.class,
+      )}
       {...rest}
     />
   );
