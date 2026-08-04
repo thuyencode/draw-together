@@ -3,7 +3,7 @@ import { m } from "~/paraglide/messages";
 
 export function NavBar() {
   return (
-    <nav>
+    <nav class="space-x-1">
       <NavLink to="/">{m.nav_home()}</NavLink>
       <NavLink to="/rooms">{m.nav_room()}</NavLink>
       {/* @ts-expect-error */}

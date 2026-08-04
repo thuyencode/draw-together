@@ -33,7 +33,7 @@ function MenuContent(_props: BaseMenu.ContentProps) {
   return (
     <BaseMenuContent
       class={cn(
-        "bg-base-100 rounded-box border-neutral/20 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 border p-1 shadow-lg outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
+        "bg-base-100 rounded-box border-neutral/30 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 border p-1 shadow-lg outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
       {...rest}
@@ -119,7 +119,7 @@ function MenuArrowTip(_props: BaseMenu.ArrowTipProps) {
 
   return (
     <BaseMenuArrowTip
-      class={cn("border-neutral/20 border-t border-l", props.class)}
+      class={cn("border-neutral/30 border-t border-l", props.class)}
       {...rest}
     />
   );
