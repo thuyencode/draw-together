@@ -27,7 +27,7 @@ function FloatingPanelPositioner(_props: FloatingPanelPositionerProps) {
 
   return (
     <BaseFloatingPanelPositioner
-      class={cn("z-50", props.class)}
+      class={cn("has-data-topmost:z-999", props.class)}
       style={isServer ? props.ssrStyle : props.style}
       {...rest}
     />
@@ -40,7 +40,7 @@ function FloatingPanelContent(_props: BaseFloatingPanel.ContentProps) {
   return (
     <BaseFloatingPanelContent
       class={cn(
-        "bg-base-100 border-neutral/30 flex w-full flex-col rounded-lg border shadow-lg outline-none data-behind:opacity-90 data-topmost:z-9999",
+        "bg-base-100 border-base-content/30 flex w-full flex-col rounded-lg border shadow-lg outline-none data-behind:opacity-90",
         props.class,
       )}
       {...rest}
@@ -59,7 +59,7 @@ function FloatingPanelHeader(_props: FloatingPanelHeaderProps) {
     <BaseFloatingPanelHeader
       data-vertical={props.vertical ? "" : undefined}
       class={cn(
-        "group bg-base-200 border-neutral/30 flex cursor-grab items-center gap-1 rounded-t-lg border-b px-3 py-1 active:cursor-grabbing",
+        "group bg-base-200 border-base-content/30 flex cursor-grab items-center gap-1 rounded-t-lg border-b px-3 py-1 active:cursor-grabbing",
         props.vertical ? "flex-col" : "justify-between",
         props.class,
       )}

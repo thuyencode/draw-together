@@ -42,11 +42,7 @@ export function ShapeToolMenu(props: ShapeToolMenuProps) {
         <span class="sr-only">{m.tools_shapes()}</span>
       </ToolButton>
 
-      <Menu.Positioner
-        style={{
-          "--z-index": "9999",
-        }}
-      >
+      <Menu.Positioner>
         <Menu.Content class="min-w-min">
           <Index each={shapes}>
             {(shape) => (

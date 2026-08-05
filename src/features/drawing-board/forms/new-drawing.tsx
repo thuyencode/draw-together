@@ -12,11 +12,13 @@ const defaultValues: NewDrawingOptionsInput = {
   title: "Untitled",
 };
 
-type NewDrawingFormProps = ComponentProps<"form">;
+interface NewDrawingFormProps extends ComponentProps<"form"> {
+  onClose?: () => void;
+}
 
 export function NewDrawingForm(_props: NewDrawingFormProps) {
   const navigate = useNavigate();
-  const [props, rest] = splitProps(_props, ["onSubmit", "children"]);
+  const [props, rest] = splitProps(_props, ["onSubmit", "onClose"]);
   const form = createForm(() => ({
     defaultValues,
     validators: {
@@ -71,7 +73,6 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
           </fieldset>
         )}
       </form.Field>
-
       <form.Field name="dimension">
         {(field) => (
           <fieldset class="fieldset">
@@ -87,7 +88,14 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
         )}
       </form.Field>
 
-      {props.children}
+      <div class="modal-action">
+        <button class="btn btn-primary" type="submit">
+          {m.home_create()}
+        </button>
+        <button class="btn" type="button" onClick={() => props.onClose?.()}>
+          {m.home_close()}
+        </button>
+      </div>
     </form>
   );
 }

@@ -13,7 +13,6 @@ import {
   SelectValueText as BaseSelectValueText,
 } from "@ark-ui/solid/select";
 import { splitProps } from "solid-js";
-import { Portal } from "solid-js/web";
 import { cn } from "../../utils/cn";
 import type { Select as BaseSelect } from "@ark-ui/solid/select";
 
@@ -87,12 +86,10 @@ function SelectPositioner(_props: BaseSelect.PositionerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
-    <Portal>
-      <BaseSelectPositioner
-        class={cn("isolate z-60 outline-none", props.class)}
-        {...rest}
-      />
-    </Portal>
+    <BaseSelectPositioner
+      class={cn("isolate outline-none [--z-index:9999]", props.class)}
+      {...rest}
+    />
   );
 }
 
@@ -102,7 +99,7 @@ function SelectContent(_props: BaseSelect.ContentProps) {
   return (
     <BaseSelectContent
       class={cn(
-        "menu bg-base-100 border-neutral/30 rounded-box relative z-[calc(var(--z-index)+var(--layer-index,0))] max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) overflow-y-auto border shadow-md",
+        "menu bg-base-100 border-base-content/30 rounded-box relative z-[calc(var(--z-index)+var(--layer-index,0))] max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) overflow-y-auto border shadow-md",
         "data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}

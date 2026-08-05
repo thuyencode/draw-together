@@ -1,18 +1,18 @@
 import {
   createContext,
   createUniqueId,
+  onMount,
   splitProps,
   untrack,
   useContext,
 } from "solid-js";
 import { createHotkey } from "@tanstack/solid-hotkeys";
-import { Portal } from "solid-js/web";
 import { cn } from "../../utils/cn";
 import type { RegisterableHotkey } from "@tanstack/solid-hotkeys";
 import type { ComponentProps, ParentProps } from "solid-js";
 import { m } from "~/paraglide/messages";
 
-interface ModalContextValue {
+export interface ModalContextValue {
   id: string;
   openModal: () => void;
   closeModal: () => void;
@@ -22,6 +22,7 @@ const ModalContext = createContext<ModalContextValue | undefined>(undefined);
 
 interface ModalProps extends Pick<Partial<ModalContextValue>, "id"> {
   hotkey?: RegisterableHotkey;
+  ref?: (value: ModalContextValue) => void;
 }
 
 function ModalProvider(props: ParentProps<ModalProps>) {
@@ -50,18 +51,16 @@ function ModalProvider(props: ParentProps<ModalProps>) {
 
   hotkey &&
     createHotkey(hotkey, () => {
-      const currentModal = modal();
-
-      if (currentModal) {
-        if (currentModal.open) {
-          currentModal.close();
-        } else {
-          currentModal.showModal();
-        }
-      } else {
-        console.warn(`Dialog element with id "${id}" not found`);
-      }
+      toggleModal(modal()?.open ? "close" : "open");
     });
+
+  onMount(() => {
+    props.ref?.({
+      id,
+      openModal,
+      closeModal,
+    });
+  });
 
   return (
     <ModalContext.Provider value={{ id, openModal, closeModal }}>
@@ -74,11 +73,7 @@ function ModalRoot(_props: ParentProps<Omit<ComponentProps<"dialog">, "id">>) {
   const [props, rest] = splitProps(_props, ["class"]);
   const modal = useModal();
 
-  return (
-    <Portal>
-      <dialog id={modal.id} class={cn("modal", props.class)} {...rest} />
-    </Portal>
-  );
+  return <dialog id={modal.id} class={cn("modal", props.class)} {...rest} />;
 }
 
 function ModalTrigger(_props: ParentProps<ComponentProps<"button">>) {
@@ -142,7 +137,7 @@ function useModal() {
   const context = useContext(ModalContext);
 
   if (!context) {
-    throw new Error("useModal must be used within a Modal");
+    throw new Error("useModal must be used within a Modal.Provider");
   }
 
   return context;

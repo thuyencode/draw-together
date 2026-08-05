@@ -22,7 +22,7 @@ function MenuPositioner(_props: BaseMenu.PositionerProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <BaseMenuPositioner
-      class={cn("isolate outline-none [--z-index:99]", props.class)}
+      class={cn("isolate outline-none [--z-index:9999]", props.class)}
       {...rest}
     />
   );
@@ -33,7 +33,7 @@ function MenuContent(_props: BaseMenu.ContentProps) {
   return (
     <BaseMenuContent
       class={cn(
-        "bg-base-100 rounded-box border-neutral/30 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 border p-1 shadow-lg outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
+        "bg-base-100 rounded-box border-base-content/30 relative z-[calc(var(--z-index)+var(--layer-index,0))] flex max-h-[min(var(--available-height,300px),300px)] min-w-[max(var(--reference-width),10rem)] origin-(--transform-origin) flex-col gap-0.5 border p-1 shadow-lg outline-none data-[state=closed]:animate-[scale-fade-out_0.1s_ease-in] data-[state=open]:animate-[scale-fade-in_0.15s_ease-out]",
         props.class,
       )}
       {...rest}
@@ -106,7 +106,7 @@ function MenuArrow(_props: BaseMenu.ArrowProps) {
   return (
     <BaseMenuArrow
       class={cn(
-        "-z-1 mb-px [--arrow-background:var(--color-base-100)] [--arrow-shadow-color:color-mix(in_oklab,var(--color-neutral)_30%,transparent)] [--arrow-size:10px]",
+        "-z- mb-px [--arrow-background:var(--color-base-100)] [--arrow-shadow-color:color-mix(in_oklab,var(--color-neutral)_30%,transparent)] [--arrow-size:10px]",
         props.class,
       )}
       {...rest}
@@ -119,7 +119,7 @@ function MenuArrowTip(_props: BaseMenu.ArrowTipProps) {
 
   return (
     <BaseMenuArrowTip
-      class={cn("border-neutral/30 border-t border-l", props.class)}
+      class={cn("border-base-content/30 border-t border-l", props.class)}
       {...rest}
     />
   );

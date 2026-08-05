@@ -1,5 +1,7 @@
 import { Show } from "solid-js";
 import { useLocation } from "@tanstack/solid-router";
+import { MenuIcon } from "lucide-solid";
+import { Drawer } from "./ui";
 import { NavBar } from "./nav-bar";
 import { LocaleSwitcher } from "./locale-switcher";
 
@@ -8,7 +10,10 @@ export function Header() {
 
   return (
     <Show when={!location().pathname.startsWith("/rooms/trial")}>
-      <header class="border-neutral/30 bg-base-100 dark:bg-base-300 fixed inset-x-0 top-0 z-100 mx-auto flex w-full max-w-3xl justify-between border px-4 py-3 shadow backdrop-blur-lg md:top-6 md:rounded-md lg:max-w-5xl">
+      <header class="border-base-content/30 fixed inset-x-0 mx-auto flex max-w-3xl justify-between border-b p-3 shadow md:top-6 md:rounded-md md:border">
+        <Drawer.Trigger class="btn-ghost btn-square sm:hidden">
+          <MenuIcon />
+        </Drawer.Trigger>
         <NavBar />
         <LocaleSwitcher />
       </header>

@@ -43,11 +43,7 @@ export function BrushToolMenu(props: BrushToolMenuProps) {
         <span class="sr-only">{m.tools_brush()}</span>
       </ToolButton>
 
-      <Menu.Positioner
-        style={{
-          "--z-index": "9999",
-        }}
-      >
+      <Menu.Positioner>
         <Menu.Content class="min-w-min">
           <Index each={brushes}>
             {(brush) => (

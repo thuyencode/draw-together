@@ -32,7 +32,7 @@ const strokeRelatedTools: Tool[] = ["brush", "eraser", "shape"];
 
 export function DrawingBoardMenu(props: DrawingBoardMenuProps) {
   return (
-    <div class="bg-base-100 border-neutral/30 flex flex-wrap gap-2 border-b p-2">
+    <div class="bg-base-100 border-base-content/30 flex flex-wrap gap-2 border-b p-2">
       <DrawingBoardDropdownMenu onExportAsPng={props.onExportAsPng} />
 
       <ZoomSettings {...props} />
