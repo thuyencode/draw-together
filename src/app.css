@@ -39,6 +39,18 @@
   }
 }
 
+@layer utilities {
+  .input input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .input input[type="number"]::-webkit-inner-spin-button,
+  .input input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 @keyframes pulse {
   0%,
   100% {

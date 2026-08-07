@@ -11,10 +11,6 @@ type PaperSizeLabel =
   "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "custom";
 
 const paperSizeMap = new Map<PaperSizeLabel, Dimension>([
-  ["A0", [14043, 9933]],
-  ["A1", [9933, 7016]],
-  ["A2", [7016, 4961]],
-  ["A3", [4961, 3508]],
   ["A4", [3508, 2480]],
   ["A5", [2480, 1748]],
   ["A6", [1748, 1240]],
@@ -62,7 +58,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
   });
 
   return (
-    <div class="flex items-center justify-between gap-1">
+    <div class="grid grid-cols-[1fr_auto] items-center gap-1 sm:flex sm:justify-between">
       <Show when={paperSizeLabel() !== "custom"}>
         <select
           class="select w-full"
@@ -98,48 +94,50 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
       </Show>
 
       <Show when={paperSizeLabel() === "custom"}>
-        <NumberInput
-          label={m.newDrawing_width()}
-          unit="px"
-          value={Number(dimension[0])}
-          onInput={(value) => {
-            setDimension(([, height]) => {
-              const next: Dimension = [value, height];
-              props.onInput?.(next);
-              return next;
-            });
-          }}
-        />
+        <div class="contents sm:flex sm:items-center sm:gap-1">
+          <NumberInput
+            label={m.newDrawing_width()}
+            unit="px"
+            value={Number(dimension[0])}
+            onInput={(width) => {
+              setDimension(([, height]) => {
+                const next: Dimension = [width, height];
+                props.onInput?.(next);
+                return next;
+              });
+            }}
+          />
 
-        <button type="button" class="btn btn-ghost btn-square" onClick={swap}>
-          <ArrowLeftRightIcon class="size-4" />
-          <span class="sr-only">{m.newDrawing_swapWidthHeight()}</span>
-        </button>
+          <button type="button" class="btn btn-ghost btn-square" onClick={swap}>
+            <ArrowLeftRightIcon class="size-4" />
+            <span class="sr-only">{m.newDrawing_swapWidthHeight()}</span>
+          </button>
 
-        <NumberInput
-          label={m.newDrawing_height()}
-          unit="px"
-          value={Number(dimension[1])}
-          onInput={(value) => {
-            setDimension(([width]) => {
-              const next: Dimension = [width, value];
-              props.onInput?.(next);
-              return next;
-            });
-          }}
-        />
+          <NumberInput
+            label={m.newDrawing_height()}
+            unit="px"
+            value={Number(dimension[1])}
+            onInput={(height) => {
+              setDimension(([width]) => {
+                const next: Dimension = [width, height];
+                props.onInput?.(next);
+                return next;
+              });
+            }}
+          />
 
-        <button
-          type="button"
-          class="btn btn-ghost btn-square"
-          onClick={() => {
-            setPaperSizeLabel(DEFAULT_LABEL);
-            setDimension(DEFAULT_CUSTOM_SIZE);
-          }}
-        >
-          <RotateCcwIcon class="size-4" />
-          <span class="sr-only">{m.newDrawing_reset()}</span>
-        </button>
+          <button
+            type="button"
+            class="btn btn-ghost btn-square"
+            onClick={() => {
+              setPaperSizeLabel(DEFAULT_LABEL);
+              setDimension(DEFAULT_CUSTOM_SIZE);
+            }}
+          >
+            <RotateCcwIcon class="size-4" />
+            <span class="sr-only">{m.newDrawing_reset()}</span>
+          </button>
+        </div>
       </Show>
     </div>
   );

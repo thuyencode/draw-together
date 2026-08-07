@@ -4,7 +4,6 @@ import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
-import { analyzer, unstableRolldownAdapter } from "vite-bundle-analyzer";
 import lucidePreprocess from "vite-plugin-lucide-preprocess";
 import solid from "vite-plugin-solid";
 import { prerenderRoutes } from "./src/prerender";
@@ -33,7 +32,7 @@ export default defineConfig({
         },
       ],
     }),
-    unstableRolldownAdapter(analyzer({ analyzerMode: "server" })),
+    // unstableRolldownAdapter(analyzer({ analyzerMode: "server" })),
     lucidePreprocess(),
     devtools(),
     tailwindcss(),

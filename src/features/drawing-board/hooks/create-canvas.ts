@@ -18,6 +18,7 @@ export function createCanvas(
     const opts = options?.();
     const canvasInstance = new Canvas(el, {
       enablePointerEvents: true,
+      renderOnAddRemove: false,
       ...opts,
     });
 
