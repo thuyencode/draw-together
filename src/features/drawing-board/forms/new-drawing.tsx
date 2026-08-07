@@ -82,26 +82,30 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
       <form.Field
         name="dimension"
         validators={{
-          onChange: ({ value: [width, height] }) => {
-            const errors: Array<{ message: string }> = [];
+          onChange: ({ value }) => {
+            const errors: { message: string }[] = [];
 
-            const w = Number(width);
-            const h = Number(height);
+            const width = Number(value[0]);
+            const height = Number(value[1]);
 
-            if (w < SIZE_MIN || w > SIZE_MAX) {
+            if (width < SIZE_MIN) {
               errors.push({
-                message:
-                  w < SIZE_MIN
-                    ? m.newDrawing_widthMin({ min: SIZE_MIN })
-                    : m.newDrawing_widthMax({ max: SIZE_MAX }),
+                message: m.newDrawing_widthMin({ min: SIZE_MIN }),
               });
             }
-            if (h < SIZE_MIN || h > SIZE_MAX) {
+            if (width > SIZE_MAX) {
               errors.push({
-                message:
-                  h < SIZE_MIN
-                    ? m.newDrawing_heightMin({ min: SIZE_MIN })
-                    : m.newDrawing_heightMax({ max: SIZE_MAX }),
+                message: m.newDrawing_widthMax({ max: SIZE_MAX }),
+              });
+            }
+            if (height < SIZE_MIN) {
+              errors.push({
+                message: m.newDrawing_heightMin({ min: SIZE_MIN }),
+              });
+            }
+            if (height > SIZE_MAX) {
+              errors.push({
+                message: m.newDrawing_heightMax({ max: SIZE_MAX }),
               });
             }
 
