@@ -1,10 +1,22 @@
 import * as v from "valibot";
+import { m } from "~/paraglide/messages";
 
+export const SIZE_MIN = 500;
+export const SIZE_MAX = 5000;
 export const TITLE_MAX_LENGTH = 200;
 
 const SizeValueSchema = v.union([
-  v.pipe(v.number(), v.minValue(500)),
-  v.pipe(v.string(), v.toNumber(), v.minValue(500)),
+  v.pipe(
+    v.number(),
+    v.minValue(SIZE_MIN, m.newDrawing_sizeMin({ min: SIZE_MIN })),
+    v.maxValue(SIZE_MAX, m.newDrawing_sizeMax({ max: SIZE_MAX })),
+  ),
+  v.pipe(
+    v.string(),
+    v.toNumber(),
+    v.minValue(SIZE_MIN, m.newDrawing_sizeMin({ min: SIZE_MIN })),
+    v.maxValue(SIZE_MAX, m.newDrawing_sizeMax({ max: SIZE_MAX })),
+  ),
 ]);
 
 export const NewDrawingOptionsFormSchema = v.object({
@@ -15,7 +27,13 @@ export const NewDrawingOptionsFormSchema = v.object({
     SizeValueSchema,
   ]),
   title: v.optional(
-    v.pipe(v.string(), v.maxLength(TITLE_MAX_LENGTH)),
+    v.pipe(
+      v.string(),
+      v.maxLength(
+        TITLE_MAX_LENGTH,
+        m.newDrawing_titleMaxLength({ max: TITLE_MAX_LENGTH }),
+      ),
+    ),
     "Untitled",
   ),
 });
@@ -28,7 +46,13 @@ export const NewDrawingOptionsSchema = v.object({
   width: SizeValueSchema,
   height: SizeValueSchema,
   title: v.optional(
-    v.pipe(v.string(), v.maxLength(TITLE_MAX_LENGTH)),
+    v.pipe(
+      v.string(),
+      v.maxLength(
+        TITLE_MAX_LENGTH,
+        m.newDrawing_titleMaxLength({ max: TITLE_MAX_LENGTH }),
+      ),
+    ),
     "Untitled",
   ),
 });

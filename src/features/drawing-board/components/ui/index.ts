@@ -4,3 +4,4 @@ export * from "./font-input";
 export * from "./canvas-skeleton";
 export * from "./canvas-size-input";
 export * from "./text-input";
+export * from "./field-error";

@@ -1,8 +1,13 @@
 import { createForm } from "@tanstack/solid-form";
 import { splitProps } from "solid-js";
 import { useNavigate } from "@tanstack/solid-router";
-import { NewDrawingOptionsFormSchema, TITLE_MAX_LENGTH } from "../schema";
-import { CanvasSizeInput, TextInput } from "../components/ui";
+import {
+  NewDrawingOptionsFormSchema,
+  SIZE_MAX,
+  SIZE_MIN,
+  TITLE_MAX_LENGTH,
+} from "../schema";
+import { CanvasSizeInput, FieldError, TextInput } from "../components/ui";
 import type { NewDrawingOptionsInput } from "../schema";
 import type { ComponentProps } from "solid-js";
 import { m } from "~/paraglide/messages";
@@ -66,24 +71,54 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
               class="w-full"
               value={field().state.value ?? ""}
               onBlur={field().handleBlur}
-              onChange={(v) => field().handleChange(v)}
+              onChange={field().handleChange}
               placeholder={m.newDrawing_untitled()}
               maxLength={TITLE_MAX_LENGTH}
             />
+            <FieldError class="mt-1" errors={field().state.meta.errors} />
           </fieldset>
         )}
       </form.Field>
-      <form.Field name="dimension">
+      <form.Field
+        name="dimension"
+        validators={{
+          onChange: ({ value: [width, height] }) => {
+            const errors: Array<{ message: string }> = [];
+
+            const w = Number(width);
+            const h = Number(height);
+
+            if (w < SIZE_MIN || w > SIZE_MAX) {
+              errors.push({
+                message:
+                  w < SIZE_MIN
+                    ? m.newDrawing_widthMin({ min: SIZE_MIN })
+                    : m.newDrawing_widthMax({ max: SIZE_MAX }),
+              });
+            }
+            if (h < SIZE_MIN || h > SIZE_MAX) {
+              errors.push({
+                message:
+                  h < SIZE_MIN
+                    ? m.newDrawing_heightMin({ min: SIZE_MIN })
+                    : m.newDrawing_heightMax({ max: SIZE_MAX }),
+              });
+            }
+
+            return errors.length ? errors : undefined;
+          },
+        }}
+      >
         {(field) => (
           <fieldset class="fieldset">
             <legend class="label text-sm capitalize">
               {m.newDrawing_dimension()}
             </legend>
-
             <CanvasSizeInput
-              onChange={(v) => field().handleChange(v)}
-              onInput={(v) => field().handleChange(v)}
+              onChange={field().handleChange}
+              onInput={field().handleChange}
             />
+            <FieldError class="mt-1" errors={field().state.meta.errors} />
           </fieldset>
         )}
       </form.Field>
