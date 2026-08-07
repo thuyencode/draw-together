@@ -19,13 +19,15 @@ const SizeValueSchema = v.union([
   ),
 ]);
 
+export const DimensionSchema = v.tuple([
+  // Width
+  SizeValueSchema,
+  // Height
+  SizeValueSchema,
+]);
+
 export const NewDrawingOptionsFormSchema = v.object({
-  dimension: v.tuple([
-    // Width
-    SizeValueSchema,
-    // Height
-    SizeValueSchema,
-  ]),
+  dimension: DimensionSchema,
   title: v.optional(
     v.pipe(
       v.string(),

@@ -2,9 +2,8 @@ import { createForm } from "@tanstack/solid-form";
 import { splitProps } from "solid-js";
 import { useNavigate } from "@tanstack/solid-router";
 import {
+  DimensionSchema,
   NewDrawingOptionsFormSchema,
-  SIZE_MAX,
-  SIZE_MIN,
   TITLE_MAX_LENGTH,
 } from "../schema";
 import { CanvasSizeInput, FieldError, TextInput } from "../components/ui";
@@ -82,35 +81,7 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
       <form.Field
         name="dimension"
         validators={{
-          onChange: ({ value }) => {
-            const errors: { message: string }[] = [];
-
-            const width = Number(value[0]);
-            const height = Number(value[1]);
-
-            if (width < SIZE_MIN) {
-              errors.push({
-                message: m.newDrawing_widthMin({ min: SIZE_MIN }),
-              });
-            }
-            if (width > SIZE_MAX) {
-              errors.push({
-                message: m.newDrawing_widthMax({ max: SIZE_MAX }),
-              });
-            }
-            if (height < SIZE_MIN) {
-              errors.push({
-                message: m.newDrawing_heightMin({ min: SIZE_MIN }),
-              });
-            }
-            if (height > SIZE_MAX) {
-              errors.push({
-                message: m.newDrawing_heightMax({ max: SIZE_MAX }),
-              });
-            }
-
-            return errors.length ? errors : undefined;
-          },
+          onChange: DimensionSchema,
         }}
       >
         {(field) => (
