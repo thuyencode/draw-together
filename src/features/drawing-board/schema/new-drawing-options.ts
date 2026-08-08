@@ -8,14 +8,14 @@ export const TITLE_MAX_LENGTH = 200;
 const SizeValueSchema = v.union([
   v.pipe(
     v.number(),
-    v.minValue(SIZE_MIN, m.newDrawing_sizeMin({ min: SIZE_MIN })),
-    v.maxValue(SIZE_MAX, m.newDrawing_sizeMax({ max: SIZE_MAX })),
+    v.minValue(SIZE_MIN, () => m.newDrawing_sizeMin({ min: SIZE_MIN })),
+    v.maxValue(SIZE_MAX, () => m.newDrawing_sizeMax({ max: SIZE_MAX })),
   ),
   v.pipe(
     v.string(),
     v.toNumber(),
-    v.minValue(SIZE_MIN, m.newDrawing_sizeMin({ min: SIZE_MIN })),
-    v.maxValue(SIZE_MAX, m.newDrawing_sizeMax({ max: SIZE_MAX })),
+    v.minValue(SIZE_MIN, () => m.newDrawing_sizeMin({ min: SIZE_MIN })),
+    v.maxValue(SIZE_MAX, () => m.newDrawing_sizeMax({ max: SIZE_MAX })),
   ),
 ]);
 
@@ -31,8 +31,7 @@ export const NewDrawingOptionsFormSchema = v.object({
   title: v.optional(
     v.pipe(
       v.string(),
-      v.maxLength(
-        TITLE_MAX_LENGTH,
+      v.maxLength(TITLE_MAX_LENGTH, () =>
         m.newDrawing_titleMaxLength({ max: TITLE_MAX_LENGTH }),
       ),
     ),
@@ -50,8 +49,7 @@ export const NewDrawingOptionsSchema = v.object({
   title: v.optional(
     v.pipe(
       v.string(),
-      v.maxLength(
-        TITLE_MAX_LENGTH,
+      v.maxLength(TITLE_MAX_LENGTH, () =>
         m.newDrawing_titleMaxLength({ max: TITLE_MAX_LENGTH }),
       ),
     ),

@@ -6,9 +6,7 @@ import type { NewDrawingOptionsInput } from "../../schema";
 import { m } from "~/paraglide/messages";
 
 type Dimension = NewDrawingOptionsInput["dimension"];
-
-type PaperSizeLabel =
-  "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "custom";
+type PaperSizeLabel = "A4" | "A5" | "A6" | "A7" | "A8" | "custom";
 
 const paperSizeMap = new Map<PaperSizeLabel, Dimension>([
   ["A4", [3508, 2480]],
