@@ -14,9 +14,16 @@
     "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"],
-      "fabricjs-psbrush": ["./fabricjs-psbrush/lib"]
-    }
+      "fabricjs-psbrush": ["./fabricjs-psbrush/lib"],
+    },
   },
   "exclude": ["fabricjs-psbrush/**/*"],
-  "include": ["vite.config.ts", "eslint.config.ts", "fabric.d.ts", "src/**/*"]
+  "include": [
+    "vite.config.ts",
+    "eslint.config.ts",
+    "fabric.d.ts",
+    "vite-env.d.ts",
+    "env.d.ts",
+    "src/**/*",
+  ],
 }

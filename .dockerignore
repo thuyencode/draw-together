@@ -1,0 +1,66 @@
+# Dependencies
+node_modules
+
+# Docker files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Git
+**/.git/
+**/.git-crypt/
+**/.git-rewrite/
+.git-blame-ignore-revs
+.gitattributes
+.gitconfig
+.gitcredentials
+.gitkeep
+.gitmodules
+.gitreview
+
+# Docs files
+*.md
+LICENSE
+Makefile
+
+# Docs directory (not needed for build)
+docs/
+
+# Env file
+.env*
+
+# IDEs and editors
+.zed
+.vscode
+.editorconfig
+.idea
+.project
+.classpath
+*.launch
+.settings
+
+# Formatter and linter configs
+.prettier*
+eslint.*
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Build Artifacts
+**/.output/
+
+# Tests
+**/*.test.*
+**/*.spec.*
+
+# Coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temp files
+*.tmp
+*.temp

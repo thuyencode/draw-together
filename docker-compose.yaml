@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mongodb/mongodb-community-server:latest-slim
+    container_name: draw-together-db
+    restart: unless-stopped
+    environment:
+      MONGODB_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGODB_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+
+  app:
+    container_name: draw-together-app
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      DB_URL: ${DB_URL}
+    ports:
+      - 3000:3000
+    volumes:
+      - app_data:/app/uploads
+    depends_on:
+      - db
+
+volumes:
+  mongodb_data:
+    driver: local
+  app_data:
+    driver: local
