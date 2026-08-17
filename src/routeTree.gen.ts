@@ -9,22 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as NavbarLayoutRouteRouteImport } from './routes/_navbar-layout/route'
 import { Route as TrialRouteImport } from './routes/trial'
+import { Route as NavbarLayoutIndexRouteImport } from './routes/_navbar-layout/index'
+import { Route as NavbarLayoutAuthRouteRouteImport } from './routes/_navbar-layout/auth/route'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
-import { Route as RoomsIndexRouteImport } from './routes/rooms/index'
+import { Route as NavbarLayoutAuthLoginRouteImport } from './routes/_navbar-layout/auth/login'
+import { Route as NavbarLayoutAuthSignUpRouteImport } from './routes/_navbar-layout/auth/sign-up'
+import { Route as NavbarLayoutRoomsIndexRouteImport } from './routes/_navbar-layout/rooms/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const NavbarLayoutRouteRoute = NavbarLayoutRouteRouteImport.update({
+  id: '/_navbar-layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrialRoute = TrialRouteImport.update({
@@ -32,107 +27,110 @@ const TrialRoute = TrialRouteImport.update({
   path: '/trial',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NavbarLayoutIndexRoute = NavbarLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NavbarLayoutRouteRoute,
+} as any)
+const NavbarLayoutAuthRouteRoute = NavbarLayoutAuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => NavbarLayoutRouteRoute,
+} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
+const NavbarLayoutAuthLoginRoute = NavbarLayoutAuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => NavbarLayoutAuthRouteRoute,
 } as any)
-const AuthSignUpRoute = AuthSignUpRouteImport.update({
+const NavbarLayoutAuthSignUpRoute = NavbarLayoutAuthSignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => NavbarLayoutAuthRouteRoute,
 } as any)
-const RoomsIndexRoute = RoomsIndexRouteImport.update({
+const NavbarLayoutRoomsIndexRoute = NavbarLayoutRoomsIndexRouteImport.update({
   id: '/rooms/',
   path: '/rooms/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => NavbarLayoutRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRouteWithChildren
+  '/': typeof NavbarLayoutIndexRoute
   '/trial': typeof TrialRoute
+  '/auth': typeof NavbarLayoutAuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/sign-up': typeof AuthSignUpRoute
-  '/rooms/': typeof RoomsIndexRoute
+  '/auth/login': typeof NavbarLayoutAuthLoginRoute
+  '/auth/sign-up': typeof NavbarLayoutAuthSignUpRoute
+  '/rooms/': typeof NavbarLayoutRoomsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRouteWithChildren
   '/trial': typeof TrialRoute
+  '/auth': typeof NavbarLayoutAuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/sign-up': typeof AuthSignUpRoute
-  '/rooms': typeof RoomsIndexRoute
+  '/': typeof NavbarLayoutIndexRoute
+  '/auth/login': typeof NavbarLayoutAuthLoginRoute
+  '/auth/sign-up': typeof NavbarLayoutAuthSignUpRoute
+  '/rooms': typeof NavbarLayoutRoomsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRouteWithChildren
+  '/_navbar-layout': typeof NavbarLayoutRouteRouteWithChildren
   '/trial': typeof TrialRoute
+  '/_navbar-layout/auth': typeof NavbarLayoutAuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/sign-up': typeof AuthSignUpRoute
-  '/rooms/': typeof RoomsIndexRoute
+  '/_navbar-layout/': typeof NavbarLayoutIndexRoute
+  '/_navbar-layout/auth/login': typeof NavbarLayoutAuthLoginRoute
+  '/_navbar-layout/auth/sign-up': typeof NavbarLayoutAuthSignUpRoute
+  '/_navbar-layout/rooms/': typeof NavbarLayoutRoomsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
     | '/trial'
+    | '/auth'
     | '/api/$'
     | '/auth/login'
     | '/auth/sign-up'
     | '/rooms/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/auth'
     | '/trial'
+    | '/auth'
     | '/api/$'
+    | '/'
     | '/auth/login'
     | '/auth/sign-up'
     | '/rooms'
   id:
     | '__root__'
-    | '/'
-    | '/auth'
+    | '/_navbar-layout'
     | '/trial'
+    | '/_navbar-layout/auth'
     | '/api/$'
-    | '/auth/login'
-    | '/auth/sign-up'
-    | '/rooms/'
+    | '/_navbar-layout/'
+    | '/_navbar-layout/auth/login'
+    | '/_navbar-layout/auth/sign-up'
+    | '/_navbar-layout/rooms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  NavbarLayoutRouteRoute: typeof NavbarLayoutRouteRouteWithChildren
   TrialRoute: typeof TrialRoute
   ApiSplatRoute: typeof ApiSplatRoute
-  RoomsIndexRoute: typeof RoomsIndexRoute
 }
 
 declare module '@tanstack/solid-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_navbar-layout': {
+      id: '/_navbar-layout'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteRouteImport
+      preLoaderRoute: typeof NavbarLayoutRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/trial': {
@@ -142,6 +140,20 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof TrialRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_navbar-layout/': {
+      id: '/_navbar-layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof NavbarLayoutIndexRouteImport
+      parentRoute: typeof NavbarLayoutRouteRoute
+    }
+    '/_navbar-layout/auth': {
+      id: '/_navbar-layout/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof NavbarLayoutAuthRouteRouteImport
+      parentRoute: typeof NavbarLayoutRouteRoute
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -149,50 +161,64 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/login': {
-      id: '/auth/login'
+    '/_navbar-layout/auth/login': {
+      id: '/_navbar-layout/auth/login'
       path: '/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof NavbarLayoutAuthLoginRouteImport
+      parentRoute: typeof NavbarLayoutAuthRouteRoute
     }
-    '/auth/sign-up': {
-      id: '/auth/sign-up'
+    '/_navbar-layout/auth/sign-up': {
+      id: '/_navbar-layout/auth/sign-up'
       path: '/sign-up'
       fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof AuthSignUpRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof NavbarLayoutAuthSignUpRouteImport
+      parentRoute: typeof NavbarLayoutAuthRouteRoute
     }
-    '/rooms/': {
-      id: '/rooms/'
+    '/_navbar-layout/rooms/': {
+      id: '/_navbar-layout/rooms/'
       path: '/rooms'
       fullPath: '/rooms/'
-      preLoaderRoute: typeof RoomsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof NavbarLayoutRoomsIndexRouteImport
+      parentRoute: typeof NavbarLayoutRouteRoute
     }
   }
 }
 
-interface AuthRouteRouteChildren {
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthSignUpRoute: typeof AuthSignUpRoute
+interface NavbarLayoutAuthRouteRouteChildren {
+  NavbarLayoutAuthLoginRoute: typeof NavbarLayoutAuthLoginRoute
+  NavbarLayoutAuthSignUpRoute: typeof NavbarLayoutAuthSignUpRoute
 }
 
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthLoginRoute: AuthLoginRoute,
-  AuthSignUpRoute: AuthSignUpRoute,
+const NavbarLayoutAuthRouteRouteChildren: NavbarLayoutAuthRouteRouteChildren = {
+  NavbarLayoutAuthLoginRoute: NavbarLayoutAuthLoginRoute,
+  NavbarLayoutAuthSignUpRoute: NavbarLayoutAuthSignUpRoute,
 }
 
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
+const NavbarLayoutAuthRouteRouteWithChildren =
+  NavbarLayoutAuthRouteRoute._addFileChildren(
+    NavbarLayoutAuthRouteRouteChildren,
+  )
+
+interface NavbarLayoutRouteRouteChildren {
+  NavbarLayoutAuthRouteRoute: typeof NavbarLayoutAuthRouteRouteWithChildren
+  NavbarLayoutIndexRoute: typeof NavbarLayoutIndexRoute
+  NavbarLayoutRoomsIndexRoute: typeof NavbarLayoutRoomsIndexRoute
+}
+
+const NavbarLayoutRouteRouteChildren: NavbarLayoutRouteRouteChildren = {
+  NavbarLayoutAuthRouteRoute: NavbarLayoutAuthRouteRouteWithChildren,
+  NavbarLayoutIndexRoute: NavbarLayoutIndexRoute,
+  NavbarLayoutRoomsIndexRoute: NavbarLayoutRoomsIndexRoute,
+}
+
+const NavbarLayoutRouteRouteWithChildren =
+  NavbarLayoutRouteRoute._addFileChildren(NavbarLayoutRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthRouteRoute: AuthRouteRouteWithChildren,
+  NavbarLayoutRouteRoute: NavbarLayoutRouteRouteWithChildren,
   TrialRoute: TrialRoute,
   ApiSplatRoute: ApiSplatRoute,
-  RoomsIndexRoute: RoomsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

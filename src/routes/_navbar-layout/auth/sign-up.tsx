@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/solid-router";
 import { SignUpForm } from "~/features/auth/forms";
 import { m } from "~/paraglide/messages";
 
-export const Route = createFileRoute("/auth/sign-up")({
+export const Route = createFileRoute("/_navbar-layout/auth/sign-up")({
   component: SignUpPage,
 });
 

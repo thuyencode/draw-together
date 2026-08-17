@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/solid-router";
 import { getSession } from "~/features/auth/functions";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/_navbar-layout/auth")({
   beforeLoad: async ({ location }) => {
     const session = await getSession();
 

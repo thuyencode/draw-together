@@ -6,7 +6,7 @@ import { NewDrawingForm } from "~/features/drawing-board/forms";
 import { Modal } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_navbar-layout/")({
   component: HomePage,
 });
 

@@ -5,14 +5,11 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from "@tanstack/solid-router";
-import { ErrorBoundary, Suspense } from "solid-js";
+import { ErrorBoundary } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
-import { Drawer } from "~/features/shared/components/ui";
 import {
   ErrorComponent,
-  Header,
-  MobileNavbar,
   NotFound,
   errorBoundaryFallBackProp,
 } from "~/features/shared/components";
@@ -40,14 +37,14 @@ export const Route = createRootRouteWithContext()({
   }),
   shellComponent: () => (
     <ErrorBoundary fallback={errorBoundaryFallBackProp}>
-      <RootComponent />
+      <RootLayout />
     </ErrorBoundary>
   ),
   notFoundComponent: NotFound,
   errorComponent: ErrorComponent,
 });
 
-function RootComponent() {
+function RootLayout() {
   return (
     <html lang={getLocale()}>
       <head>
@@ -55,20 +52,7 @@ function RootComponent() {
         <HeadContent />
       </head>
       <body class="bg-base-300 h-dvh min-h-dvh">
-        <Drawer.Provider>
-          <Drawer.Root class="drawer-end">
-            <Drawer.Content class="flex min-h-dvh flex-col">
-              <Header />
-              <Suspense>
-                <Outlet />
-              </Suspense>
-            </Drawer.Content>
-            <Drawer.Side class="sm:hidden">
-              <Drawer.Overlay />
-              <MobileNavbar />
-            </Drawer.Side>
-          </Drawer.Root>
-        </Drawer.Provider>
+        <Outlet />
         <Scripts />
       </body>
     </html>
