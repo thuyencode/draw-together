@@ -11,11 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as TrialRouteImport } from './routes/trial'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as RoomsIndexRouteImport } from './routes/rooms/index'
-import { Route as RoomsTrialRouteImport } from './routes/rooms/trial'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -25,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrialRoute = TrialRouteImport.update({
+  id: '/trial',
+  path: '/trial',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
@@ -47,38 +52,33 @@ const RoomsIndexRoute = RoomsIndexRouteImport.update({
   path: '/rooms/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RoomsTrialRoute = RoomsTrialRouteImport.update({
-  id: '/rooms/trial',
-  path: '/rooms/trial',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/trial': typeof TrialRoute
   '/api/$': typeof ApiSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/rooms/trial': typeof RoomsTrialRoute
   '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/trial': typeof TrialRoute
   '/api/$': typeof ApiSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/rooms/trial': typeof RoomsTrialRoute
   '/rooms': typeof RoomsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/trial': typeof TrialRoute
   '/api/$': typeof ApiSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/rooms/trial': typeof RoomsTrialRoute
   '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRouteTypes {
@@ -86,36 +86,36 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/trial'
     | '/api/$'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/rooms/trial'
     | '/rooms/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/trial'
     | '/api/$'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/rooms/trial'
     | '/rooms'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/trial'
     | '/api/$'
     | '/auth/login'
     | '/auth/sign-up'
-    | '/rooms/trial'
     | '/rooms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  TrialRoute: typeof TrialRoute
   ApiSplatRoute: typeof ApiSplatRoute
-  RoomsTrialRoute: typeof RoomsTrialRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
 }
 
@@ -133,6 +133,13 @@ declare module '@tanstack/solid-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trial': {
+      id: '/trial'
+      path: '/trial'
+      fullPath: '/trial'
+      preLoaderRoute: typeof TrialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/$': {
@@ -163,13 +170,6 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof RoomsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rooms/trial': {
-      id: '/rooms/trial'
-      path: '/rooms/trial'
-      fullPath: '/rooms/trial'
-      preLoaderRoute: typeof RoomsTrialRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -190,8 +190,8 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  TrialRoute: TrialRoute,
   ApiSplatRoute: ApiSplatRoute,
-  RoomsTrialRoute: RoomsTrialRoute,
   RoomsIndexRoute: RoomsIndexRoute,
 }
 export const routeTree = rootRouteImport

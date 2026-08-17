@@ -2,7 +2,7 @@ import { locales, localizeHref } from "./paraglide/runtime";
 import type { FileRouteTypes } from "./routeTree.gen";
 
 /**
- * Static routes that can be prerendered. Dynamic routes (e.g. `/rooms/trial`
+ * Static routes that can be prerendered. Dynamic routes (e.g. `/trial`
  * which reads search params) and API routes are intentionally excluded.
  */
 const staticRoutes: FileRouteTypes["fullPaths"][] = [

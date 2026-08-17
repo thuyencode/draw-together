@@ -36,7 +36,7 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
         title,
       } = data.value;
       navigate({
-        to: "/rooms/trial",
+        to: "/trial",
         search: { width, height, title },
       });
     },

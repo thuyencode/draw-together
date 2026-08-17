@@ -7,20 +7,6 @@ import {
 } from "./constants";
 import { m } from "~/paraglide/messages";
 
-const EmailSchema = v.pipe(v.string(), v.trim(), v.email());
-
-const UsernameSchema = v.pipe(
-  v.string(),
-  v.trim(),
-  v.regex(/^\S*$/, () => m.auth_usernameNoWhitespace()),
-  v.minLength(USERNAME_MIN_LENGTH, () =>
-    m.auth_usernameMinLength({ min: USERNAME_MIN_LENGTH }),
-  ),
-  v.maxLength(USERNAME_MAX_LENGTH, () =>
-    m.auth_usernameMaxLength({ max: USERNAME_MAX_LENGTH }),
-  ),
-);
-
 export const PasswordSchema = v.pipe(
   v.string(),
   v.regex(/[a-z]/, () => m.auth_passwordLowercase()),
@@ -36,7 +22,7 @@ export const PasswordSchema = v.pipe(
 );
 
 export const LoginFormSchema = v.object({
-  email: EmailSchema,
+  email: v.pipe(v.string(), v.trim(), v.email()),
   password: PasswordSchema,
 });
 
@@ -48,8 +34,17 @@ export const SignUpFormSchema = v.pipe(
       v.trim(),
       v.nonEmpty(() => m.auth_nameRequired()),
     ),
-    email: EmailSchema,
-    username: UsernameSchema,
+    username: v.pipe(
+      v.string(),
+      v.trim(),
+      v.regex(/^\S*$/, () => m.auth_usernameNoWhitespace()),
+      v.minLength(USERNAME_MIN_LENGTH, () =>
+        m.auth_usernameMinLength({ min: USERNAME_MIN_LENGTH }),
+      ),
+      v.maxLength(USERNAME_MAX_LENGTH, () =>
+        m.auth_usernameMaxLength({ max: USERNAME_MAX_LENGTH }),
+      ),
+    ),
     confirmPassword: PasswordSchema,
   }),
   v.forward(
