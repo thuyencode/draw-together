@@ -54,7 +54,7 @@ function RootComponent() {
         <HydrationScript />
         <HeadContent />
       </head>
-      <body class="h-dvh min-h-dvh">
+      <body class="bg-base-300 h-dvh min-h-dvh">
         <Drawer.Provider>
           <Drawer.Root class="drawer-end">
             <Drawer.Content class="flex min-h-dvh flex-col">

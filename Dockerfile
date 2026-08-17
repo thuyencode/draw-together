@@ -1,34 +1,56 @@
-# Stage 1: Build
-FROM oven/bun:slim AS builder
+ARG ALPINE_VERSION=3.24
+
+# Stage 1: Install dependencies (Bun as package manager only)
+FROM oven/bun:slim AS install
+
+# install dependencies into temp directory
+# this will cache them and speed up future builds
+RUN mkdir -p /temp/dev
+
+COPY package.json /temp/dev
+COPY bun.lock /temp/dev
+
+RUN cd /temp/dev && bun install --frozen-lockfile
+
+# Stage 2: Build
+FROM node:26.7.0-alpine${ALPINE_VERSION} AS builder
+
+RUN mkdir -p /temp/prod
+
+COPY . /temp/prod
+COPY --from=install /temp/dev/node_modules /temp/prod/node_modules
+
+# Build-time env vars (Vite reads these during build)
+ARG VITE_PUBLIC_URL
+ENV VITE_PUBLIC_URL=$VITE_PUBLIC_URL
+
+RUN cd /temp/prod && npm run build
+
+# Stage 3: Runtime (fresh minimal image, Node only)
+FROM alpine:${ALPINE_VERSION} AS release
 
 WORKDIR /app
 
-# Cache packages installation
-COPY package.json ./
-COPY bun.lock ./
+# Add required binaries
+RUN apk add --no-cache libstdc++ dumb-init \
+    && addgroup -g 1000 node && adduser -u 1000 -G node -s /bin/sh -D node \
+    && chown node:node ./
 
-# Install dependencies
-RUN --mount=type=cache,target=~/.bun/install/cache \
-  bun install --frozen-lockfile
+COPY --from=builder /usr/local/bin/node /usr/local/bin/
+COPY --from=builder /usr/local/bin/docker-entrypoint.sh /usr/local/bin/
 
-# Copy source code
-COPY . .
+ENTRYPOINT ["docker-entrypoint.sh"]
 
-# Build the application
-RUN bun run build
+USER node
 
-# Stage 2: Run
-FROM oven/bun:distroless AS runtime
+# Uploads dir is mounted as a volume in docker-compose
+RUN mkdir -p /app/uploads && chown -R node:node /app/uploads
 
-WORKDIR /app
+COPY --from=builder --chown=node:node /temp/prod/.output ./.output
 
-# Copy built output from the build stage
-COPY --from=builder /app/.output ./.output
-
-# Copy package.json so bun can resolve the scripts
-COPY --from=builder /app/package.json ./package.json
-
-# Expose the configured port
 EXPOSE 3000
 
-CMD ["bun", "run", "start"]
+ENV NODE_ENV=production
+
+# Run with dumb-init to not start node with PID=1, since Node.js was not designed to run as PID 1
+CMD ["dumb-init", "node", ".output/server/index.mjs"]

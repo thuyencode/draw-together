@@ -6,10 +6,12 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import lucidePreprocess from "vite-plugin-lucide-preprocess";
 import solid from "vite-plugin-solid";
+import { ValidateEnv } from "@julr/vite-plugin-validate-env";
 import { prerenderRoutes } from "./src/prerender";
 
 export default defineConfig({
   plugins: [
+    ValidateEnv({ configFile: "./src/configs/env/env" }),
     paraglideVitePlugin({
       project: "./project.inlang",
       outdir: "./src/paraglide",
@@ -48,7 +50,6 @@ export default defineConfig({
     }),
     solid({ ssr: true }),
     nitro({
-      preset: "bun",
       compressPublicAssets: true,
     }),
   ],

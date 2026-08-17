@@ -73,6 +73,7 @@
   "notFound_alt": "Không tìm thấy",
   "font_selectFont": "Chọn phông chữ",
   "modal_close": "Đóng",
+  "drawer_closeSidebar": "Đóng thanh bên",
   "localeSwitcher_language": [
     {
       "match": {
@@ -81,5 +82,33 @@
       }
     }
   ],
+  "auth_logIn": "Đăng nhập",
+  "auth_loggingIn": "Đang đăng nhập",
+  "auth_signUp": "Đăng ký",
+  "auth_signingIn": "Đang đăng ký",
+  "auth_reset": "Đặt lại",
+  "auth_dontHaveAccount": "Chưa có tài khoản? Đăng ký",
+  "auth_alreadyHaveAccount": "Đã có tài khoản? Đăng nhập",
+  "auth_fakeNameOk": "Tên giả cũng được",
+  "auth_fakeEmailOk": "Email giả cũng được",
+  "auth_confirmPassword": "Xác nhận mật khẩu",
+  "auth_passwordsDoNotMatch": "Mật khẩu không khớp",
+  "auth_showPassword": "Hiện mật khẩu",
+  "auth_hidePassword": "Ẩn mật khẩu",
+  "auth_fieldEmail": "Email",
+  "auth_fieldPassword": "Mật khẩu",
+  "auth_fieldName": "Tên",
+  "auth_nameRequired": "Vui lòng nhập tên",
+  "auth_fieldUsername": "Tên người dùng",
+  "auth_usernameNoWhitespace": "Tên người dùng không được chứa khoảng trắng",
+  "auth_usernameMinLength": "Tên người dùng phải dài tối thiểu {min} ký tự.",
+  "auth_usernameMaxLength": "Tên người dùng phải dài tối đa {max} ký tự.",
+  "auth_passwordLowercase": "Mật khẩu phải chứa ít nhất một chữ thường.",
+  "auth_passwordUppercase": "Mật khẩu phải chứa ít nhất một chữ hoa.",
+  "auth_passwordNumber": "Mật khẩu phải chứa ít nhất một chữ số.",
+  "auth_passwordSpecial": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+  "auth_passwordMinLength": "Mật khẩu phải dài tối thiểu {min} ký tự.",
+  "auth_passwordMaxLength": "Mật khẩu phải dài tối đa {max} ký tự.",
+  "auth_passwordsDoNotMatchError": "Hai mật khẩu không khớp.",
   "shortcuts": "[\n  \\{\"id\":\"deleteObject\",\"hotkey\":\"Delete\",\"description\":\"Xóa (các) đối tượng đã chọn\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"editText\",\"hotkey\":\"Enter\",\"description\":\"Chỉnh sửa văn bản đã chọn\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"swapColors\",\"hotkey\":\"Shift+X\",\"description\":\"Hoán đổi màu chính/phụ\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"selectAll\",\"hotkey\":\"Mod+A\",\"description\":\"Chọn tất cả đối tượng\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"undo\",\"hotkey\":\"Mod+Z\",\"description\":\"Hoàn tác\",\"category\":\"History\"\\},\n  \\{\"id\":\"redo\",\"hotkey\":\"Mod+Shift+Z\",\"description\":\"Làm lại\",\"category\":\"History\"\\},\n  \\{\"id\":\"resetCanvas\",\"hotkey\":\"Mod+Delete\",\"description\":\"Đặt lại canvas\",\"category\":\"History\"\\},\n  \\{\"id\":\"resetZoom\",\"hotkey\":\"Mod+0\",\"description\":\"Đặt lại zoom về 100%\",\"category\":\"View\"\\},\n  \\{\"id\":\"fitToView\",\"hotkey\":\"Mod+1\",\"description\":\"Vừa canvas với khung nhìn\",\"category\":\"View\"\\},\n  \\{\"id\":\"toggleShortcuts\",\"hotkey\":\"H\",\"description\":\"Bật/tắt cửa sổ phím tắt\",\"category\":\"View\"\\},\n  \\{\"id\":\"exportAsPng\",\"hotkey\":\"Mod+S\",\"description\":\"Xuất PNG\",\"category\":\"Export\"\\},\n  \\{\"id\":\"addToSelection\",\"hotkey\":\"Shift\",\"description\":\"Thêm vào vùng chọn\",\"action\":\"click\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"constrainProportions\",\"hotkey\":\"Shift\",\"description\":\"Giữ tỷ lệ khi thay đổi kích thước\",\"action\":\"drag\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"scaleFromCenter\",\"hotkey\":\"Alt\",\"description\":\"Phóng to từ tâm\",\"action\":\"drag\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"exitTextEditing\",\"hotkey\":\"Escape\",\"description\":\"Thoát chỉnh sửa văn bản / bỏ chọn\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"newLineInText\",\"hotkey\":\"Enter\",\"description\":\"Xuống dòng trong đối tượng văn bản\",\"category\":\"Canvas (built-in)\"\\}\n]"
 }

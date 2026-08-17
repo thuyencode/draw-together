@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as RoomsIndexRouteImport } from './routes/rooms/index'
 import { Route as RoomsTrialRouteImport } from './routes/rooms/trial'
 
@@ -19,10 +22,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const RoomsIndexRoute = RoomsIndexRouteImport.update({
   id: '/rooms/',
@@ -37,33 +55,65 @@ const RoomsTrialRoute = RoomsTrialRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/rooms/trial': typeof RoomsTrialRoute
   '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/rooms/trial': typeof RoomsTrialRoute
   '/rooms': typeof RoomsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/rooms/trial': typeof RoomsTrialRoute
   '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/$' | '/rooms/trial' | '/rooms/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/api/$'
+    | '/auth/login'
+    | '/auth/sign-up'
+    | '/rooms/trial'
+    | '/rooms/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/$' | '/rooms/trial' | '/rooms'
-  id: '__root__' | '/' | '/api/$' | '/rooms/trial' | '/rooms/'
+  to:
+    | '/'
+    | '/auth'
+    | '/api/$'
+    | '/auth/login'
+    | '/auth/sign-up'
+    | '/rooms/trial'
+    | '/rooms'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/api/$'
+    | '/auth/login'
+    | '/auth/sign-up'
+    | '/rooms/trial'
+    | '/rooms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
   RoomsTrialRoute: typeof RoomsTrialRoute
   RoomsIndexRoute: typeof RoomsIndexRoute
@@ -78,12 +128,33 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
       fullPath: '/api/$'
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/rooms/': {
       id: '/rooms/'
@@ -102,8 +173,23 @@ declare module '@tanstack/solid-router' {
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
   RoomsTrialRoute: RoomsTrialRoute,
   RoomsIndexRoute: RoomsIndexRoute,

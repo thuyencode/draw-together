@@ -6,9 +6,10 @@ import {
   NewDrawingOptionsFormSchema,
   TITLE_MAX_LENGTH,
 } from "../schema";
-import { CanvasSizeInput, FieldError, TextInput } from "../components/ui";
+import { CanvasSizeInput } from "../components/ui";
 import type { NewDrawingOptionsInput } from "../schema";
 import type { ComponentProps } from "solid-js";
+import { FieldError, TextInput } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
 
 const defaultValues: NewDrawingOptionsInput = {
@@ -74,7 +75,7 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
               placeholder={m.newDrawing_untitled()}
               maxLength={TITLE_MAX_LENGTH}
             />
-            <FieldError class="mt-1" errors={field().state.meta.errors} />
+            <FieldError errors={field().state.meta.errors} />
           </fieldset>
         )}
       </form.Field>
@@ -93,7 +94,7 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
               onChange={field().handleChange}
               onInput={field().handleChange}
             />
-            <FieldError class="mt-1" errors={field().state.meta.errors} />
+            <FieldError errors={field().state.meta.errors} />
           </fieldset>
         )}
       </form.Field>

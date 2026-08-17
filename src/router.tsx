@@ -1,12 +1,16 @@
 import { createRouter as createTanStackRouter } from "@tanstack/solid-router";
-import { getContext } from "./integrations/tanstack-query/provider";
+import { queryClient } from "./integrations/tanstack-query/client";
 import { routeTree } from "./routeTree.gen";
 import { deLocalizeUrl, localizeUrl } from "./paraglide/runtime";
+import { authClient } from "./integrations/better-auth/client";
 
 export const getRouter = () =>
   createTanStackRouter({
     routeTree,
-    context: getContext(),
+    context: {
+      queryClient,
+      authClient,
+    },
     scrollRestoration: true,
     defaultPreload: "intent",
     defaultPreloadStaleTime: 0,

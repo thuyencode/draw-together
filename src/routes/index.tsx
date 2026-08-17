@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/solid-router";
 import { FilePlusCornerIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 import type { ModalContextValue } from "~/features/shared/components/ui";
-import { NewDrawingForm } from "~/features/drawing-board/forms/new-drawing";
+import { NewDrawingForm } from "~/features/drawing-board/forms";
 import { Modal } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
 

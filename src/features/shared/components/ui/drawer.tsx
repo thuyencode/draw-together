@@ -11,6 +11,7 @@ import { cn } from "../../utils/cn";
 import type { PropsWithAs } from "../../types/props";
 import type { RegisterableHotkey } from "@tanstack/solid-hotkeys";
 import type { ComponentProps, ParentProps, ValidComponent } from "solid-js";
+import { m } from "~/paraglide/messages";
 
 interface DrawerContextValue {
   id: string;
@@ -143,7 +144,7 @@ function DrawerOverlay(_props: ParentProps<ComponentProps<"label">>) {
   return (
     <label
       for={drawer.id}
-      aria-label="close sidebar"
+      aria-label={m.drawer_closeSidebar()}
       class={cn("drawer-overlay", props.class)}
       {...rest}
     />

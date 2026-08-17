@@ -4,18 +4,20 @@ import { cn } from "~/features/shared/utils/cn";
 
 interface TextInputProps extends Omit<
   ComponentProps<"input">,
-  "type" | "onChange" | "value"
+  "onChange" | "onInput" | "value"
 > {
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
+  onInput?: (value: string) => void;
   label?: string;
-  maxLength: number;
+  maxLength?: number;
 }
 
 export function TextInput(_props: TextInputProps) {
   const [props, rest] = splitProps(_props, [
     "value",
     "onChange",
+    "onInput",
     "label",
     "maxLength",
     "class",
@@ -24,20 +26,28 @@ export function TextInput(_props: TextInputProps) {
   const charCount = () => props.value.length;
 
   return (
-    <label class={cn("input text-sm", props.class)}>
+    <label
+      class={cn(
+        "input has-[aria-invalid=true]:input-error text-sm",
+        props.class,
+      )}
+    >
       <Show when={props.label}>
-        <span class="label">{props.label}</span>
+        <span class="label [&_svg]:size-4">{props.label}</span>
       </Show>
       <input
         type="text"
         value={props.value}
-        onInput={(e) => props.onChange(e.target.value)}
+        onChange={(e) => props.onChange?.(e.target.value)}
+        onInput={(e) => props.onInput?.(e.target.value)}
         maxLength={props.maxLength}
         {...rest}
       />
-      <span class="badge badge-sm">
-        {charCount()}/{props.maxLength}
-      </span>
+      <Show when={props.maxLength !== undefined}>
+        <span class="badge badge-sm">
+          {charCount()}/{props.maxLength}
+        </span>
+      </Show>
     </label>
   );
 }

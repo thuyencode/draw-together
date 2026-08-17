@@ -1,10 +1,16 @@
 import { locales, localizeHref } from "./paraglide/runtime";
+import type { FileRouteTypes } from "./routeTree.gen";
 
 /**
  * Static routes that can be prerendered. Dynamic routes (e.g. `/rooms/trial`
  * which reads search params) and API routes are intentionally excluded.
  */
-const staticRoutes = ["/", "/rooms/"];
+const staticRoutes: FileRouteTypes["fullPaths"][] = [
+  "/",
+  "/rooms/",
+  "/auth/login",
+  "/auth/sign-up",
+];
 
 /**
  * Generates the localized prerender pages for every configured locale.

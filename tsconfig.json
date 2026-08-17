@@ -18,12 +18,5 @@
     },
   },
   "exclude": ["fabricjs-psbrush/**/*"],
-  "include": [
-    "vite.config.ts",
-    "eslint.config.ts",
-    "fabric.d.ts",
-    "vite-env.d.ts",
-    "env.d.ts",
-    "src/**/*",
-  ],
+  "include": ["vite.config.ts", "eslint.config.ts", "src/**/*"],
 }

@@ -73,6 +73,7 @@
   "notFound_alt": "Not Found",
   "font_selectFont": "Select a font",
   "modal_close": "Close",
+  "drawer_closeSidebar": "Close sidebar",
   "localeSwitcher_language": [
     {
       "match": {
@@ -81,5 +82,33 @@
       }
     }
   ],
+  "auth_logIn": "Log in",
+  "auth_loggingIn": "Logging in",
+  "auth_signUp": "Sign up",
+  "auth_signingIn": "Signing in",
+  "auth_reset": "Reset",
+  "auth_dontHaveAccount": "Don't have an account? Sign up",
+  "auth_alreadyHaveAccount": "Already have an account? Log in",
+  "auth_fakeNameOk": "A fake name is a ok",
+  "auth_fakeEmailOk": "A fake email address is a ok",
+  "auth_confirmPassword": "Confirm password",
+  "auth_passwordsDoNotMatch": "Passwords do not match",
+  "auth_showPassword": "Show password",
+  "auth_hidePassword": "Hide password",
+  "auth_fieldEmail": "Email",
+  "auth_fieldPassword": "Password",
+  "auth_fieldName": "Name",
+  "auth_nameRequired": "Name is required",
+  "auth_fieldUsername": "Username",
+  "auth_usernameNoWhitespace": "Username must not contain whitespace",
+  "auth_usernameMinLength": "Username must be at least {min} characters long.",
+  "auth_usernameMaxLength": "Username must be at most {max} characters long.",
+  "auth_passwordLowercase": "Your password must contain a lowercase letter.",
+  "auth_passwordUppercase": "Your password must contain an uppercase letter.",
+  "auth_passwordNumber": "Your password must contain a number.",
+  "auth_passwordSpecial": "Your password must contains at least one special character",
+  "auth_passwordMinLength": "Your password must be at least {min} characters long.",
+  "auth_passwordMaxLength": "Your password must be at most {max} characters long.",
+  "auth_passwordsDoNotMatchError": "The two passwords do not match.",
   "shortcuts": "[\n  \\{\"id\":\"deleteObject\",\"hotkey\":\"Delete\",\"description\":\"Delete selected object(s)\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"editText\",\"hotkey\":\"Enter\",\"description\":\"Edit selected text\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"swapColors\",\"hotkey\":\"Shift+X\",\"description\":\"Swap primary/secondary colors\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"selectAll\",\"hotkey\":\"Mod+A\",\"description\":\"Select all objects\",\"category\":\"Tools\"\\},\n  \\{\"id\":\"undo\",\"hotkey\":\"Mod+Z\",\"description\":\"Undo\",\"category\":\"History\"\\},\n  \\{\"id\":\"redo\",\"hotkey\":\"Mod+Shift+Z\",\"description\":\"Redo\",\"category\":\"History\"\\},\n  \\{\"id\":\"resetCanvas\",\"hotkey\":\"Mod+Delete\",\"description\":\"Reset canvas\",\"category\":\"History\"\\},\n  \\{\"id\":\"resetZoom\",\"hotkey\":\"Mod+0\",\"description\":\"Reset zoom to 100%\",\"category\":\"View\"\\},\n  \\{\"id\":\"fitToView\",\"hotkey\":\"Mod+1\",\"description\":\"Fit canvas to view\",\"category\":\"View\"\\},\n  \\{\"id\":\"toggleShortcuts\",\"hotkey\":\"H\",\"description\":\"Toggle keyboard shortcuts modal\",\"category\":\"View\"\\},\n  \\{\"id\":\"exportAsPng\",\"hotkey\":\"Mod+S\",\"description\":\"Export as PNG\",\"category\":\"Export\"\\},\n  \\{\"id\":\"addToSelection\",\"hotkey\":\"Shift\",\"description\":\"Add to selection\",\"action\":\"click\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"constrainProportions\",\"hotkey\":\"Shift\",\"description\":\"Constrain proportions while scaling\",\"action\":\"drag\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"scaleFromCenter\",\"hotkey\":\"Alt\",\"description\":\"Scale from center\",\"action\":\"drag\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"exitTextEditing\",\"hotkey\":\"Escape\",\"description\":\"Exit text editing / deselect\",\"category\":\"Canvas (built-in)\"\\},\n  \\{\"id\":\"newLineInText\",\"hotkey\":\"Enter\",\"description\":\"New line inside text object\",\"category\":\"Canvas (built-in)\"\\}\n]"
 }

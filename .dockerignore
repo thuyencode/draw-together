@@ -64,3 +64,6 @@ npm-debug.log*
 # Temp files
 *.tmp
 *.temp
+
+# Secrets
+*-keyfile

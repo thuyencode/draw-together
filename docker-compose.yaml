@@ -1,32 +1,92 @@
 services:
   db:
-    image: mongodb/mongodb-community-server:latest-slim
+    image: mongodb/mongodb-community-server:latest
     container_name: draw-together-db
-    restart: unless-stopped
     environment:
-      MONGODB_INITDB_ROOT_USERNAME: ${DB_USERNAME}
-      MONGODB_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGODB_INITDB_ROOT_USERNAME: ${DB_ROOT_USERNAME}
+      MONGODB_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MONGODB_INITDB_DATABASE: ${DB_NAME}
     ports:
       - 27017:27017
     volumes:
       - mongodb_data:/data/db
+    command:
+      - --bind_ip_all
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - -u
+        - ${DB_ROOT_USERNAME}
+        - -p
+        - ${DB_ROOT_PASSWORD}
+        - --authenticationDatabase
+        - admin
+        - --eval
+        - "db.runCommand({ ping: 1 }).ok"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  mongo-init:
+    image: alpine/mongosh:latest
+    container_name: draw-together-mongo-init
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_ROOT_USERNAME: ${DB_ROOT_USERNAME}
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    entrypoint:
+      - bash
+      - -c
+      - |
+        mongosh --host db:27017 \
+          -u "$$DB_ROOT_USERNAME" -p "$$DB_ROOT_PASSWORD" \
+          --authenticationDatabase admin \
+          --eval '
+            const appDb = db.getSiblingDB("'"$$DB_NAME"'");
+            const existing = appDb.getUser("'"$$DB_USERNAME"'");
+            if (existing) {
+              print("App user already exists");
+            } else {
+              appDb.createUser({
+                user: "'"$$DB_USERNAME"'",
+                pwd: "'"$$DB_PASSWORD"'",
+                roles: [{ role: "readWrite", db: "'"$$DB_NAME"'" }]
+              });
+              print("App user created");
+            }
+          '
 
   app:
     container_name: draw-together-app
-    restart: unless-stopped
     build:
       context: .
+      args:
+        VITE_PUBLIC_URL: ${VITE_PUBLIC_URL}
     environment:
-      DB_URL: ${DB_URL}
+      DB_URI: mongodb://${DB_USERNAME}:${DB_PASSWORD}@db:27017/${DB_NAME}?authSource=${DB_NAME}
+      DB_NAME: ${DB_NAME}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
     ports:
       - 3000:3000
     volumes:
-      - app_data:/app/uploads
+      - app_data_uploads:/app/uploads
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
 
 volumes:
   mongodb_data:
     driver: local
-  app_data:
+  app_data_uploads:
     driver: local

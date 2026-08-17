@@ -10,7 +10,7 @@ export function LocaleSwitcher() {
 
   return (
     <Menu.Root positioning={{ placement: "bottom" }}>
-      <Menu.Trigger class="btn btn-soft btn-info">
+      <Menu.Trigger class="btn btn-ghost">
         {m.localeSwitcher_language({ locale })}
       </Menu.Trigger>
 
