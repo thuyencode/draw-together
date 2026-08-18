@@ -1,2 +1,6 @@
 fabricjs-psbrush/**/*
 pnpm-lock.yaml
+src/routeTree.gen.ts
+src/paraglide/**/*
+project.inlang/**/*
+!project.inlang/settings.json
