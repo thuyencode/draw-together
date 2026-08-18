@@ -12,6 +12,7 @@
     "strict": true,
     "types": ["vite/client"],
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
     "paths": {
       "~/*": ["./src/*"],
       "fabricjs-psbrush": ["./fabricjs-psbrush/lib"],

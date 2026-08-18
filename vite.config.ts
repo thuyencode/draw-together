@@ -7,7 +7,7 @@ import { defineConfig } from "vite";
 import lucidePreprocess from "vite-plugin-lucide-preprocess";
 import solid from "vite-plugin-solid";
 import { ValidateEnv } from "@julr/vite-plugin-validate-env";
-import { prerenderRoutes } from "./src/prerender";
+import { prerenderRoutes } from "./src/prerender.ts";
 
 export default defineConfig({
   plugins: [
@@ -80,5 +80,8 @@ export default defineConfig({
         },
       },
     },
+  },
+  server: {
+    forwardConsole: true,
   },
 });

@@ -3,7 +3,6 @@ import { Show, createSignal } from "solid-js";
 import { Link, useNavigate } from "@tanstack/solid-router";
 import { PasswordSchema, SignUpFormSchema } from "../schema";
 import { PASSWORD_MAX_LENGTH } from "../constants";
-import type { SignUpForm } from "../schema";
 import type { ComponentProps } from "solid-js";
 import {
   FieldError,

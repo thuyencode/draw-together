@@ -1,5 +1,5 @@
-import { locales, localizeHref } from "./paraglide/runtime";
-import type { FileRouteTypes } from "./routeTree.gen";
+import { locales, localizeHref } from "./paraglide/runtime.js";
+import type { FileRouteTypes } from "./routeTree.gen.ts";
 
 /**
  * Static routes that can be prerendered. Dynamic routes (e.g. `/trial`

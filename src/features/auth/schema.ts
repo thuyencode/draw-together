@@ -56,6 +56,3 @@ export const SignUpFormSchema = v.pipe(
     ["confirmPassword"],
   ),
 );
-
-export type LoginForm = v.InferOutput<typeof LoginFormSchema>;
-export type SignUpForm = v.InferOutput<typeof SignUpFormSchema>;
