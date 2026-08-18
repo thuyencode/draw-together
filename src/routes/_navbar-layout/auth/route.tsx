@@ -19,9 +19,7 @@ export const Route = createFileRoute("/_navbar-layout/auth")({
 function AuthLayout() {
   return (
     <main class="flex h-full flex-col items-center justify-center gap-5 p-4">
-      <section class="card bg-base-100 w-full max-w-md shadow-sm">
-        <Outlet />
-      </section>
+      <Outlet />
     </main>
   );
 }

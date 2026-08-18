@@ -4,10 +4,8 @@ import * as tsParser from "@typescript-eslint/parser";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import solid from "eslint-plugin-solid/configs/recommended";
 import unusedImports from "eslint-plugin-unused-imports";
-import js from "@eslint/js";
 
 export default [
-  js.configs.recommended,
   ...tanstackConfig,
   ...router.configs["flat/recommended"],
   jsxA11y.flatConfigs.recommended,

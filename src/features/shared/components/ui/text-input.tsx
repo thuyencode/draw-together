@@ -2,7 +2,7 @@ import { Show, splitProps } from "solid-js";
 import type { ComponentProps } from "solid-js";
 import { cn } from "~/features/shared/utils/cn";
 
-interface TextInputProps extends Omit<
+export interface TextInputProps extends Omit<
   ComponentProps<"input">,
   "onChange" | "onInput" | "value"
 > {

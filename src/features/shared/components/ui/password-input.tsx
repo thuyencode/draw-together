@@ -4,7 +4,7 @@ import type { ComponentProps } from "solid-js";
 import { cn } from "~/features/shared/utils/cn";
 import { m } from "~/paraglide/messages";
 
-interface PasswordInputProps extends Omit<
+export interface PasswordInputProps extends Omit<
   ComponentProps<"input">,
   "type" | "onChange" | "onInput" | "value"
 > {

@@ -51,7 +51,7 @@ function RootLayout() {
         <HydrationScript />
         <HeadContent />
       </head>
-      <body class="bg-base-300 h-dvh min-h-dvh">
+      <body class="h-dvh min-h-dvh">
         <Outlet />
         <Scripts />
       </body>

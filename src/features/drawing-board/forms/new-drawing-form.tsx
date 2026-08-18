@@ -1,5 +1,3 @@
-import { createForm } from "@tanstack/solid-form";
-import { splitProps } from "solid-js";
 import { useNavigate } from "@tanstack/solid-router";
 import {
   DimensionSchema,
@@ -8,23 +6,21 @@ import {
 } from "../schema";
 import { CanvasSizeInput } from "../components/ui";
 import type { NewDrawingOptionsInput } from "../schema";
-import type { ComponentProps } from "solid-js";
-import { FieldError, TextInput } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
+import { useAppForm } from "~/features/shared/hooks/form";
 
 const defaultValues: NewDrawingOptionsInput = {
   dimension: [500, 500],
   title: "Untitled",
 };
 
-interface NewDrawingFormProps extends ComponentProps<"form"> {
+interface NewDrawingFormProps {
   onClose?: () => void;
 }
 
-export function NewDrawingForm(_props: NewDrawingFormProps) {
+export function NewDrawingForm(props: NewDrawingFormProps) {
   const navigate = useNavigate();
-  const [props, rest] = splitProps(_props, ["onSubmit", "onClose"]);
-  const form = createForm(() => ({
+  const form = useAppForm(() => ({
     defaultValues,
     validators: {
       onSubmit: NewDrawingOptionsFormSchema,
@@ -46,58 +42,38 @@ export function NewDrawingForm(_props: NewDrawingFormProps) {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         form.handleSubmit();
-
-        if (props.onSubmit) {
-          if (typeof props.onSubmit === "function") {
-            props.onSubmit(e);
-          } else {
-            const data = props.onSubmit[1];
-            const handler = props.onSubmit[0];
-            handler(data, e);
-          }
-        }
       }}
-      {...rest}
     >
-      <form.Field name="title">
+      <form.AppField name="title">
         {(field) => (
-          <fieldset class="fieldset">
-            <legend class="label text-sm capitalize">
-              {m.newDrawing_title()}
-            </legend>
-            <TextInput
-              name={field().name}
+          <field.Fieldset label={m.newDrawing_title()}>
+            <field.TextInput
               class="w-full"
-              value={field().state.value ?? ""}
-              onBlur={field().handleBlur}
-              onChange={field().handleChange}
               placeholder={m.newDrawing_untitled()}
               maxLength={TITLE_MAX_LENGTH}
             />
-            <FieldError errors={field().state.meta.errors} />
-          </fieldset>
+            <field.FieldError />
+          </field.Fieldset>
         )}
-      </form.Field>
-      <form.Field
+      </form.AppField>
+      <form.AppField
         name="dimension"
         validators={{
           onChange: DimensionSchema,
         }}
       >
         {(field) => (
-          <fieldset class="fieldset">
-            <legend class="label text-sm capitalize">
-              {m.newDrawing_dimension()}
-            </legend>
+          <field.Fieldset label={m.newDrawing_dimension()}>
             <CanvasSizeInput
               onChange={field().handleChange}
               onInput={field().handleChange}
             />
-            <FieldError errors={field().state.meta.errors} />
-          </fieldset>
+            <field.FieldError />
+          </field.Fieldset>
         )}
-      </form.Field>
+      </form.AppField>
 
       <div class="modal-action">
         <button class="btn btn-primary" type="submit">

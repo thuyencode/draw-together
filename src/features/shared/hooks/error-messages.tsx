@@ -2,7 +2,7 @@ import { createMemo } from "solid-js";
 import type { FieldErrors } from "../types/props";
 import type { Accessor } from "solid-js";
 
-export function createUniqueErrorMessages(errors: Accessor<FieldErrors>) {
+export function createFormErrorMessages(errors: Accessor<FieldErrors>) {
   const messages = createMemo(() => {
     const list = errors();
     if (!list?.length) return [] as string[];

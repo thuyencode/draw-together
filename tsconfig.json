@@ -15,9 +15,9 @@
     "allowImportingTsExtensions": true,
     "paths": {
       "~/*": ["./src/*"],
-      "fabricjs-psbrush": ["./fabricjs-psbrush/lib"],
-    },
+      "fabricjs-psbrush": ["./fabricjs-psbrush/lib"]
+    }
   },
   "exclude": ["fabricjs-psbrush/**/*"],
-  "include": ["vite.config.ts", "eslint.config.ts", "src/**/*"],
+  "include": ["vite.config.ts", "eslint.config.ts", "src/**/*"]
 }

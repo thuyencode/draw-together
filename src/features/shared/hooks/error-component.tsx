@@ -1,10 +1,10 @@
 import { For, createMemo } from "solid-js";
-import { createUniqueErrorMessages } from "./create-unique-error-messages";
+import { createFormErrorMessages } from "./error-messages";
 import type { FieldErrors } from "../types/props";
 import type { Accessor } from "solid-js";
 
-export function createUniqueErrorComponent(errors: Accessor<FieldErrors>) {
-  const uniqueErrors = createUniqueErrorMessages(errors);
+export function createFormErrorComponent(errors: Accessor<FieldErrors>) {
+  const uniqueErrors = createFormErrorMessages(errors);
 
   const content = createMemo(() => {
     const errors = uniqueErrors();

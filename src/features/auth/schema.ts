@@ -1,10 +1,5 @@
 import * as v from "valibot";
-import {
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
-  USERNAME_MAX_LENGTH,
-  USERNAME_MIN_LENGTH,
-} from "./constants";
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "./constants";
 import { m } from "~/paraglide/messages";
 
 export const PasswordSchema = v.pipe(
@@ -21,38 +16,9 @@ export const PasswordSchema = v.pipe(
   ),
 );
 
+export const EmailSchema = v.pipe(v.string(), v.trim(), v.email());
+
 export const LoginFormSchema = v.object({
-  email: v.pipe(v.string(), v.trim(), v.email()),
+  email: EmailSchema,
   password: PasswordSchema,
 });
-
-export const SignUpFormSchema = v.pipe(
-  v.object({
-    ...LoginFormSchema.entries,
-    name: v.pipe(
-      v.string(),
-      v.trim(),
-      v.nonEmpty(() => m.auth_nameRequired()),
-    ),
-    username: v.pipe(
-      v.string(),
-      v.trim(),
-      v.regex(/^\S*$/, () => m.auth_usernameNoWhitespace()),
-      v.minLength(USERNAME_MIN_LENGTH, () =>
-        m.auth_usernameMinLength({ min: USERNAME_MIN_LENGTH }),
-      ),
-      v.maxLength(USERNAME_MAX_LENGTH, () =>
-        m.auth_usernameMaxLength({ max: USERNAME_MAX_LENGTH }),
-      ),
-    ),
-    confirmPassword: PasswordSchema,
-  }),
-  v.forward(
-    v.partialCheck(
-      [["password"], ["confirmPassword"]],
-      (input) => input.password === input.confirmPassword,
-      () => m.auth_passwordsDoNotMatchError(),
-    ),
-    ["confirmPassword"],
-  ),
-);
