@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-import { HouseIcon, UserRoundArrowLeft } from "lucide-solid";
+import { HouseIcon, UserRoundArrowLeftIcon } from "lucide-solid";
 import { NavLink } from "./ui";
 import { m } from "~/paraglide/messages";
 import { authClient } from "~/integrations/better-auth/client";
@@ -21,7 +21,7 @@ export function MobileNavbar() {
             <div class="status status-secondary" />
           </div>
           <NavLink class="w-full justify-start" to="/auth/login">
-            <UserRoundArrowLeft /> {m.auth_logIn()}
+            <UserRoundArrowLeftIcon /> {m.auth_logIn()}
           </NavLink>
         </div>
       </Show>

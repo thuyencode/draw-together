@@ -84,7 +84,7 @@ function StepsItem(_props: StepsItemProps) {
     <li
       class={cn(
         "step",
-        props.index  <= steps.step()  ? props.stepClass : undefined,
+        props.index <= steps.step() ? props.stepClass : undefined,
         props.class,
       )}
       data-current={steps.step() === props.index}
@@ -99,7 +99,11 @@ function StepsIcon(_props: ComponentProps<"span">) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
-    <span class={cn("step-icon", props.class)} data-scope="steps" {...rest} />
+    <span
+      class={cn("step-icon [&_svg]:size-4", props.class)}
+      data-scope="steps"
+      {...rest}
+    />
   );
 }
 

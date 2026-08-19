@@ -37,7 +37,7 @@ export default [
     },
   },
   {
-    ignores: [".output/**/*", "./fabricjs-psbrush/**/*"],
+    ignores: [".output/**/*", "./fabricjs-psbrush/**/*", "src/paraglide/**/*"],
   },
   {
     files: ["src/routes/**/*.{ts,tsx}"],

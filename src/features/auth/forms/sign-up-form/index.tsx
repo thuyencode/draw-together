@@ -1,19 +1,25 @@
 import { revalidateLogic } from "@tanstack/solid-form";
 import { useNavigate } from "@tanstack/solid-router";
-import { Index, createSignal } from "solid-js";
+import { KeyRoundIcon, UserRoundIcon } from "lucide-solid";
+import { For, createSignal } from "solid-js";
 import { signUpFormOpts } from "./options";
 import { SignUpFormMultiStepSchema } from "./schema";
 import { SignUpStep1Form } from "./step1-subform";
 import { SignUpStep2Form } from "./step2-subform";
+import type { LucideIcon } from "lucide-solid";
+import type { LocalizedString } from "@inlang/paraglide-js";
 import { Steps } from "~/features/shared/components/ui";
 import { useAppForm } from "~/features/shared/hooks/form";
 import { sleep } from "~/features/shared/utils";
 import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
 
-const signUpStepLabels = [
-  m.auth_signUp_stepProfile,
-  m.auth_signUp_stepPassword,
+const signUpStepLabels: {
+  label: () => LocalizedString;
+  Icon: LucideIcon;
+}[] = [
+  { label: m.auth_signUp_stepProfile, Icon: UserRoundIcon },
+  { label: m.auth_signUp_stepPassword, Icon: KeyRoundIcon },
 ];
 
 export function SignUpForm() {
@@ -56,13 +62,16 @@ export function SignUpForm() {
   return (
     <Steps.Root count={signUpStepLabels.length}>
       <Steps.List class="w-full max-w-sm">
-        <Index each={signUpStepLabels}>
+        <For each={signUpStepLabels}>
           {(item, index) => (
-            <Steps.Item index={index} stepClass="step-neutral">
-              {item()()}
+            <Steps.Item index={index()} stepClass="step-info">
+              <Steps.Icon>
+                <item.Icon />
+              </Steps.Icon>
+              {item.label()}
             </Steps.Item>
           )}
-        </Index>
+        </For>
       </Steps.List>
 
       <section class="card bg-base-200 border-base-content/30 w-full max-w-md border shadow">
