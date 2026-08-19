@@ -8,7 +8,7 @@ export function OtherFormLink(_props: LinkComponentProps) {
 
   return (
     <Link
-      class={cn("btn btn-link no-underline hover:underline", props.class)}
+      class={cn("btn btn-ghost no-underline hover:underline", props.class)}
       {...rest}
     />
   );

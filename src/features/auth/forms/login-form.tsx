@@ -78,7 +78,7 @@ export function LogInForm() {
             )}
           </form.AppField>
 
-          <div class="mt-4 space-y-1">
+          <div class="mt-4 space-y-2">
             <form.AppForm>
               <form.SubmitButton
                 class="btn-block"

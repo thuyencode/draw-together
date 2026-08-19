@@ -5,13 +5,10 @@ import { signUpFormOpts } from "./options";
 import { SignUpFormStep2Schema } from "./schema";
 import { m } from "~/paraglide/messages";
 import { withForm } from "~/features/shared/hooks/form";
+import { Steps } from "~/features/shared/components/ui";
 
 export const SignUpStep2Form = withForm({
   ...signUpFormOpts,
-  props: {
-    step: 0,
-    setStep: (_step: number) => {},
-  },
   render: (props) => (
     <props.form.FormGroup
       name="step2"
@@ -77,14 +74,10 @@ export const SignUpStep2Form = withForm({
               />
             </props.form.AppForm>
 
-            <button
-              type="button"
-              class="btn btn-secondary btn-soft btn-block"
-              onClick={() => props.setStep(props.step - 1)}
-            >
+            <Steps.PrevTrigger class="btn-secondary btn-soft btn-block">
               <ArrowLeftIcon class="size-4" />
               {m.auth_previous()}
-            </button>
+            </Steps.PrevTrigger>
           </div>
         </form>
       )}

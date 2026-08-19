@@ -1,18 +1,23 @@
 import { revalidateLogic } from "@tanstack/solid-form";
-import { Match, Switch, createSignal } from "solid-js";
 import { useNavigate } from "@tanstack/solid-router";
-import { SignUpFormMultiStepSchema } from "./schema";
+import { Index, createSignal } from "solid-js";
 import { signUpFormOpts } from "./options";
+import { SignUpFormMultiStepSchema } from "./schema";
 import { SignUpStep1Form } from "./step1-subform";
 import { SignUpStep2Form } from "./step2-subform";
-import { authClient } from "~/integrations/better-auth/client";
-import { sleep } from "~/features/shared/utils";
+import { Steps } from "~/features/shared/components/ui";
 import { useAppForm } from "~/features/shared/hooks/form";
+import { sleep } from "~/features/shared/utils";
+import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
+
+const signUpStepLabels = [
+  m.auth_signUp_stepProfile,
+  m.auth_signUp_stepPassword,
+];
 
 export function SignUpForm() {
   const navigate = useNavigate();
-  const [step, setStep] = createSignal(0);
   const [rootError, setRootError] = createSignal<string[]>([]);
 
   const form = useAppForm(() => ({
@@ -49,15 +54,16 @@ export function SignUpForm() {
   }));
 
   return (
-    <>
-      <ul class="steps w-full max-w-sm">
-        <li class="step" classList={{ "step-neutral": step() <= 1 }}>
-          {m.auth_stepProfile()}
-        </li>
-        <li class="step" classList={{ "step-neutral": step() === 1 }}>
-          {m.auth_stepPassword()}
-        </li>
-      </ul>
+    <Steps.Root count={signUpStepLabels.length}>
+      <Steps.List class="w-full max-w-sm">
+        <Index each={signUpStepLabels}>
+          {(item, index) => (
+            <Steps.Item index={index} stepClass="step-neutral">
+              {item()()}
+            </Steps.Item>
+          )}
+        </Index>
+      </Steps.List>
 
       <section class="card bg-base-200 border-base-content/30 w-full max-w-md border shadow">
         <div class="card-body">
@@ -65,16 +71,14 @@ export function SignUpForm() {
 
           <form.FormError errors={rootError()} />
 
-          <Switch>
-            <Match when={step() === 0}>
-              <SignUpStep1Form form={form} step={step()} setStep={setStep} />
-            </Match>
-            <Match when={step() === 1}>
-              <SignUpStep2Form form={form} step={step()} setStep={setStep} />
-            </Match>
-          </Switch>
+          <Steps.Content index={0}>
+            <SignUpStep1Form form={form} />
+          </Steps.Content>
+          <Steps.Content index={1}>
+            <SignUpStep2Form form={form} />
+          </Steps.Content>
         </div>
       </section>
-    </>
+    </Steps.Root>
   );
 }

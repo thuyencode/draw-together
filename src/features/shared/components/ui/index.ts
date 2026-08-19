@@ -15,3 +15,4 @@ export * from "./form-error";
 export * from "./submit-button";
 export * from "./fieldset";
 export * from "./other-form-link";
+export * from "./steps";
