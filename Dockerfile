@@ -13,7 +13,7 @@ COPY bun.lock /temp/dev
 RUN cd /temp/dev && bun install --frozen-lockfile
 
 # Stage 2: Build
-FROM node:26.7.0-alpine${ALPINE_VERSION} AS builder
+FROM node:lts-alpine${ALPINE_VERSION} AS builder
 
 RUN mkdir -p /temp/prod
 

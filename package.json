@@ -84,6 +84,6 @@
     "vite-plugin-solid": "^2.11.14"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   }
 }
