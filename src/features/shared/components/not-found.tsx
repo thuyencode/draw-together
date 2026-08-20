@@ -1,13 +1,20 @@
+import { Link } from "@tanstack/solid-router";
+import { HouseIcon } from "lucide-solid";
 import { m } from "~/paraglide/messages";
 
 export function NotFound() {
   return (
-    <main class="relative min-h-screen">
+    <main class="flex min-h-screen flex-col items-center justify-center gap-4">
       <img
-        class="absolute top-1/2 left-1/2 max-w-xl -translate-x-1/2 -translate-y-1/2 transform"
+        class="max-w-xl"
         src="https://httpducks.com/404.jpg"
         alt={m.notFound_alt()}
       />
+
+      <Link to="/" class="btn btn-primary btn-lg">
+        <HouseIcon class="size-5" />
+        {m.menu_goToHomepage()}
+      </Link>
     </main>
   );
 }
