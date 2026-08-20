@@ -2,7 +2,7 @@ import { Link, createFileRoute } from "@tanstack/solid-router";
 import { HouseIcon } from "lucide-solid";
 import { m } from "~/paraglide/messages";
 
-export const Route = createFileRoute("/_navbar-layout/rooms/")({
+export const Route = createFileRoute("/_drawer-layout/_floating-header-layout/rooms/")({
   component: RoomsPage,
 });
 

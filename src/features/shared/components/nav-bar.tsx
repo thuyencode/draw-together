@@ -1,4 +1,4 @@
-import { HouseIcon, UserRoundArrowLeftIcon } from "lucide-solid";
+import { HouseIcon, UserRoundArrowLeftIcon, UserRoundIcon } from "lucide-solid";
 import { AuthGuard } from "./auth-guard";
 import { NavLink } from "./ui";
 import { m } from "~/paraglide/messages";
@@ -11,7 +11,6 @@ export function NavBar() {
       </NavLink>
 
       <AuthGuard
-        children={null}
         fallback={
           <div class="indicator">
             <div class="indicator-item inline-grid *:[grid-area:1/1]">
@@ -23,7 +22,11 @@ export function NavBar() {
             </NavLink>
           </div>
         }
-      />
+      >
+        <NavLink to="/me">
+          <UserRoundIcon /> {m.my_account()}
+        </NavLink>
+      </AuthGuard>
     </nav>
   );
 }

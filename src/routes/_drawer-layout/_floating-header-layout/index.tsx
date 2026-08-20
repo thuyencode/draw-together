@@ -6,7 +6,9 @@ import { NewDrawingForm } from "~/features/drawing-board/forms";
 import { Modal } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
 
-export const Route = createFileRoute("/_navbar-layout/")({
+export const Route = createFileRoute(
+  "/_drawer-layout/_floating-header-layout/",
+)({
   component: HomePage,
 });
 
@@ -31,10 +33,7 @@ function HomePage() {
               {m.home_createNewDrawing()}
             </h2>
 
-            <NewDrawingForm
-              class="space-y-3"
-              onClose={() => modalRef()?.closeModal()}
-            />
+            <NewDrawingForm onClose={() => modalRef()?.closeModal()} />
           </Modal.Box>
 
           <Modal.Backdrop />

@@ -1,9 +1,9 @@
 import { Outlet, createFileRoute } from "@tanstack/solid-router";
 import { Suspense } from "solid-js";
-import { Header, MobileNavbar } from "~/features/shared/components";
+import { MobileNavbar } from "~/features/shared/components";
 import { Drawer } from "~/features/shared/components/ui";
 
-export const Route = createFileRoute("/_navbar-layout")({
+export const Route = createFileRoute("/_drawer-layout")({
   component: DrawerLayout,
 });
 
@@ -12,7 +12,6 @@ function DrawerLayout() {
     <Drawer.Provider>
       <Drawer.Root class="drawer-end">
         <Drawer.Content class="flex min-h-dvh flex-col">
-          <Header />
           <Suspense>
             <Outlet />
           </Suspense>
