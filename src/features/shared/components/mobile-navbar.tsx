@@ -1,6 +1,6 @@
-import { Show } from "solid-js";
 import { HouseIcon, UserRoundArrowLeftIcon } from "lucide-solid";
 import { NavLink } from "./ui";
+import { AuthGuard } from "./auth-guard";
 import { m } from "~/paraglide/messages";
 import { authClient } from "~/integrations/better-auth/client";
 
@@ -14,17 +14,20 @@ export function MobileNavbar() {
         <HouseIcon /> {m.nav_home()}
       </NavLink>
 
-      <Show when={!isAuthed()}>
-        <div class="indicator w-full">
-          <div class="indicator-item inline-grid *:[grid-area:1/1]">
-            <div class="status status-secondary animate-ping" />
-            <div class="status status-secondary" />
+      <AuthGuard
+        children={null}
+        fallback={
+          <div class="indicator w-full">
+            <div class="indicator-item inline-grid *:[grid-area:1/1]">
+              <div class="status status-secondary animate-ping" />
+              <div class="status status-secondary" />
+            </div>
+            <NavLink class="w-full justify-start" to="/auth/login">
+              <UserRoundArrowLeftIcon /> {m.auth_logIn()}
+            </NavLink>
           </div>
-          <NavLink class="w-full justify-start" to="/auth/login">
-            <UserRoundArrowLeftIcon /> {m.auth_logIn()}
-          </NavLink>
-        </div>
-      </Show>
+        }
+      />
     </nav>
   );
 }

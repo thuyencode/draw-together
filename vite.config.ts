@@ -76,6 +76,11 @@ export default defineConfig({
               test: /node_modules[\\/]eyedropper-polyfill/,
               priority: 15,
             },
+            {
+              name: "better-auth",
+              test: /node_modules[\\/]better-auth/,
+              priority: 25,
+            },
           ],
         },
       },
