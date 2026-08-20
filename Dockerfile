@@ -1,4 +1,5 @@
 ARG ALPINE_VERSION=3.24
+ARG NODEJS_VERSION=24.19.0
 
 # Stage 1: Install dependencies (Bun as package manager only)
 FROM oven/bun:slim AS install
@@ -13,7 +14,7 @@ COPY bun.lock /temp/dev
 RUN cd /temp/dev && bun install --frozen-lockfile
 
 # Stage 2: Build
-FROM node:lts-alpine${ALPINE_VERSION} AS builder
+FROM node:${NODEJS_VERSION}-alpine${ALPINE_VERSION} AS builder
 
 RUN mkdir -p /temp/prod
 
