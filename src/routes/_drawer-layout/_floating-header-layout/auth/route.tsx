@@ -1,7 +1,11 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/solid-router";
+import { Suspense } from "solid-js";
+
 import { getSession } from "~/features/auth/functions";
 
-export const Route = createFileRoute("/_drawer-layout/_floating-header-layout/auth")({
+export const Route = createFileRoute(
+  "/_drawer-layout/_floating-header-layout/auth",
+)({
   beforeLoad: async ({ location }) => {
     const session = await getSession();
 
@@ -19,7 +23,9 @@ export const Route = createFileRoute("/_drawer-layout/_floating-header-layout/au
 function AuthLayout() {
   return (
     <main class="flex h-full flex-col items-center justify-center gap-5 p-4">
-      <Outlet />
+      <Suspense>
+        <Outlet />
+      </Suspense>
     </main>
   );
 }

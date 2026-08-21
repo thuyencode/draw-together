@@ -3,9 +3,10 @@ import {
   HeadContent,
   Outlet,
   Scripts,
+
   createRootRouteWithContext,
 } from "@tanstack/solid-router";
-import { ErrorBoundary } from "solid-js";
+import { ErrorBoundary, Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
 import {
@@ -52,7 +53,9 @@ function RootLayout() {
         <HeadContent />
       </head>
       <body class="h-dvh min-h-dvh">
-        <Outlet />
+        <Suspense>
+          <Outlet />
+        </Suspense>
         <Scripts />
       </body>
     </html>
