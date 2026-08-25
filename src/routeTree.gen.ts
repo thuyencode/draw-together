@@ -13,10 +13,10 @@ import { Route as DrawerLayoutRouteRouteImport } from './routes/_drawer-layout/r
 import { Route as TrialRouteImport } from './routes/trial'
 import { Route as DrawerLayoutFloatingHeaderLayoutRouteRouteImport } from './routes/_drawer-layout/_floating-header-layout/route'
 import { Route as DrawerLayoutHeaderLayoutRouteRouteImport } from './routes/_drawer-layout/_header-layout/route'
-import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as DrawerLayoutFloatingHeaderLayoutIndexRouteImport } from './routes/_drawer-layout/_floating-header-layout/index'
 import { Route as DrawerLayoutFloatingHeaderLayoutAuthRouteRouteImport } from './routes/_drawer-layout/_floating-header-layout/auth/route'
 import { Route as DrawerLayoutHeaderLayoutMeRouteRouteImport } from './routes/_drawer-layout/_header-layout/me/route'
+import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
 import { Route as DrawerLayoutFloatingHeaderLayoutAuthLoginRouteImport } from './routes/_drawer-layout/_floating-header-layout/auth/login'
 import { Route as DrawerLayoutFloatingHeaderLayoutAuthSignUpRouteImport } from './routes/_drawer-layout/_floating-header-layout/auth/sign-up'
 import { Route as DrawerLayoutFloatingHeaderLayoutRoomsIndexRouteImport } from './routes/_drawer-layout/_floating-header-layout/rooms/index'
@@ -43,11 +43,6 @@ const DrawerLayoutHeaderLayoutRouteRoute =
     id: '/_header-layout',
     getParentRoute: () => DrawerLayoutRouteRoute,
   } as any)
-const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DrawerLayoutFloatingHeaderLayoutIndexRoute =
   DrawerLayoutFloatingHeaderLayoutIndexRouteImport.update({
     id: '/',
@@ -66,6 +61,11 @@ const DrawerLayoutHeaderLayoutMeRouteRoute =
     path: '/me',
     getParentRoute: () => DrawerLayoutHeaderLayoutRouteRoute,
   } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DrawerLayoutFloatingHeaderLayoutAuthLoginRoute =
   DrawerLayoutFloatingHeaderLayoutAuthLoginRouteImport.update({
     id: '/login',
@@ -106,9 +106,9 @@ const DrawerLayoutHeaderLayoutMeSecurityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
   '/trial': typeof TrialRoute
-  '/api/$': typeof ApiSplatRoute
   '/auth': typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
   '/me': typeof DrawerLayoutHeaderLayoutMeRouteRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/login': typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
   '/auth/sign-up': typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
   '/me/profile': typeof DrawerLayoutHeaderLayoutMeProfileRoute
@@ -119,8 +119,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
   '/trial': typeof TrialRoute
-  '/api/$': typeof ApiSplatRoute
   '/auth': typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/login': typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
   '/auth/sign-up': typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
   '/me/profile': typeof DrawerLayoutHeaderLayoutMeProfileRoute
@@ -134,9 +134,9 @@ export interface FileRoutesById {
   '/trial': typeof TrialRoute
   '/_drawer-layout/_floating-header-layout': typeof DrawerLayoutFloatingHeaderLayoutRouteRouteWithChildren
   '/_drawer-layout/_header-layout': typeof DrawerLayoutHeaderLayoutRouteRouteWithChildren
-  '/api/$': typeof ApiSplatRoute
   '/_drawer-layout/_floating-header-layout/auth': typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
   '/_drawer-layout/_header-layout/me': typeof DrawerLayoutHeaderLayoutMeRouteRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/_drawer-layout/_floating-header-layout/': typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
   '/_drawer-layout/_floating-header-layout/auth/login': typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
   '/_drawer-layout/_floating-header-layout/auth/sign-up': typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
@@ -150,9 +150,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/trial'
-    | '/api/$'
     | '/auth'
     | '/me'
+    | '/api/auth/$'
     | '/auth/login'
     | '/auth/sign-up'
     | '/me/profile'
@@ -163,8 +163,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/trial'
-    | '/api/$'
     | '/auth'
+    | '/api/auth/$'
     | '/auth/login'
     | '/auth/sign-up'
     | '/me/profile'
@@ -177,9 +177,9 @@ export interface FileRouteTypes {
     | '/trial'
     | '/_drawer-layout/_floating-header-layout'
     | '/_drawer-layout/_header-layout'
-    | '/api/$'
     | '/_drawer-layout/_floating-header-layout/auth'
     | '/_drawer-layout/_header-layout/me'
+    | '/api/auth/$'
     | '/_drawer-layout/_floating-header-layout/'
     | '/_drawer-layout/_floating-header-layout/auth/login'
     | '/_drawer-layout/_floating-header-layout/auth/sign-up'
@@ -192,7 +192,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   DrawerLayoutRouteRoute: typeof DrawerLayoutRouteRouteWithChildren
   TrialRoute: typeof TrialRoute
-  ApiSplatRoute: typeof ApiSplatRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/solid-router' {
@@ -225,13 +225,6 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof DrawerLayoutHeaderLayoutRouteRouteImport
       parentRoute: typeof DrawerLayoutRouteRoute
     }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_drawer-layout/_floating-header-layout/': {
       id: '/_drawer-layout/_floating-header-layout/'
       path: '/'
@@ -252,6 +245,13 @@ declare module '@tanstack/solid-router' {
       fullPath: '/me'
       preLoaderRoute: typeof DrawerLayoutHeaderLayoutMeRouteRouteImport
       parentRoute: typeof DrawerLayoutHeaderLayoutRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_drawer-layout/_floating-header-layout/auth/login': {
       id: '/_drawer-layout/_floating-header-layout/auth/login'
@@ -390,7 +390,7 @@ const DrawerLayoutRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   DrawerLayoutRouteRoute: DrawerLayoutRouteRouteWithChildren,
   TrialRoute: TrialRoute,
-  ApiSplatRoute: ApiSplatRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

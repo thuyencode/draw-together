@@ -23,8 +23,6 @@
   "dependencies": {
     "@ark-ui/solid": "^5.38.2",
     "@better-auth/mongo-adapter": "^1.7.0",
-    "@elysia/eden": "^1.4.10",
-    "@elysia/node": "^1.4.6",
     "@erase2d/fabric": "^1.2.1",
     "@solid-primitives/resize-observer": "^2.2.0",
     "@solid-primitives/scheduled": "^1.5.3",
@@ -38,7 +36,6 @@
     "better-auth": "^1.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "elysia": "^1.4.29",
     "eyedropper-polyfill": "^1.1.5",
     "fabric": "^7.4.0",
     "lucide-solid": "^1.31.0",
