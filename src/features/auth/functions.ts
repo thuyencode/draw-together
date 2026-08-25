@@ -7,15 +7,7 @@ export const getSession = createServerFn({ method: "GET" }).handler(() => {
   return auth.api.getSession({ headers });
 });
 
-export const ensureSession = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const headers = getRequestHeaders();
-    const session = await auth.api.getSession({ headers });
-
-    if (!session) {
-      throw new Error("Unauthorized");
-    }
-
-    return session;
-  },
-);
+export const getSessionList = createServerFn({ method: "GET" }).handler(() => {
+  const headers = getRequestHeaders();
+  return auth.api.listSessions({ headers });
+});

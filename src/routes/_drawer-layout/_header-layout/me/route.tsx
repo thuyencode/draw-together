@@ -16,13 +16,13 @@ import { For, Suspense } from "solid-js";
 import type { LocalizedString } from "@inlang/paraglide-js";
 import type { LinkProps } from "@tanstack/solid-router";
 import type { LucideIcon } from "lucide-solid";
-import { getSession } from "~/features/auth/functions";
 import { Drawer } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
+import { sessionQueryOptions } from "~/features/auth/queries";
 
 export const Route = createFileRoute("/_drawer-layout/_header-layout/me")({
-  beforeLoad: async ({ location }) => {
-    const session = await getSession();
+  beforeLoad: async ({ context: { queryClient }, location }) => {
+    const session = await queryClient.ensureQueryData(sessionQueryOptions());
 
     if (!session) {
       throw redirect({
@@ -41,7 +41,7 @@ function MyAccountLayout() {
   return (
     <Drawer.Provider>
       <Drawer.Root class="md:drawer-open max-md:drawer-end">
-        <Drawer.Content>
+        <Drawer.Content as="main" class="p-5">
           <Suspense>
             <Outlet />
           </Suspense>
@@ -83,7 +83,7 @@ function MyAccountLayout() {
               <Drawer.Trigger class="btn-soft btn-neutral flex h-9 w-full rounded-none">
                 <ChevronsLeftIcon class="is-drawer-close:hidden" />
                 <ChevronsRightIcon class="is-drawer-open:hidden" />
-                <span class="is-drawer-close:hidden">
+                <span class="is-drawer-close:hidden text-nowrap">
                   {m.my_account_sidebar_collapse()}
                 </span>
               </Drawer.Trigger>

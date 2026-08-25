@@ -3,12 +3,12 @@ import {
   HeadContent,
   Outlet,
   Scripts,
-
   createRootRouteWithContext,
 } from "@tanstack/solid-router";
 import { ErrorBoundary, Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
+import type { QueryClient } from "@tanstack/solid-query";
 import {
   ErrorComponent,
   NotFound,
@@ -16,8 +16,14 @@ import {
 } from "~/features/shared/components";
 import { getLocale } from "~/paraglide/runtime";
 import { m } from "~/paraglide/messages";
+import { sessionQueryOptions } from "~/features/auth/queries";
 
-export const Route = createRootRouteWithContext()({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
+  beforeLoad: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(sessionQueryOptions());
+  },
   head: () => ({
     links: [{ rel: "stylesheet", href: css }],
     meta: [

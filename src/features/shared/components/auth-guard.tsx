@@ -1,12 +1,12 @@
+import { useQuery } from "@tanstack/solid-query";
 import { Show } from "solid-js";
 import type { ComponentProps } from "solid-js";
-import { authClient } from "~/integrations/better-auth/client";
+import { sessionQueryOptions } from "~/features/auth/queries";
 
 type AuthGuardProps = Omit<ComponentProps<typeof Show>, "when" | "keyed">;
 
 export function AuthGuard(props: AuthGuardProps) {
-  const session = authClient.useSession();
-  const isAuthed = () => !!session().data;
+  const session = useQuery(sessionQueryOptions);
 
-  return <Show when={isAuthed()} {...props} />;
+  return <Show when={!!session.data} {...props} />;
 }

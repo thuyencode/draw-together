@@ -43,6 +43,7 @@ export const SignUpStep2Form = withForm({
               </field.Fieldset>
             )}
           </props.form.AppField>
+
           <props.form.AppField
             name="step2.confirmPassword"
             validators={{

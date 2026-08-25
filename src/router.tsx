@@ -1,13 +1,15 @@
 import { createRouter as createTanStackRouter } from "@tanstack/solid-router";
+import { setupRouterSsrQueryIntegration } from "@tanstack/solid-router-ssr-query";
 import { getQueryClient } from "./integrations/tanstack-query/client";
 import { routeTree } from "./routeTree.gen";
 import { deLocalizeUrl, localizeUrl } from "./paraglide/runtime";
 
-export const getRouter = () =>
-  createTanStackRouter({
+export function getRouter() {
+  const queryClient = getQueryClient();
+  const router = createTanStackRouter({
     routeTree,
     context: {
-      queryClient: getQueryClient(),
+      queryClient,
     },
     scrollRestoration: true,
     defaultPreload: "intent",
@@ -17,6 +19,14 @@ export const getRouter = () =>
       output: ({ url }) => localizeUrl(url),
     },
   });
+
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+  });
+
+  return router;
+}
 
 declare module "@tanstack/solid-router" {
   interface Register {
