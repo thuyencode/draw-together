@@ -1,5 +1,5 @@
 export * from "./color-picker";
-export * from "./password-strength-progress";
+export * from "./password-strength-meter";
 export * from "./password-input";
 export * from "./text-input";
 export * from "./submit-button";

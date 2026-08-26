@@ -2,13 +2,13 @@ import { Show } from "solid-js";
 import { createFormErrorMessages } from "~/features/shared/hooks";
 import { m } from "~/paraglide/messages";
 
-export interface PasswordStrengthProgressProps {
+export interface PasswordStrengthMeterProps {
   totalLevel: number;
   errors: Array<{ message: string } | undefined> | string[] | null;
   isDirty: boolean;
 }
 
-export function PasswordStrengthProgress(props: PasswordStrengthProgressProps) {
+export function PasswordStrengthMeter(props: PasswordStrengthMeterProps) {
   const uniqueErrors = createFormErrorMessages(() => props.errors);
 
   const percentage = () => {

@@ -36,7 +36,7 @@ export const SignUpStep2Form = withForm({
                   required
                   maxLength={PASSWORD_MAX_LENGTH}
                 />
-                <field.PasswordStrengthProgress
+                <field.PasswordStrengthMeter
                   // The last criteria in PasswordSchema is max length can be ignored here
                   totalLevel={5}
                 />

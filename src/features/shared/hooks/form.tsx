@@ -3,7 +3,7 @@ import { createFormHook } from "@tanstack/solid-form";
 import {
   FieldError as BaseFieldError,
   PasswordInput as BasePasswordInput,
-  PasswordStrengthProgress as BasePasswordStrengthProgress,
+  PasswordStrengthMeter as BasePasswordStrengthMeter,
   SubmitButton as BaseSubmitButton,
   TextInput as BaseTextInput,
   Fieldset,
@@ -20,7 +20,7 @@ import type { JSXElement, ParentProps } from "solid-js";
 import type {
   SubmitButtonProps as BaseSubmitButtonProps,
   PasswordInputProps,
-  PasswordStrengthProgressProps,
+  PasswordStrengthMeterProps,
   TextInputProps,
 } from "../components/ui";
 
@@ -31,7 +31,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     FieldHelper,
     TextInput,
     PasswordInput,
-    PasswordStrengthProgress,
+    PasswordStrengthMeter,
   },
   formComponents: {
     FormError,
@@ -98,13 +98,13 @@ function PasswordInput(
   );
 }
 
-function PasswordStrengthProgress(
-  props: Pick<PasswordStrengthProgressProps, "totalLevel">,
+function PasswordStrengthMeter(
+  props: Pick<PasswordStrengthMeterProps, "totalLevel">,
 ) {
   const field = useFieldContext();
 
   return (
-    <BasePasswordStrengthProgress
+    <BasePasswordStrengthMeter
       errors={field().state.meta.errors}
       isDirty={field().state.meta.isDirty}
       {...props}
@@ -114,7 +114,7 @@ function PasswordStrengthProgress(
 
 interface SubmitButtonProps extends BaseSubmitButtonProps {
   label: JSXElement;
-  submittingLabel: string;
+  submittingLabel?: string;
 }
 
 function SubmitButton(_props: SubmitButtonProps) {
