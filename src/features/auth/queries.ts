@@ -1,14 +1,14 @@
 import { queryOptions } from "@tanstack/solid-query";
-import { getSession, getSessionList } from "./functions";
+import { fetchSession, fetchSessionList } from "./functions";
 
-export const sessionListQueryOptions = () =>
+export const createSessionListQueryOptions = () =>
   queryOptions({
     queryKey: ["auth", "api", "listSessions"],
-    queryFn: () => getSessionList(),
+    queryFn: () => fetchSessionList(),
   });
 
-export const sessionQueryOptions = () =>
+export const createSessionQueryOptions = () =>
   queryOptions({
     queryKey: ["auth", "api", "getSession"],
-    queryFn: () => getSession(),
+    queryFn: () => fetchSession(),
   });

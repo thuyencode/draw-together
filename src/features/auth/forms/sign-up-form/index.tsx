@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/solid-router";
 import { KeyRoundIcon, UserRoundIcon } from "lucide-solid";
 import { For, createSignal } from "solid-js";
 import { useQueryClient } from "@tanstack/solid-query";
-import { sessionQueryOptions } from "../../queries";
+import { createSessionQueryOptions } from "../../queries";
 import { signUpFormOpts } from "./options";
 import { SignUpFormMultiStepSchema } from "./schema";
 import { SignUpStep1Form } from "./step1-subform";
@@ -55,8 +55,9 @@ export function SignUpForm() {
             setRootError([ctx.error.message]);
           },
           onSuccess: () => {
-            queryClient.invalidateQueries(sessionQueryOptions());
-            navigate({ to: "/" });
+            const urlParams = new URLSearchParams(window.location.search);
+            queryClient.invalidateQueries(createSessionQueryOptions());
+            navigate({ to: urlParams.get("redirect") ?? "/" });
           },
         },
       );

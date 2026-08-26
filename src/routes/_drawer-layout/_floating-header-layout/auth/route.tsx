@@ -1,12 +1,14 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/solid-router";
 import { Suspense } from "solid-js";
-import { sessionQueryOptions } from "~/features/auth/queries";
+import { createSessionQueryOptions } from "~/features/auth/queries";
 
 export const Route = createFileRoute(
   "/_drawer-layout/_floating-header-layout/auth",
 )({
   beforeLoad: async ({ context: { queryClient }, location }) => {
-    const session = await queryClient.ensureQueryData(sessionQueryOptions());
+    const session = await queryClient.ensureQueryData(
+      createSessionQueryOptions(),
+    );
 
     if (session) {
       throw redirect({ to: "/" });

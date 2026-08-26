@@ -3,7 +3,7 @@ import { createSignal } from "solid-js";
 import { useQueryClient } from "@tanstack/solid-query";
 import { PASSWORD_MAX_LENGTH } from "../constants";
 import { LoginFormSchema, PasswordSchema } from "../schema";
-import { sessionQueryOptions } from "../queries";
+import { createSessionQueryOptions } from "../queries";
 import { useAppForm } from "~/features/shared/hooks/form";
 import { sleep } from "~/features/shared/utils";
 import { authClient } from "~/integrations/better-auth/client";
@@ -33,8 +33,9 @@ export function LogInForm() {
           setRootError([ctx.error.message]);
         },
         onSuccess: () => {
-          queryClient.invalidateQueries(sessionQueryOptions());
-          navigate({ to: "/" });
+          const urlParams = new URLSearchParams(window.location.search);
+          queryClient.invalidateQueries(createSessionQueryOptions());
+          navigate({ to: urlParams.get("redirect") ?? "/" });
         },
       });
     },

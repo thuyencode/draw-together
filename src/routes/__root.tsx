@@ -16,13 +16,13 @@ import {
 } from "~/features/shared/components";
 import { getLocale } from "~/paraglide/runtime";
 import { m } from "~/paraglide/messages";
-import { sessionQueryOptions } from "~/features/auth/queries";
+import { createSessionQueryOptions } from "~/features/auth/queries";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   beforeLoad: async ({ context: { queryClient } }) => {
-    await queryClient.ensureQueryData(sessionQueryOptions());
+    await queryClient.ensureQueryData(createSessionQueryOptions());
   },
   head: () => ({
     links: [{ rel: "stylesheet", href: css }],

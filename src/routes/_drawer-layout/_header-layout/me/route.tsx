@@ -18,11 +18,13 @@ import type { LinkProps } from "@tanstack/solid-router";
 import type { LucideIcon } from "lucide-solid";
 import { Drawer } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
-import { sessionQueryOptions } from "~/features/auth/queries";
+import { createSessionQueryOptions } from "~/features/auth/queries";
 
 export const Route = createFileRoute("/_drawer-layout/_header-layout/me")({
   beforeLoad: async ({ context: { queryClient }, location }) => {
-    const session = await queryClient.ensureQueryData(sessionQueryOptions());
+    const session = await queryClient.ensureQueryData(
+      createSessionQueryOptions(),
+    );
 
     if (!session) {
       throw redirect({
