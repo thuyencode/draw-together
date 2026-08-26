@@ -5,13 +5,14 @@ import { createSessionQueryOptions } from "~/features/auth/queries";
 export const Route = createFileRoute(
   "/_drawer-layout/_floating-header-layout/auth",
 )({
-  beforeLoad: async ({ context: { queryClient }, location }) => {
+  beforeLoad: async ({ context: { queryClient }, location, search }) => {
     const session = await queryClient.ensureQueryData(
       createSessionQueryOptions(),
     );
 
     if (session) {
-      throw redirect({ to: "/" });
+      const urlParams = new URLSearchParams(location.searchStr);
+      throw redirect({ to: urlParams.get("redirect") ?? "/" });
     }
 
     if (location.pathname === "/auth") {

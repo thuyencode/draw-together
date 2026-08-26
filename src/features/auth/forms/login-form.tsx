@@ -33,9 +33,12 @@ export function LogInForm() {
           setRootError([ctx.error.message]);
         },
         onSuccess: () => {
-          const urlParams = new URLSearchParams(window.location.search);
-          queryClient.invalidateQueries(createSessionQueryOptions());
-          navigate({ to: urlParams.get("redirect") ?? "/" });
+          queryClient
+            .invalidateQueries(createSessionQueryOptions())
+            .then(() => {
+              const urlParams = new URLSearchParams(window.location.search);
+              navigate({ to: urlParams.get("redirect") ?? "/" });
+            });
         },
       });
     },
