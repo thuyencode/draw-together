@@ -17,6 +17,7 @@ import {
 import { getLocale } from "~/paraglide/runtime";
 import { m } from "~/paraglide/messages";
 import { createSessionQueryOptions } from "~/features/auth/queries";
+import { Toast } from "~/features/shared/components/ui";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -62,6 +63,7 @@ function RootLayout() {
         <Suspense>
           <Outlet />
         </Suspense>
+        <Toast />
         <Scripts />
       </body>
     </html>

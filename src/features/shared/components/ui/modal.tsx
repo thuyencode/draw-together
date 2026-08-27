@@ -20,12 +20,13 @@ export interface ModalContextValue {
 
 const ModalContext = createContext<ModalContextValue | undefined>(undefined);
 
-interface ModalProps extends Pick<Partial<ModalContextValue>, "id"> {
+export interface ModalProviderProps
+  extends ParentProps, Pick<Partial<ModalContextValue>, "id"> {
   hotkey?: RegisterableHotkey;
   ref?: (value: ModalContextValue) => void;
 }
 
-function ModalProvider(props: ParentProps<ModalProps>) {
+function ModalProvider(props: ModalProviderProps) {
   const defaultId = untrack(() => props.id);
   const hotkey = untrack(() => props.hotkey);
 
@@ -69,14 +70,18 @@ function ModalProvider(props: ParentProps<ModalProps>) {
   );
 }
 
-function ModalRoot(_props: ParentProps<Omit<ComponentProps<"dialog">, "id">>) {
+export type ModalRootProps = Omit<ComponentProps<"dialog">, "id">;
+
+function ModalRoot(_props: ModalRootProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   const modal = useModal();
 
   return <dialog id={modal.id} class={cn("modal", props.class)} {...rest} />;
 }
 
-function ModalTrigger(_props: ParentProps<ComponentProps<"button">>) {
+export type ModalTriggerProps = ComponentProps<"button">;
+
+function ModalTrigger(_props: ModalTriggerProps) {
   const [props, rest] = splitProps(_props, ["class", "onClick", "children"]);
   const modal = useModal();
 
@@ -103,17 +108,25 @@ function ModalTrigger(_props: ParentProps<ComponentProps<"button">>) {
   );
 }
 
-function ModalBox(_props: ParentProps<ComponentProps<"div">>) {
-  const [props, rest] = splitProps(_props, ["class", "children"]);
+export type ModalBoxProps = ComponentProps<"div">;
 
-  return (
-    <div class={cn("modal-box", props.class)} {...rest}>
-      {props.children}
-    </div>
-  );
+function ModalBox(_props: ModalBoxProps) {
+  const [props, rest] = splitProps(_props, ["class"]);
+
+  return <div class={cn("modal-box", props.class)} {...rest} />;
 }
 
-function ModalCloser(_props: ParentProps<ComponentProps<"button">>) {
+export type ModalActionProps = ComponentProps<"div">;
+
+function ModalAction(_props: ComponentProps<"div">) {
+  const [props, rest] = splitProps(_props, ["class"]);
+
+  return <div class={cn("modal-action", props.class)} {...rest} />;
+}
+
+export type ModalCloserProps = ComponentProps<"button">;
+
+function ModalCloser(_props: ModalCloserProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -123,7 +136,9 @@ function ModalCloser(_props: ParentProps<ComponentProps<"button">>) {
   );
 }
 
-function ModalBackdrop(_props: ParentProps<ComponentProps<"form">>) {
+export type ModalBackdropProps = ComponentProps<"form">;
+
+function ModalBackdrop(_props: ModalBackdropProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
   return (
@@ -148,6 +163,7 @@ export const Modal = {
   Root: ModalRoot,
   Trigger: ModalTrigger,
   Box: ModalBox,
+  Action: ModalAction,
   Closer: ModalCloser,
   Backdrop: ModalBackdrop,
   useModal,
