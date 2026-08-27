@@ -12,9 +12,9 @@ import type { LucideIcon } from "lucide-solid";
 import type { LocalizedString } from "@inlang/paraglide-js";
 import { Steps } from "~/features/shared/components/ui";
 import { useAppForm } from "~/features/shared/hooks/form";
-import { sleep } from "~/features/shared/utils";
 import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
+import { toaster } from "~/integrations/ark-ui/toast";
 
 const signUpStepLabels: {
   label: () => LocalizedString;
@@ -39,10 +39,6 @@ export function SignUpForm() {
       onDynamic: SignUpFormMultiStepSchema,
     },
     onSubmit: async ({ value }) => {
-      if (import.meta.env.MODE === "development") {
-        await sleep(2000);
-      }
-
       await authClient.signUp.email(
         {
           email: value.step1.email,
@@ -55,12 +51,16 @@ export function SignUpForm() {
             setRootError([ctx.error.message]);
           },
           onSuccess: () => {
-            queryClient
-              .invalidateQueries(createSessionQueryOptions())
-              .then(() => {
+            toaster.promise(
+              async () => {
+                await queryClient.invalidateQueries(
+                  createSessionQueryOptions(),
+                );
                 const urlParams = new URLSearchParams(window.location.search);
-                navigate({ to: urlParams.get("redirect") ?? "/" });
-              });
+                await navigate({ to: urlParams.get("redirect") ?? "/" });
+              },
+              { loading: { title: "Please wait..." } },
+            );
           },
         },
       );

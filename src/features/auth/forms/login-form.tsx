@@ -5,9 +5,9 @@ import { PASSWORD_MAX_LENGTH } from "../constants";
 import { LoginFormSchema, PasswordSchema } from "../schema";
 import { createSessionQueryOptions } from "../queries";
 import { useAppForm } from "~/features/shared/hooks/form";
-import { sleep } from "~/features/shared/utils";
 import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
+import { toaster } from "~/integrations/ark-ui/toast";
 
 export function LogInForm() {
   const queryClient = useQueryClient();
@@ -24,21 +24,19 @@ export function LogInForm() {
     onSubmit: async ({ value }) => {
       setRootError([]);
 
-      if (import.meta.env.MODE === "development") {
-        await sleep(2000);
-      }
-
       await authClient.signIn.email(value, {
         onError: (ctx) => {
           setRootError([ctx.error.message]);
         },
         onSuccess: () => {
-          queryClient
-            .invalidateQueries(createSessionQueryOptions())
-            .then(() => {
+          toaster.promise(
+            async () => {
+              await queryClient.invalidateQueries(createSessionQueryOptions());
               const urlParams = new URLSearchParams(window.location.search);
-              navigate({ to: urlParams.get("redirect") ?? "/" });
-            });
+              await navigate({ to: urlParams.get("redirect") ?? "/" });
+            },
+            { loading: { title: "Please wait..." } },
+          );
         },
       });
     },
