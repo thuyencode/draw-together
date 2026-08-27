@@ -32,6 +32,7 @@ export function NewDrawingForm(props: NewDrawingFormProps) {
         title,
       } = data.value;
       navigate({
+        viewTransition: true,
         to: "/trial",
         search: { width, height, title },
       });

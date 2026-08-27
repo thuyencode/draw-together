@@ -33,7 +33,10 @@ export function LogInForm() {
             async () => {
               await queryClient.invalidateQueries(createSessionQueryOptions());
               const urlParams = new URLSearchParams(window.location.search);
-              await navigate({ to: urlParams.get("redirect") ?? "/" });
+              await navigate({
+                viewTransition: true,
+                to: urlParams.get("redirect") ?? "/",
+              });
             },
             { loading: { title: "Please wait..." } },
           );
