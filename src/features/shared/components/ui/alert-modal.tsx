@@ -30,7 +30,12 @@ function AlertModalTrigger<T extends ValidComponent = "button">(
 function AlertModalBox(_props: ModalBoxProps) {
   const [props, rest] = splitProps(_props, ["class"]);
 
-  return <Modal.Box class={cn("max-w-sm p-4", props.class)} {...rest} />;
+  return (
+    <Modal.Box
+      class={cn("border-base-content/30 max-w-sm border p-4", props.class)}
+      {...rest}
+    />
+  );
 }
 
 function AlertModalTitle(_props: ComponentProps<"h2">) {
@@ -55,10 +60,7 @@ function AlertModalAction(_props: ModalActionProps) {
 
   return (
     <Modal.Action
-      class={cn(
-        "bg-base-200 border-base-content/30 -mx-4 -mb-4 border-t p-4",
-        props.class,
-      )}
+      class={cn("border-base-content/30 -mx-4 -mb-4 border-t p-4", props.class)}
       {...rest}
     />
   );
@@ -68,10 +70,7 @@ function AlertModalCancel(_props: ModalCloserProps) {
   const [props, rest] = splitProps(_props, ["class", "children"]);
 
   return (
-    <Modal.Closer
-      class={cn("btn-sm bg-base-content text-base-300", props.class)}
-      {...rest}
-    >
+    <Modal.Closer class={cn("btn-sm", props.class)} {...rest}>
       <Show when={props.children} fallback={m.cancel()}>
         {(children) => children()}
       </Show>
