@@ -13,10 +13,8 @@ export const auth = betterAuth({
     enabled: true,
   },
   session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60, // Cache duration in seconds
-    },
+    // Temp fix for the "Session is not fresh" error
+    freshAge: 0,
   },
   plugins: [username(), tanstackStartCookies()],
 });

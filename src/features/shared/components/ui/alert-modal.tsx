@@ -1,7 +1,7 @@
 import { Show, splitProps } from "solid-js";
 import { cn } from "../../utils/cn";
 import { Modal } from "./modal";
-import type { ComponentProps, ParentProps } from "solid-js";
+import type { ComponentProps, ParentProps, ValidComponent } from "solid-js";
 import type {
   ModalActionProps,
   ModalBackdropProps,
@@ -11,6 +11,7 @@ import type {
   ModalRootProps,
   ModalTriggerProps,
 } from "./modal";
+import { m } from "~/paraglide/messages";
 
 function AlertModalProvider(props: ParentProps<ModalProviderProps>) {
   return <Modal.Provider {...props} />;
@@ -20,7 +21,9 @@ function AlertModalRoot(props: ModalRootProps) {
   return <Modal.Root {...props} />;
 }
 
-function AlertModalTrigger(props: ModalTriggerProps) {
+function AlertModalTrigger<T extends ValidComponent = "button">(
+  props: ModalTriggerProps<T>,
+) {
   return <Modal.Trigger {...props} />;
 }
 
@@ -65,8 +68,11 @@ function AlertModalCancel(_props: ModalCloserProps) {
   const [props, rest] = splitProps(_props, ["class", "children"]);
 
   return (
-    <Modal.Closer class={cn("btn-sm bg-base-100", props.class)} {...rest}>
-      <Show when={props.children} fallback={"Cancel"}>
+    <Modal.Closer
+      class={cn("btn-sm bg-base-content text-base-300", props.class)}
+      {...rest}
+    >
+      <Show when={props.children} fallback={m.cancel()}>
         {(children) => children()}
       </Show>
     </Modal.Closer>
@@ -78,7 +84,7 @@ function AlertModalProceed(_props: ModalCloserProps) {
 
   return (
     <Modal.Closer class={cn("btn-sm btn-error", props.class)} {...rest}>
-      <Show when={props.children} fallback={"Proceed"}>
+      <Show when={props.children} fallback={m.proceed()}>
         {(children) => children()}
       </Show>
     </Modal.Closer>

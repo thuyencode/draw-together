@@ -22,3 +22,19 @@ export const LoginFormSchema = v.object({
   email: EmailSchema,
   password: PasswordSchema,
 });
+
+export const PasswordChangingFormSchema = v.pipe(
+  v.object({
+    currentPassword: PasswordSchema,
+    newPassword: PasswordSchema,
+    confirmPassword: PasswordSchema,
+  }),
+  v.forward(
+    v.partialCheck(
+      [["newPassword"], ["confirmPassword"]],
+      (input) => input.newPassword === input.confirmPassword,
+      () => m.auth_passwordsDoNotMatchError(),
+    ),
+    ["confirmPassword"],
+  ),
+);

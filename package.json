@@ -33,6 +33,7 @@
     "@tanstack/solid-router": "latest",
     "@tanstack/solid-router-ssr-query": "latest",
     "@tanstack/solid-start": "latest",
+    "accept-language-parser": "^1.5.0",
     "better-auth": "^1.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -43,6 +44,7 @@
     "nitro": "npm:nitro-nightly@latest",
     "solid-js": "^1.9.15",
     "tailwind-merge": "^3.6.0",
+    "ua-parser-js": "^2.0.10",
     "valibot": "^1.4.2"
   },
   "devDependencies": {
@@ -64,6 +66,7 @@
     "@tanstack/router-plugin": "^1.168.32",
     "@tanstack/solid-query-devtools": "latest",
     "@tanstack/solid-router-devtools": "latest",
+    "@types/accept-language-parser": "^1.5.8",
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
     "@types/node": "latest",
     "daisyui": "^5.7.18",

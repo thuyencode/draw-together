@@ -7,9 +7,16 @@ import {
   useContext,
 } from "solid-js";
 import { createHotkey } from "@tanstack/solid-hotkeys";
+import { Dynamic, Portal } from "solid-js/web";
 import { cn } from "../../utils/cn";
+import type { PropsWithAs } from "../../types/props";
 import type { RegisterableHotkey } from "@tanstack/solid-hotkeys";
-import type { ComponentProps, ParentProps } from "solid-js";
+import type {
+  ComponentProps,
+  JSX,
+  ParentProps,
+  ValidComponent,
+} from "solid-js";
 import { m } from "~/paraglide/messages";
 
 export interface ModalContextValue {
@@ -76,18 +83,36 @@ function ModalRoot(_props: ModalRootProps) {
   const [props, rest] = splitProps(_props, ["class"]);
   const modal = useModal();
 
-  return <dialog id={modal.id} class={cn("modal", props.class)} {...rest} />;
+  return (
+    <Portal>
+      <dialog id={modal.id} class={cn("modal", props.class)} {...rest} />
+    </Portal>
+  );
 }
 
-export type ModalTriggerProps = ComponentProps<"button">;
+type BaseModalTriggerProps<T extends ValidComponent> = PropsWithAs<
+  T,
+  {
+    class?: string;
+    onClick?: JSX.EventHandlerUnion<T, MouseEvent>;
+  }
+>;
 
-function ModalTrigger(_props: ModalTriggerProps) {
-  const [props, rest] = splitProps(_props, ["class", "onClick", "children"]);
+export type ModalTriggerProps<T extends ValidComponent> =
+  BaseModalTriggerProps<T> &
+    Omit<ComponentProps<T>, keyof BaseModalTriggerProps<T>>;
+
+function ModalTrigger<T extends ValidComponent = "button">(
+  _props: ModalTriggerProps<T>,
+) {
+  const [props, rest] = splitProps(_props, ["as", "class", "onClick"]);
   const modal = useModal();
 
   return (
-    <button
+    <Dynamic
+      component={props.as ?? "button"}
       class={cn("btn", props.class)}
+      // @ts-ignore - `e` is not any
       onClick={(e) => {
         modal.openModal();
 
@@ -102,9 +127,7 @@ function ModalTrigger(_props: ModalTriggerProps) {
         }
       }}
       {...rest}
-    >
-      {props.children}
-    </button>
+    />
   );
 }
 

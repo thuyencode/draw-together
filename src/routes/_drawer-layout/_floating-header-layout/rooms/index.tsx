@@ -2,7 +2,9 @@ import { Link, createFileRoute } from "@tanstack/solid-router";
 import { HouseIcon } from "lucide-solid";
 import { m } from "~/paraglide/messages";
 
-export const Route = createFileRoute("/_drawer-layout/_floating-header-layout/rooms/")({
+export const Route = createFileRoute(
+  "/_drawer-layout/_floating-header-layout/rooms/",
+)({
   component: RoomsPage,
 });
 
@@ -12,7 +14,7 @@ function RoomsPage() {
       <h1>{m.rooms_notImplemented()}</h1>
       <h2 class="font-light">{m.rooms_sorry()}</h2>
 
-      <Link class="btn btn-primary btn-lg" to="/">
+      <Link viewTransition class="btn btn-primary btn-lg" to="/">
         <HouseIcon class="size-5" /> {m.rooms_goHome()}
       </Link>
     </main>

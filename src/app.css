@@ -37,6 +37,18 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  [data-scope="toast"][data-part="root"][data-state="closed"] {
+    @apply transition-[translate,scale,opacity] duration-400 ease-[cubic-bezier(0.06,0.71,0.55,1)];
+  }
+
+  [data-scope="toast"][data-part="root"][data-placement^="top"] {
+    @apply shadow-[0_-4px_12px_rgba(0,0,0,0.1),0_0_1px_rgba(0,0,0,0.2)];
+  }
+
+  [data-scope="toast"][data-part="root"][data-placement^="bottom"] {
+    @apply shadow-[0_4px_12px_rgba(0,0,0,0.1),0_0_1px_rgba(0,0,0,0.2)];
+  }
 }
 
 @layer utilities {
