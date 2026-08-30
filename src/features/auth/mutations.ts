@@ -34,7 +34,7 @@ export const createRevokeSessionMutationOptions = (token: Session["token"]) =>
         );
       }
     },
-    onSettled: (_data, _error, _variables, result, ctx) => {
+    onSettled: (_, __, ___, result, ctx) => {
       if (result) {
         ctx.client.invalidateQueries(result.queryOptions);
       }
@@ -45,8 +45,7 @@ export const createSignOutMutationOptions = () =>
   mutationOptions({
     mutationFn: () => authClient.signOut({ fetchOptions: { throw: true } }),
     onMutate: (_, ctx) => {
-      const queryOptions = createSessionQueryOptions();
-      ctx.client.setQueryData(queryOptions.queryKey, null);
+      ctx.client.setQueryData(createSessionQueryOptions().queryKey, null);
       ctx.client.cancelQueries();
     },
   });
