@@ -27,56 +27,70 @@ interface SessionListProps {
 }
 
 export function SessionList(props: SessionListProps) {
-  const router = useRouter();
   const currentSessionQuery = useQuery(createSessionQueryOptions);
   const sessionListQuery = useQuery(createSessionListQueryOptions);
-  const signOutMutation = useMutation(createSignOutMutationOptions);
 
-  const sessionList = () =>
+  const otherSessionList = () =>
     sessionListQuery.data?.filter(
       (session) => session.id !== currentSessionQuery.data?.session.id,
     );
-
-  const signOut = () => {
-    signOutMutation.mutate();
-    router.invalidate();
-  };
 
   return (
     <section class={cn("space-y-3", props.class)}>
       <h2 class="text-xl">{m.session_list_title()}</h2>
 
       <ul class="list">
-        <li class="opacity-80">Current device</li>
+        <li class="text-base opacity-80">
+          {m.session_list_title_currentDevice()}
+        </li>
 
         <Show when={currentSessionQuery.data}>
-          {(data) => (
-            <SessionItem session={data().session} onLogOut={signOut} />
-          )}
+          {(data) => <CurrentSessionItem session={data().session} />}
         </Show>
 
-        <li class="pt-4 opacity-80">Other devices</li>
+        <li class="pt-4 text-base opacity-80">
+          {m.session_list_title_otherDevices()}
+        </li>
 
-        <Show when={sessionList()}>
-          {(data) => (
-            <For each={data()}>
-              {(session) => {
-                const revokeSessionMutation = useMutation(() =>
-                  createRevokeSessionMutationOptions(session.token),
-                );
-
-                return (
-                  <SessionItem
-                    session={session}
-                    onLogOut={revokeSessionMutation.mutate}
-                  />
-                );
-              }}
-            </For>
-          )}
+        <Show
+          when={otherSessionList()?.length !== 0}
+          fallback={
+            <li class="pt-4 text-center text-lg">
+              {m.session_list_message_noOtherSessions()}
+            </li>
+          }
+        >
+          <For each={otherSessionList()}>
+            {(session) => <OtherSessionItem session={session} />}
+          </For>
         </Show>
       </ul>
     </section>
+  );
+}
+
+function CurrentSessionItem(props: Pick<SessionItemProps, "session">) {
+  const router = useRouter();
+  const signOutMutation = useMutation(createSignOutMutationOptions);
+
+  const signOut = () => {
+    signOutMutation.mutate();
+    router.invalidate();
+  };
+
+  return <SessionItem session={props.session} onLogOut={signOut} />;
+}
+
+function OtherSessionItem(props: Pick<SessionItemProps, "session">) {
+  const revokeSessionMutation = useMutation(() =>
+    createRevokeSessionMutationOptions(props.session.token),
+  );
+
+  return (
+    <SessionItem
+      session={props.session}
+      onLogOut={revokeSessionMutation.mutate}
+    />
   );
 }
 
@@ -85,7 +99,7 @@ interface SessionItemProps {
   onLogOut: () => void;
 }
 
-export function SessionItem(props: SessionItemProps) {
+function SessionItem(props: SessionItemProps) {
   const userLocaleQuery = useQuery(createUserLocaleQueryOptions);
 
   const sinceDate = () =>
