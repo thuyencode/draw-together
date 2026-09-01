@@ -33,7 +33,7 @@ export function Sidebar(props: ParentProps) {
 
       <div class="divider mx-0 mt-auto mb-1 px-2" />
       <LocaleSwitcher />
-      <div class="divider mx-0 my-1 px-2" />
+      <div class="md:divider mx-0 my-1 px-2" />
 
       <Drawer.Trigger
         class="btn-soft btn-neutral is-drawer-close:tooltip is-drawer-close:tooltip-right flex h-9 w-full rounded-none max-md:hidden"
