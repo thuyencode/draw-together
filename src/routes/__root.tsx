@@ -9,15 +9,15 @@ import { ErrorBoundary, Suspense } from "solid-js";
 import { HydrationScript } from "solid-js/web";
 import css from "../app.css?url";
 import type { QueryClient } from "@tanstack/solid-query";
+import { createSessionQueryOptions } from "~/features/auth/queries";
 import {
   ErrorComponent,
   NotFound,
   errorBoundaryFallBackProp,
 } from "~/features/shared/components";
-import { getLocale } from "~/paraglide/runtime";
-import { m } from "~/paraglide/messages";
-import { createSessionQueryOptions } from "~/features/auth/queries";
 import { Toast } from "~/features/shared/components/ui";
+import { m } from "~/paraglide/messages";
+import { getLocale } from "~/paraglide/runtime";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -37,9 +37,6 @@ export const Route = createRootRouteWithContext<{
       },
       {
         title: m.app_name(),
-      },
-      {
-        lang: "en",
       },
     ],
   }),

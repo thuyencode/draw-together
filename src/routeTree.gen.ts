@@ -11,18 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DrawerLayoutRouteRouteImport } from './routes/_drawer-layout/route'
 import { Route as TrialRouteImport } from './routes/trial'
-import { Route as DrawerLayoutFloatingHeaderLayoutRouteRouteImport } from './routes/_drawer-layout/_floating-header-layout/route'
-import { Route as DrawerLayoutHeaderLayoutRouteRouteImport } from './routes/_drawer-layout/_header-layout/route'
-import { Route as DrawerLayoutFloatingHeaderLayoutIndexRouteImport } from './routes/_drawer-layout/_floating-header-layout/index'
-import { Route as DrawerLayoutFloatingHeaderLayoutAuthRouteRouteImport } from './routes/_drawer-layout/_floating-header-layout/auth/route'
-import { Route as DrawerLayoutHeaderLayoutMeRouteRouteImport } from './routes/_drawer-layout/_header-layout/me/route'
+import { Route as DrawerLayoutIndexRouteImport } from './routes/_drawer-layout/index'
+import { Route as DrawerLayoutAuthRouteRouteImport } from './routes/_drawer-layout/auth/route'
+import { Route as DrawerLayoutMeRouteRouteImport } from './routes/_drawer-layout/me/route'
+import { Route as DrawerLayoutAuthLoginRouteImport } from './routes/_drawer-layout/auth/login'
+import { Route as DrawerLayoutAuthSignUpRouteImport } from './routes/_drawer-layout/auth/sign-up'
+import { Route as DrawerLayoutMeIndexRouteImport } from './routes/_drawer-layout/me/index'
+import { Route as DrawerLayoutMeProfileRouteImport } from './routes/_drawer-layout/me/profile'
+import { Route as DrawerLayoutMeSecurityRouteImport } from './routes/_drawer-layout/me/security'
+import { Route as DrawerLayoutRoomsIndexRouteImport } from './routes/_drawer-layout/rooms/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
-import { Route as DrawerLayoutFloatingHeaderLayoutAuthLoginRouteImport } from './routes/_drawer-layout/_floating-header-layout/auth/login'
-import { Route as DrawerLayoutFloatingHeaderLayoutAuthSignUpRouteImport } from './routes/_drawer-layout/_floating-header-layout/auth/sign-up'
-import { Route as DrawerLayoutFloatingHeaderLayoutRoomsIndexRouteImport } from './routes/_drawer-layout/_floating-header-layout/rooms/index'
-import { Route as DrawerLayoutHeaderLayoutMeIndexRouteImport } from './routes/_drawer-layout/_header-layout/me/index'
-import { Route as DrawerLayoutHeaderLayoutMeProfileRouteImport } from './routes/_drawer-layout/_header-layout/me/profile'
-import { Route as DrawerLayoutHeaderLayoutMeSecurityRouteImport } from './routes/_drawer-layout/_header-layout/me/security'
 
 const DrawerLayoutRouteRoute = DrawerLayoutRouteRouteImport.update({
   id: '/_drawer-layout',
@@ -33,117 +31,96 @@ const TrialRoute = TrialRouteImport.update({
   path: '/trial',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DrawerLayoutFloatingHeaderLayoutRouteRoute =
-  DrawerLayoutFloatingHeaderLayoutRouteRouteImport.update({
-    id: '/_floating-header-layout',
-    getParentRoute: () => DrawerLayoutRouteRoute,
-  } as any)
-const DrawerLayoutHeaderLayoutRouteRoute =
-  DrawerLayoutHeaderLayoutRouteRouteImport.update({
-    id: '/_header-layout',
-    getParentRoute: () => DrawerLayoutRouteRoute,
-  } as any)
-const DrawerLayoutFloatingHeaderLayoutIndexRoute =
-  DrawerLayoutFloatingHeaderLayoutIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => DrawerLayoutFloatingHeaderLayoutRouteRoute,
-  } as any)
-const DrawerLayoutFloatingHeaderLayoutAuthRouteRoute =
-  DrawerLayoutFloatingHeaderLayoutAuthRouteRouteImport.update({
-    id: '/auth',
-    path: '/auth',
-    getParentRoute: () => DrawerLayoutFloatingHeaderLayoutRouteRoute,
-  } as any)
-const DrawerLayoutHeaderLayoutMeRouteRoute =
-  DrawerLayoutHeaderLayoutMeRouteRouteImport.update({
-    id: '/me',
-    path: '/me',
-    getParentRoute: () => DrawerLayoutHeaderLayoutRouteRoute,
-  } as any)
+const DrawerLayoutIndexRoute = DrawerLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DrawerLayoutRouteRoute,
+} as any)
+const DrawerLayoutAuthRouteRoute = DrawerLayoutAuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => DrawerLayoutRouteRoute,
+} as any)
+const DrawerLayoutMeRouteRoute = DrawerLayoutMeRouteRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => DrawerLayoutRouteRoute,
+} as any)
+const DrawerLayoutAuthLoginRoute = DrawerLayoutAuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => DrawerLayoutAuthRouteRoute,
+} as any)
+const DrawerLayoutAuthSignUpRoute = DrawerLayoutAuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => DrawerLayoutAuthRouteRoute,
+} as any)
+const DrawerLayoutMeIndexRoute = DrawerLayoutMeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DrawerLayoutMeRouteRoute,
+} as any)
+const DrawerLayoutMeProfileRoute = DrawerLayoutMeProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DrawerLayoutMeRouteRoute,
+} as any)
+const DrawerLayoutMeSecurityRoute = DrawerLayoutMeSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => DrawerLayoutMeRouteRoute,
+} as any)
+const DrawerLayoutRoomsIndexRoute = DrawerLayoutRoomsIndexRouteImport.update({
+  id: '/rooms/',
+  path: '/rooms/',
+  getParentRoute: () => DrawerLayoutRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DrawerLayoutFloatingHeaderLayoutAuthLoginRoute =
-  DrawerLayoutFloatingHeaderLayoutAuthLoginRouteImport.update({
-    id: '/login',
-    path: '/login',
-    getParentRoute: () => DrawerLayoutFloatingHeaderLayoutAuthRouteRoute,
-  } as any)
-const DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute =
-  DrawerLayoutFloatingHeaderLayoutAuthSignUpRouteImport.update({
-    id: '/sign-up',
-    path: '/sign-up',
-    getParentRoute: () => DrawerLayoutFloatingHeaderLayoutAuthRouteRoute,
-  } as any)
-const DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute =
-  DrawerLayoutFloatingHeaderLayoutRoomsIndexRouteImport.update({
-    id: '/rooms/',
-    path: '/rooms/',
-    getParentRoute: () => DrawerLayoutFloatingHeaderLayoutRouteRoute,
-  } as any)
-const DrawerLayoutHeaderLayoutMeIndexRoute =
-  DrawerLayoutHeaderLayoutMeIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => DrawerLayoutHeaderLayoutMeRouteRoute,
-  } as any)
-const DrawerLayoutHeaderLayoutMeProfileRoute =
-  DrawerLayoutHeaderLayoutMeProfileRouteImport.update({
-    id: '/profile',
-    path: '/profile',
-    getParentRoute: () => DrawerLayoutHeaderLayoutMeRouteRoute,
-  } as any)
-const DrawerLayoutHeaderLayoutMeSecurityRoute =
-  DrawerLayoutHeaderLayoutMeSecurityRouteImport.update({
-    id: '/security',
-    path: '/security',
-    getParentRoute: () => DrawerLayoutHeaderLayoutMeRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
+  '/': typeof DrawerLayoutIndexRoute
   '/trial': typeof TrialRoute
-  '/auth': typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
-  '/me': typeof DrawerLayoutHeaderLayoutMeRouteRouteWithChildren
+  '/auth': typeof DrawerLayoutAuthRouteRouteWithChildren
+  '/me': typeof DrawerLayoutMeRouteRouteWithChildren
+  '/auth/login': typeof DrawerLayoutAuthLoginRoute
+  '/auth/sign-up': typeof DrawerLayoutAuthSignUpRoute
+  '/me/profile': typeof DrawerLayoutMeProfileRoute
+  '/me/security': typeof DrawerLayoutMeSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/login': typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
-  '/auth/sign-up': typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
-  '/me/profile': typeof DrawerLayoutHeaderLayoutMeProfileRoute
-  '/me/security': typeof DrawerLayoutHeaderLayoutMeSecurityRoute
-  '/rooms/': typeof DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute
-  '/me/': typeof DrawerLayoutHeaderLayoutMeIndexRoute
+  '/me/': typeof DrawerLayoutMeIndexRoute
+  '/rooms/': typeof DrawerLayoutRoomsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
   '/trial': typeof TrialRoute
-  '/auth': typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
+  '/auth': typeof DrawerLayoutAuthRouteRouteWithChildren
+  '/': typeof DrawerLayoutIndexRoute
+  '/auth/login': typeof DrawerLayoutAuthLoginRoute
+  '/auth/sign-up': typeof DrawerLayoutAuthSignUpRoute
+  '/me/profile': typeof DrawerLayoutMeProfileRoute
+  '/me/security': typeof DrawerLayoutMeSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/login': typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
-  '/auth/sign-up': typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
-  '/me/profile': typeof DrawerLayoutHeaderLayoutMeProfileRoute
-  '/me/security': typeof DrawerLayoutHeaderLayoutMeSecurityRoute
-  '/rooms': typeof DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute
-  '/me': typeof DrawerLayoutHeaderLayoutMeIndexRoute
+  '/me': typeof DrawerLayoutMeIndexRoute
+  '/rooms': typeof DrawerLayoutRoomsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_drawer-layout': typeof DrawerLayoutRouteRouteWithChildren
   '/trial': typeof TrialRoute
-  '/_drawer-layout/_floating-header-layout': typeof DrawerLayoutFloatingHeaderLayoutRouteRouteWithChildren
-  '/_drawer-layout/_header-layout': typeof DrawerLayoutHeaderLayoutRouteRouteWithChildren
-  '/_drawer-layout/_floating-header-layout/auth': typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
-  '/_drawer-layout/_header-layout/me': typeof DrawerLayoutHeaderLayoutMeRouteRouteWithChildren
+  '/_drawer-layout/auth': typeof DrawerLayoutAuthRouteRouteWithChildren
+  '/_drawer-layout/me': typeof DrawerLayoutMeRouteRouteWithChildren
+  '/_drawer-layout/': typeof DrawerLayoutIndexRoute
+  '/_drawer-layout/auth/login': typeof DrawerLayoutAuthLoginRoute
+  '/_drawer-layout/auth/sign-up': typeof DrawerLayoutAuthSignUpRoute
+  '/_drawer-layout/me/profile': typeof DrawerLayoutMeProfileRoute
+  '/_drawer-layout/me/security': typeof DrawerLayoutMeSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/_drawer-layout/_floating-header-layout/': typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
-  '/_drawer-layout/_floating-header-layout/auth/login': typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
-  '/_drawer-layout/_floating-header-layout/auth/sign-up': typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
-  '/_drawer-layout/_header-layout/me/profile': typeof DrawerLayoutHeaderLayoutMeProfileRoute
-  '/_drawer-layout/_header-layout/me/security': typeof DrawerLayoutHeaderLayoutMeSecurityRoute
-  '/_drawer-layout/_floating-header-layout/rooms/': typeof DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute
-  '/_drawer-layout/_header-layout/me/': typeof DrawerLayoutHeaderLayoutMeIndexRoute
+  '/_drawer-layout/me/': typeof DrawerLayoutMeIndexRoute
+  '/_drawer-layout/rooms/': typeof DrawerLayoutRoomsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,41 +129,39 @@ export interface FileRouteTypes {
     | '/trial'
     | '/auth'
     | '/me'
-    | '/api/auth/$'
     | '/auth/login'
     | '/auth/sign-up'
     | '/me/profile'
     | '/me/security'
-    | '/rooms/'
+    | '/api/auth/$'
     | '/me/'
+    | '/rooms/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/trial'
     | '/auth'
-    | '/api/auth/$'
+    | '/'
     | '/auth/login'
     | '/auth/sign-up'
     | '/me/profile'
     | '/me/security'
-    | '/rooms'
+    | '/api/auth/$'
     | '/me'
+    | '/rooms'
   id:
     | '__root__'
     | '/_drawer-layout'
     | '/trial'
-    | '/_drawer-layout/_floating-header-layout'
-    | '/_drawer-layout/_header-layout'
-    | '/_drawer-layout/_floating-header-layout/auth'
-    | '/_drawer-layout/_header-layout/me'
+    | '/_drawer-layout/auth'
+    | '/_drawer-layout/me'
+    | '/_drawer-layout/'
+    | '/_drawer-layout/auth/login'
+    | '/_drawer-layout/auth/sign-up'
+    | '/_drawer-layout/me/profile'
+    | '/_drawer-layout/me/security'
     | '/api/auth/$'
-    | '/_drawer-layout/_floating-header-layout/'
-    | '/_drawer-layout/_floating-header-layout/auth/login'
-    | '/_drawer-layout/_floating-header-layout/auth/sign-up'
-    | '/_drawer-layout/_header-layout/me/profile'
-    | '/_drawer-layout/_header-layout/me/security'
-    | '/_drawer-layout/_floating-header-layout/rooms/'
-    | '/_drawer-layout/_header-layout/me/'
+    | '/_drawer-layout/me/'
+    | '/_drawer-layout/rooms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -211,40 +186,68 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof TrialRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_drawer-layout/_floating-header-layout': {
-      id: '/_drawer-layout/_floating-header-layout'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DrawerLayoutFloatingHeaderLayoutRouteRouteImport
-      parentRoute: typeof DrawerLayoutRouteRoute
-    }
-    '/_drawer-layout/_header-layout': {
-      id: '/_drawer-layout/_header-layout'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof DrawerLayoutHeaderLayoutRouteRouteImport
-      parentRoute: typeof DrawerLayoutRouteRoute
-    }
-    '/_drawer-layout/_floating-header-layout/': {
-      id: '/_drawer-layout/_floating-header-layout/'
+    '/_drawer-layout/': {
+      id: '/_drawer-layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof DrawerLayoutFloatingHeaderLayoutIndexRouteImport
-      parentRoute: typeof DrawerLayoutFloatingHeaderLayoutRouteRoute
+      preLoaderRoute: typeof DrawerLayoutIndexRouteImport
+      parentRoute: typeof DrawerLayoutRouteRoute
     }
-    '/_drawer-layout/_floating-header-layout/auth': {
-      id: '/_drawer-layout/_floating-header-layout/auth'
+    '/_drawer-layout/auth': {
+      id: '/_drawer-layout/auth'
       path: '/auth'
       fullPath: '/auth'
-      preLoaderRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteImport
-      parentRoute: typeof DrawerLayoutFloatingHeaderLayoutRouteRoute
+      preLoaderRoute: typeof DrawerLayoutAuthRouteRouteImport
+      parentRoute: typeof DrawerLayoutRouteRoute
     }
-    '/_drawer-layout/_header-layout/me': {
-      id: '/_drawer-layout/_header-layout/me'
+    '/_drawer-layout/me': {
+      id: '/_drawer-layout/me'
       path: '/me'
       fullPath: '/me'
-      preLoaderRoute: typeof DrawerLayoutHeaderLayoutMeRouteRouteImport
-      parentRoute: typeof DrawerLayoutHeaderLayoutRouteRoute
+      preLoaderRoute: typeof DrawerLayoutMeRouteRouteImport
+      parentRoute: typeof DrawerLayoutRouteRoute
+    }
+    '/_drawer-layout/auth/login': {
+      id: '/_drawer-layout/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof DrawerLayoutAuthLoginRouteImport
+      parentRoute: typeof DrawerLayoutAuthRouteRoute
+    }
+    '/_drawer-layout/auth/sign-up': {
+      id: '/_drawer-layout/auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof DrawerLayoutAuthSignUpRouteImport
+      parentRoute: typeof DrawerLayoutAuthRouteRoute
+    }
+    '/_drawer-layout/me/': {
+      id: '/_drawer-layout/me/'
+      path: '/'
+      fullPath: '/me/'
+      preLoaderRoute: typeof DrawerLayoutMeIndexRouteImport
+      parentRoute: typeof DrawerLayoutMeRouteRoute
+    }
+    '/_drawer-layout/me/profile': {
+      id: '/_drawer-layout/me/profile'
+      path: '/profile'
+      fullPath: '/me/profile'
+      preLoaderRoute: typeof DrawerLayoutMeProfileRouteImport
+      parentRoute: typeof DrawerLayoutMeRouteRoute
+    }
+    '/_drawer-layout/me/security': {
+      id: '/_drawer-layout/me/security'
+      path: '/security'
+      fullPath: '/me/security'
+      preLoaderRoute: typeof DrawerLayoutMeSecurityRouteImport
+      parentRoute: typeof DrawerLayoutMeRouteRoute
+    }
+    '/_drawer-layout/rooms/': {
+      id: '/_drawer-layout/rooms/'
+      path: '/rooms'
+      fullPath: '/rooms/'
+      preLoaderRoute: typeof DrawerLayoutRoomsIndexRouteImport
+      parentRoute: typeof DrawerLayoutRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -253,135 +256,51 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_drawer-layout/_floating-header-layout/auth/login': {
-      id: '/_drawer-layout/_floating-header-layout/auth/login'
-      path: '/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRouteImport
-      parentRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRoute
-    }
-    '/_drawer-layout/_floating-header-layout/auth/sign-up': {
-      id: '/_drawer-layout/_floating-header-layout/auth/sign-up'
-      path: '/sign-up'
-      fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRouteImport
-      parentRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRoute
-    }
-    '/_drawer-layout/_floating-header-layout/rooms/': {
-      id: '/_drawer-layout/_floating-header-layout/rooms/'
-      path: '/rooms'
-      fullPath: '/rooms/'
-      preLoaderRoute: typeof DrawerLayoutFloatingHeaderLayoutRoomsIndexRouteImport
-      parentRoute: typeof DrawerLayoutFloatingHeaderLayoutRouteRoute
-    }
-    '/_drawer-layout/_header-layout/me/': {
-      id: '/_drawer-layout/_header-layout/me/'
-      path: '/'
-      fullPath: '/me/'
-      preLoaderRoute: typeof DrawerLayoutHeaderLayoutMeIndexRouteImport
-      parentRoute: typeof DrawerLayoutHeaderLayoutMeRouteRoute
-    }
-    '/_drawer-layout/_header-layout/me/profile': {
-      id: '/_drawer-layout/_header-layout/me/profile'
-      path: '/profile'
-      fullPath: '/me/profile'
-      preLoaderRoute: typeof DrawerLayoutHeaderLayoutMeProfileRouteImport
-      parentRoute: typeof DrawerLayoutHeaderLayoutMeRouteRoute
-    }
-    '/_drawer-layout/_header-layout/me/security': {
-      id: '/_drawer-layout/_header-layout/me/security'
-      path: '/security'
-      fullPath: '/me/security'
-      preLoaderRoute: typeof DrawerLayoutHeaderLayoutMeSecurityRouteImport
-      parentRoute: typeof DrawerLayoutHeaderLayoutMeRouteRoute
-    }
   }
 }
 
-interface DrawerLayoutFloatingHeaderLayoutAuthRouteRouteChildren {
-  DrawerLayoutFloatingHeaderLayoutAuthLoginRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthLoginRoute
-  DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute
+interface DrawerLayoutAuthRouteRouteChildren {
+  DrawerLayoutAuthLoginRoute: typeof DrawerLayoutAuthLoginRoute
+  DrawerLayoutAuthSignUpRoute: typeof DrawerLayoutAuthSignUpRoute
 }
 
-const DrawerLayoutFloatingHeaderLayoutAuthRouteRouteChildren: DrawerLayoutFloatingHeaderLayoutAuthRouteRouteChildren =
-  {
-    DrawerLayoutFloatingHeaderLayoutAuthLoginRoute:
-      DrawerLayoutFloatingHeaderLayoutAuthLoginRoute,
-    DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute:
-      DrawerLayoutFloatingHeaderLayoutAuthSignUpRoute,
-  }
+const DrawerLayoutAuthRouteRouteChildren: DrawerLayoutAuthRouteRouteChildren = {
+  DrawerLayoutAuthLoginRoute: DrawerLayoutAuthLoginRoute,
+  DrawerLayoutAuthSignUpRoute: DrawerLayoutAuthSignUpRoute,
+}
 
-const DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren =
-  DrawerLayoutFloatingHeaderLayoutAuthRouteRoute._addFileChildren(
-    DrawerLayoutFloatingHeaderLayoutAuthRouteRouteChildren,
+const DrawerLayoutAuthRouteRouteWithChildren =
+  DrawerLayoutAuthRouteRoute._addFileChildren(
+    DrawerLayoutAuthRouteRouteChildren,
   )
 
-interface DrawerLayoutFloatingHeaderLayoutRouteRouteChildren {
-  DrawerLayoutFloatingHeaderLayoutAuthRouteRoute: typeof DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren
-  DrawerLayoutFloatingHeaderLayoutIndexRoute: typeof DrawerLayoutFloatingHeaderLayoutIndexRoute
-  DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute: typeof DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute
+interface DrawerLayoutMeRouteRouteChildren {
+  DrawerLayoutMeProfileRoute: typeof DrawerLayoutMeProfileRoute
+  DrawerLayoutMeSecurityRoute: typeof DrawerLayoutMeSecurityRoute
+  DrawerLayoutMeIndexRoute: typeof DrawerLayoutMeIndexRoute
 }
 
-const DrawerLayoutFloatingHeaderLayoutRouteRouteChildren: DrawerLayoutFloatingHeaderLayoutRouteRouteChildren =
-  {
-    DrawerLayoutFloatingHeaderLayoutAuthRouteRoute:
-      DrawerLayoutFloatingHeaderLayoutAuthRouteRouteWithChildren,
-    DrawerLayoutFloatingHeaderLayoutIndexRoute:
-      DrawerLayoutFloatingHeaderLayoutIndexRoute,
-    DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute:
-      DrawerLayoutFloatingHeaderLayoutRoomsIndexRoute,
-  }
-
-const DrawerLayoutFloatingHeaderLayoutRouteRouteWithChildren =
-  DrawerLayoutFloatingHeaderLayoutRouteRoute._addFileChildren(
-    DrawerLayoutFloatingHeaderLayoutRouteRouteChildren,
-  )
-
-interface DrawerLayoutHeaderLayoutMeRouteRouteChildren {
-  DrawerLayoutHeaderLayoutMeProfileRoute: typeof DrawerLayoutHeaderLayoutMeProfileRoute
-  DrawerLayoutHeaderLayoutMeSecurityRoute: typeof DrawerLayoutHeaderLayoutMeSecurityRoute
-  DrawerLayoutHeaderLayoutMeIndexRoute: typeof DrawerLayoutHeaderLayoutMeIndexRoute
+const DrawerLayoutMeRouteRouteChildren: DrawerLayoutMeRouteRouteChildren = {
+  DrawerLayoutMeProfileRoute: DrawerLayoutMeProfileRoute,
+  DrawerLayoutMeSecurityRoute: DrawerLayoutMeSecurityRoute,
+  DrawerLayoutMeIndexRoute: DrawerLayoutMeIndexRoute,
 }
 
-const DrawerLayoutHeaderLayoutMeRouteRouteChildren: DrawerLayoutHeaderLayoutMeRouteRouteChildren =
-  {
-    DrawerLayoutHeaderLayoutMeProfileRoute:
-      DrawerLayoutHeaderLayoutMeProfileRoute,
-    DrawerLayoutHeaderLayoutMeSecurityRoute:
-      DrawerLayoutHeaderLayoutMeSecurityRoute,
-    DrawerLayoutHeaderLayoutMeIndexRoute: DrawerLayoutHeaderLayoutMeIndexRoute,
-  }
-
-const DrawerLayoutHeaderLayoutMeRouteRouteWithChildren =
-  DrawerLayoutHeaderLayoutMeRouteRoute._addFileChildren(
-    DrawerLayoutHeaderLayoutMeRouteRouteChildren,
-  )
-
-interface DrawerLayoutHeaderLayoutRouteRouteChildren {
-  DrawerLayoutHeaderLayoutMeRouteRoute: typeof DrawerLayoutHeaderLayoutMeRouteRouteWithChildren
-}
-
-const DrawerLayoutHeaderLayoutRouteRouteChildren: DrawerLayoutHeaderLayoutRouteRouteChildren =
-  {
-    DrawerLayoutHeaderLayoutMeRouteRoute:
-      DrawerLayoutHeaderLayoutMeRouteRouteWithChildren,
-  }
-
-const DrawerLayoutHeaderLayoutRouteRouteWithChildren =
-  DrawerLayoutHeaderLayoutRouteRoute._addFileChildren(
-    DrawerLayoutHeaderLayoutRouteRouteChildren,
-  )
+const DrawerLayoutMeRouteRouteWithChildren =
+  DrawerLayoutMeRouteRoute._addFileChildren(DrawerLayoutMeRouteRouteChildren)
 
 interface DrawerLayoutRouteRouteChildren {
-  DrawerLayoutFloatingHeaderLayoutRouteRoute: typeof DrawerLayoutFloatingHeaderLayoutRouteRouteWithChildren
-  DrawerLayoutHeaderLayoutRouteRoute: typeof DrawerLayoutHeaderLayoutRouteRouteWithChildren
+  DrawerLayoutAuthRouteRoute: typeof DrawerLayoutAuthRouteRouteWithChildren
+  DrawerLayoutMeRouteRoute: typeof DrawerLayoutMeRouteRouteWithChildren
+  DrawerLayoutIndexRoute: typeof DrawerLayoutIndexRoute
+  DrawerLayoutRoomsIndexRoute: typeof DrawerLayoutRoomsIndexRoute
 }
 
 const DrawerLayoutRouteRouteChildren: DrawerLayoutRouteRouteChildren = {
-  DrawerLayoutFloatingHeaderLayoutRouteRoute:
-    DrawerLayoutFloatingHeaderLayoutRouteRouteWithChildren,
-  DrawerLayoutHeaderLayoutRouteRoute:
-    DrawerLayoutHeaderLayoutRouteRouteWithChildren,
+  DrawerLayoutAuthRouteRoute: DrawerLayoutAuthRouteRouteWithChildren,
+  DrawerLayoutMeRouteRoute: DrawerLayoutMeRouteRouteWithChildren,
+  DrawerLayoutIndexRoute: DrawerLayoutIndexRoute,
+  DrawerLayoutRoomsIndexRoute: DrawerLayoutRoomsIndexRoute,
 }
 
 const DrawerLayoutRouteRouteWithChildren =

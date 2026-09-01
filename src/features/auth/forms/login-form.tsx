@@ -34,7 +34,6 @@ export function LogInForm() {
               await queryClient.invalidateQueries(createSessionQueryOptions());
               const urlParams = new URLSearchParams(window.location.search);
               await navigate({
-                viewTransition: true,
                 to: urlParams.get("redirect") ?? "/",
               });
             },

@@ -77,8 +77,16 @@
   "localeSwitcher_language": [
     {
       "match": {
-        "locale=en": "🇬🇧 Tiếng Anh",
-        "locale=vi": "🇻🇳 Tiếng Việt"
+        "locale=en": "Tiếng Anh",
+        "locale=vi": "Tiếng Việt"
+      }
+    }
+  ],
+  "localeSwitcher_emoji": [
+    {
+      "match": {
+        "locale=en": "🇬🇧",
+        "locale=vi": "🇻🇳"
       }
     }
   ],

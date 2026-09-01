@@ -48,7 +48,7 @@ function TrialPageErrorComponent(_props: ErrorComponentProps) {
     <main class="flex h-full flex-col items-center justify-center gap-5">
       <ErrorComponent {...rest} error={error()} />
 
-      <Link viewTransition to="/" class="btn btn-outline btn-secondary">
+      <Link to="/" class="btn btn-outline btn-secondary">
         <HouseIcon class="size-5" />
         {m.menu_goToHomepage()}
       </Link>

@@ -11,9 +11,8 @@ export function NavLink(_props: NavLinkProps) {
 
   return (
     <Link
-      viewTransition
       class={cn(
-        "btn btn-ghost aria-[current=page]:btn-soft aria-[current=page]:hover:bg-secondary/20 aria-[current=page]:btn-secondary aria-[current=page]:hover:text-secondary border-0 shadow-none [&_svg]:size-4",
+        "aria-[current=page]:menu-active is-drawer-close:tooltip is-drawer-close:tooltip-right h-9 content-center [&_svg]:size-4",
         props.class,
       )}
       {...rest}

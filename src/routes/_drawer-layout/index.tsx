@@ -6,9 +6,7 @@ import { NewDrawingForm } from "~/features/drawing-board/forms";
 import { Modal } from "~/features/shared/components/ui";
 import { m } from "~/paraglide/messages";
 
-export const Route = createFileRoute(
-  "/_drawer-layout/_floating-header-layout/",
-)({
+export const Route = createFileRoute("/_drawer-layout/")({
   component: HomePage,
 });
 
@@ -16,7 +14,7 @@ function HomePage() {
   const [modalRef, setModalRef] = createSignal<ModalContextValue>();
 
   return (
-    <main class="flex h-full flex-col items-center justify-center gap-5">
+    <main class="flex flex-1 flex-col items-center justify-center gap-5">
       <h1>{m.app_name()}</h1>
       <h2 class="font-light">{m.home_tagline()}</h2>
 

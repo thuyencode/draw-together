@@ -58,7 +58,6 @@ export function SignUpForm() {
                 );
                 const urlParams = new URLSearchParams(window.location.search);
                 await navigate({
-                  viewTransition: true,
                   to: urlParams.get("redirect") ?? "/",
                 });
               },

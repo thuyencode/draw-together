@@ -10,8 +10,11 @@ export function LocaleSwitcher() {
 
   return (
     <Menu.Root positioning={{ placement: "bottom" }}>
-      <Menu.Trigger class="btn btn-ghost">
-        {m.localeSwitcher_language({ locale })}
+      <Menu.Trigger class="btn btn-ghost mx-2 h-9">
+        {m.localeSwitcher_emoji({ locale })}{" "}
+        <span class="is-drawer-close:hidden text-nowrap">
+          {m.localeSwitcher_language({ locale })}
+        </span>
       </Menu.Trigger>
 
       <Menu.Positioner>
@@ -27,6 +30,7 @@ export function LocaleSwitcher() {
               {(locale) => (
                 <Menu.RadioItem value={locale()}>
                   <Menu.ItemText>
+                    {m.localeSwitcher_emoji({ locale: locale() })}{" "}
                     {m.localeSwitcher_language({ locale: locale() })}
                   </Menu.ItemText>
                   <Menu.ItemIndicator>
