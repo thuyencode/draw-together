@@ -21,10 +21,6 @@ RUN mkdir -p /temp/prod
 COPY . /temp/prod
 COPY --from=install /temp/dev/node_modules /temp/prod/node_modules
 
-# Build-time env vars (Vite reads these during build)
-ARG VITE_PUBLIC_URL
-ENV VITE_PUBLIC_URL=$VITE_PUBLIC_URL
-
 RUN cd /temp/prod && npm run build
 
 # Stage 3: Runtime (fresh minimal image, Node only)

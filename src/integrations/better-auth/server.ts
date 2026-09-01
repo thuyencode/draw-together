@@ -17,4 +17,5 @@ export const auth = betterAuth({
     freshAge: 0,
   },
   plugins: [username(), tanstackStartCookies()],
+  baseURL: process.env.BETTER_AUTH_URL,
 });

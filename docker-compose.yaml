@@ -68,8 +68,6 @@ services:
     container_name: draw-together-app
     build:
       context: .
-      args:
-        VITE_PUBLIC_URL: ${VITE_PUBLIC_URL}
     environment:
       DB_URI: mongodb://${DB_USERNAME}:${DB_PASSWORD}@db:27017/${DB_NAME}?authSource=${DB_NAME}
       DB_NAME: ${DB_NAME}
