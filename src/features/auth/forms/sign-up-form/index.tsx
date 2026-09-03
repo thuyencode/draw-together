@@ -2,8 +2,8 @@ import { revalidateLogic } from "@tanstack/solid-form";
 import { useNavigate } from "@tanstack/solid-router";
 import { KeyRoundIcon, UserRoundIcon } from "lucide-solid";
 import { For, createSignal } from "solid-js";
-import { useQueryClient } from "@tanstack/solid-query";
-import { createSessionQueryOptions } from "../../queries";
+import { useMutation } from "@tanstack/solid-query";
+import { createSignUpMutationOptions } from "../../mutations";
 import { signUpFormOpts } from "./options";
 import { SignUpFormMultiStepSchema } from "./schema";
 import { SignUpStep1Form } from "./step1-subform";
@@ -12,9 +12,7 @@ import type { LucideIcon } from "lucide-solid";
 import type { LocalizedString } from "@inlang/paraglide-js";
 import { Steps } from "~/features/shared/components/ui";
 import { useAppForm } from "~/features/shared/hooks/form";
-import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
-import { toaster } from "~/integrations/ark-ui/toast";
 
 const signUpStepLabels: {
   label: () => LocalizedString;
@@ -25,9 +23,18 @@ const signUpStepLabels: {
 ];
 
 export function SignUpForm() {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [rootError, setRootError] = createSignal<string[]>([]);
+
+  const signUpMutation = useMutation(() => ({
+    ...createSignUpMutationOptions(),
+    onMutate: () => {
+      setRootError([]);
+    },
+    onError: (error) => {
+      setRootError([error.message]);
+    },
+  }));
 
   const form = useAppForm(() => ({
     ...signUpFormOpts,
@@ -39,33 +46,12 @@ export function SignUpForm() {
       onDynamic: SignUpFormMultiStepSchema,
     },
     onSubmit: async ({ value }) => {
-      await authClient.signUp.email(
-        {
-          email: value.step1.email,
-          name: value.step1.name,
-          username: value.step1.username,
-          password: value.step2.password,
-        },
-        {
-          onError: (ctx) => {
-            setRootError([ctx.error.message]);
-          },
-          onSuccess: () => {
-            toaster.promise(
-              async () => {
-                await queryClient.invalidateQueries(
-                  createSessionQueryOptions(),
-                );
-                const urlParams = new URLSearchParams(window.location.search);
-                await navigate({
-                  to: urlParams.get("redirect") ?? "/",
-                });
-              },
-              { loading: { title: "Please wait..." } },
-            );
-          },
-        },
-      );
+      await signUpMutation.mutateAsync({
+        email: value.step1.email,
+        name: value.step1.name,
+        username: value.step1.username,
+        password: value.step2.password,
+      });
     },
   }));
 

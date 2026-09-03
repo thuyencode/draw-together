@@ -1,14 +1,11 @@
 import { createSignal } from "solid-js";
-import { useQueryClient } from "@tanstack/solid-query";
+import { useMutation } from "@tanstack/solid-query";
 import { PASSWORD_MAX_LENGTH } from "../constants";
 import { PasswordChangingFormSchema, PasswordSchema } from "../schema";
-import { createSessionListQueryOptions } from "../queries";
+import { createPasswordChangingMutationOptions } from "../mutations";
 import { useAppForm } from "~/features/shared/hooks/form";
-import { sleep } from "~/features/shared/utils";
-import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
 import { cn } from "~/features/shared/utils/cn";
-import { toaster } from "~/integrations/ark-ui/toast";
 import { AlertModal } from "~/features/shared/components/ui";
 
 interface PasswordChangingFormProps {
@@ -17,7 +14,6 @@ interface PasswordChangingFormProps {
 
 export function PasswordChangingForm(props: PasswordChangingFormProps) {
   const [rootError, setRootError] = createSignal<string[]>([]);
-  const queryClient = useQueryClient();
 
   const form = useAppForm(() => ({
     defaultValues: {
@@ -29,28 +25,17 @@ export function PasswordChangingForm(props: PasswordChangingFormProps) {
       onSubmit: PasswordChangingFormSchema,
     },
     onSubmit: async ({ value }) => {
+      await passwordChangingMutation.mutateAsync(value);
+    },
+  }));
+
+  const passwordChangingMutation = useMutation(() => ({
+    ...createPasswordChangingMutationOptions(form),
+    onMutate: () => {
       setRootError([]);
-
-      if (import.meta.env.MODE === "development") {
-        await sleep(2000);
-      }
-
-      await authClient.changePassword(
-        {
-          ...value,
-          revokeOtherSessions: true,
-        },
-        {
-          onError: ({ error }) => {
-            setRootError([error.message]);
-          },
-          onSuccess: () => {
-            toaster.success({ title: m.passwd_security_passwdChanged() });
-            form.reset();
-            queryClient.invalidateQueries(createSessionListQueryOptions());
-          },
-        },
-      );
+    },
+    onError: (error) => {
+      setRootError([error.message]);
     },
   }));
 

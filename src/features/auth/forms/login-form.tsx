@@ -1,18 +1,26 @@
 import { useNavigate } from "@tanstack/solid-router";
 import { createSignal } from "solid-js";
-import { useQueryClient } from "@tanstack/solid-query";
+import { useMutation } from "@tanstack/solid-query";
 import { PASSWORD_MAX_LENGTH } from "../constants";
 import { LoginFormSchema, PasswordSchema } from "../schema";
-import { createSessionQueryOptions } from "../queries";
+import { createLoginMutationOptions } from "../mutations";
 import { useAppForm } from "~/features/shared/hooks/form";
-import { authClient } from "~/integrations/better-auth/client";
 import { m } from "~/paraglide/messages";
-import { toaster } from "~/integrations/ark-ui/toast";
 
 export function LogInForm() {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [rootError, setRootError] = createSignal<string[]>([]);
+
+  const loginMutation = useMutation(() => ({
+    ...createLoginMutationOptions(),
+    onMutate: () => {
+      setRootError([]);
+    },
+    onError: (error) => {
+      setRootError([error.message]);
+    },
+  }));
+
   const form = useAppForm(() => ({
     defaultValues: {
       email: "",
@@ -22,25 +30,7 @@ export function LogInForm() {
       onSubmit: LoginFormSchema,
     },
     onSubmit: async ({ value }) => {
-      setRootError([]);
-
-      await authClient.signIn.email(value, {
-        onError: (ctx) => {
-          setRootError([ctx.error.message]);
-        },
-        onSuccess: () => {
-          toaster.promise(
-            async () => {
-              await queryClient.invalidateQueries(createSessionQueryOptions());
-              const urlParams = new URLSearchParams(window.location.search);
-              await navigate({
-                to: urlParams.get("redirect") ?? "/",
-              });
-            },
-            { loading: { title: "Please wait..." } },
-          );
-        },
-      });
+      await loginMutation.mutateAsync(value);
     },
   }));
 
