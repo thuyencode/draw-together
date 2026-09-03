@@ -1,7 +1,32 @@
 {
   "formatter": "prettier",
-  "language_servers": ["eslint", "!biome", "..."],
   "code_actions_on_format": {
-    "source.fixAll.eslint": true
-  }
+    "source.fixAll.eslint": true,
+  },
+  "languages": {
+    "TypeScript": {
+      "language_servers": [
+        "typescript-ls",
+        "!vtsls",
+        "!typescript-language-server",
+        "...",
+      ],
+    },
+    "TSX": {
+      "language_servers": [
+        "typescript-ls",
+        "!vtsls",
+        "!typescript-language-server",
+        "...",
+      ],
+    },
+    "JavaScript": {
+      "language_servers": [
+        "typescript-ls",
+        "!vtsls",
+        "!typescript-language-server",
+        "...",
+      ],
+    },
+  },
 }
