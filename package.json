@@ -83,6 +83,9 @@
     "vite-plugin-lucide-preprocess": "^1.5.4",
     "vite-plugin-solid": "^2.11.14"
   },
+  "peerDependencies": {
+    "typescript": "^7.0.2"
+  },
   "engines": {
     "node": ">=24"
   }
