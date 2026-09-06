@@ -1,6 +1,7 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/solid-router";
 import { Suspense } from "solid-js";
 import { createSessionQueryOptions } from "~/features/auth/queries";
+import { getRedirect } from "~/features/shared/utils/url";
 
 export const Route = createFileRoute("/_drawer-layout/auth")({
   beforeLoad: async ({ context: { queryClient }, location, search }) => {
@@ -9,8 +10,7 @@ export const Route = createFileRoute("/_drawer-layout/auth")({
     );
 
     if (session) {
-      const urlParams = new URLSearchParams(location.searchStr);
-      throw redirect({ to: urlParams.get("redirect") ?? "/" });
+      throw redirect({ to: getRedirect(location.searchStr) ?? "/" });
     }
 
     if (location.pathname === "/auth") {

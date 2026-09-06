@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/solid-query";
-import { For, Match, Show, Switch, createMemo } from "solid-js";
+import { For, Match, Show, Switch, createMemo, splitProps } from "solid-js";
 import {
   CircleQuestionMark,
   MonitorIcon,
@@ -13,6 +13,7 @@ import {
   createSessionQueryOptions,
 } from "../../auth/queries";
 import { LogOutButton } from "./log-out-button";
+import type { ComponentProps } from "solid-js";
 import type { Session } from "better-auth";
 import { createUserLocaleQueryOptions } from "~/features/shared/queries";
 import { cn } from "~/features/shared/utils/cn";
@@ -22,11 +23,8 @@ import {
   createSignOutMutationOptions,
 } from "~/features/auth/mutations";
 
-interface SessionListProps {
-  class?: string;
-}
-
-export function SessionList(props: SessionListProps) {
+export function SessionList(_props: ComponentProps<"section">) {
+  const [props, rest] = splitProps(_props, ["class"]);
   const currentSessionQuery = useQuery(createSessionQueryOptions);
   const sessionListQuery = useQuery(createSessionListQueryOptions);
 
@@ -36,7 +34,7 @@ export function SessionList(props: SessionListProps) {
     );
 
   return (
-    <section class={cn("space-y-3", props.class)}>
+    <section class={cn("space-y-3", props.class)} {...rest}>
       <h2 class="text-xl">{m.session_list_title()}</h2>
 
       <ul class="list">

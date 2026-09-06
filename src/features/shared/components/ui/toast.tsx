@@ -65,15 +65,10 @@ export function Toast() {
               </Show>
 
               <ToastCloseTrigger
-                class="btn btn-circle btn-xs btn-ghost self-start"
-                classList={{
-                  "btn-success": toast().type === "success",
-                  "btn-error": toast().type === "error",
-                  "btn-warning": toast().type === "warning",
-                  "btn-info": toast().type === "info",
-                }}
+                class="btn btn-circle btn-xs btn-ghost data-[type=success]:btn-success data-[type=error]:btn-error data-[type=warning]:btn-warning data-[type=info]:btn-info self-start"
+                data-type={toast().type}
               >
-                <XIcon class="size-4" />
+                <XIcon />
               </ToastCloseTrigger>
             </ToastRoot>
           );

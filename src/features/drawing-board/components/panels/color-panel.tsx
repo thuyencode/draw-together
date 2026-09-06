@@ -246,7 +246,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                       onClick={handleExpand}
                     >
                       {m.colorPicker_showLess()}
-                      <ArrowBigUpDash class="size-4" />
+                      <ArrowBigUpDash />
                     </button>
                   </div>
                 </Match>
@@ -258,7 +258,7 @@ export function ColorPanels(props: ColorSettingsPanelsProps) {
                     onClick={handleExpand}
                   >
                     {m.colorPicker_showMore()}
-                    <ArrowBigDownDash class="size-4" />
+                    <ArrowBigDownDash />
                   </button>
                 </Match>
               </Switch>

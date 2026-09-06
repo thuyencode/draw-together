@@ -11,7 +11,7 @@ export function LogOutButton(props: LogOutButtonProps) {
     <AlertModal.Provider>
       <AlertModal.Trigger class="btn btn-error btn-sm btn-soft">
         {m.passwd_security_logOut()}
-        <LogOutIcon class="size-4" />
+        <LogOutIcon />
       </AlertModal.Trigger>
 
       <AlertModal.Root>

@@ -133,7 +133,7 @@ function FloatingPanelCloseTrigger(
 
   return (
     <BaseFloatingPanelCloseTrigger
-      class={cn("btn btn-xs btn-ghost btn-square [&_svg]:size-4", props.class)}
+      class={cn("btn btn-xs btn-ghost btn-square", props.class)}
       {...rest}
     />
   );
@@ -157,7 +157,7 @@ function FloatingPanelStageTrigger(
 
   return (
     <BaseFloatingPanelStageTrigger
-      class={cn("btn btn-xs btn-ghost btn-square [&_svg]:size-4", props.class)}
+      class={cn("btn btn-xs btn-ghost btn-square", props.class)}
       {...rest}
     />
   );

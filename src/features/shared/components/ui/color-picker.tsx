@@ -142,7 +142,7 @@ function ColorPickerEyeDropperTrigger(
 
   return (
     <BaseColorPickerEyeDropperTrigger
-      class={cn("btn btn-sm btn-square [&_svg]:size-4", props.class)}
+      class={cn("btn btn-sm btn-square", props.class)}
       {...rest}
     />
   );
@@ -154,7 +154,7 @@ function ColorPickerSwatchTrigger(_props: BaseColorPicker.SwatchTriggerProps) {
   return (
     <BaseColorPickerSwatchTrigger
       class={cn(
-        "btn btn-square btn-neutral [&_svg]:size-4 data-[state=unchecked]:[&_svg]:hidden",
+        "btn btn-square btn-neutral data-[state=unchecked]:[&_svg]:hidden",
         props.class,
       )}
       style={{ "--btn-color": props.value.toString() }}

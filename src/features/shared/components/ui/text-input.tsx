@@ -33,7 +33,7 @@ export function TextInput(_props: TextInputProps) {
       )}
     >
       <Show when={props.label}>
-        <span class="label [&_svg]:size-4">{props.label}</span>
+        {(label) => <span class="label [&_svg]:size-4">{label()}</span>}
       </Show>
       <input
         type="text"
@@ -43,10 +43,12 @@ export function TextInput(_props: TextInputProps) {
         maxLength={props.maxLength}
         {...rest}
       />
-      <Show when={props.maxLength !== undefined}>
-        <span class="badge badge-sm">
-          {charCount()}/{props.maxLength}
-        </span>
+      <Show when={props.maxLength}>
+        {(maxLength) => (
+          <span class="badge badge-sm badge-soft">
+            {charCount()}/{maxLength()}
+          </span>
+        )}
       </Show>
     </label>
   );

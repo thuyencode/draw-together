@@ -99,7 +99,7 @@ function DrawerTrigger(_props: ParentProps<ComponentProps<"label">>) {
   return (
     <label
       for={drawer.id}
-      class={cn("btn drawer-button [&_svg]:size-4", props.class)}
+      class={cn("btn drawer-button", props.class)}
       {...rest}
     />
   );

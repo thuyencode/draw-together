@@ -61,7 +61,7 @@ export const SignUpStep1Form = withForm({
                   class="btn-block"
                   label={
                     <>
-                      {m.auth_next()} <ArrowRightIcon class="size-4" />
+                      {m.auth_next()} <ArrowRightIcon />
                     </>
                   }
                   submittingLabel={m.auth_next()}

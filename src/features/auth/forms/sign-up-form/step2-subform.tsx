@@ -76,7 +76,7 @@ export const SignUpStep2Form = withForm({
             </props.form.AppForm>
 
             <Steps.PrevTrigger class="btn-secondary btn-soft btn-block">
-              <ArrowLeftIcon class="size-4" />
+              <ArrowLeftIcon />
               {m.auth_previous()}
             </Steps.PrevTrigger>
           </div>

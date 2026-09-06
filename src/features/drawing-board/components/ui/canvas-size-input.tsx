@@ -86,7 +86,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
             setPaperSizeLabel("custom");
           }}
         >
-          <PencilIcon class="size-4" />
+          <PencilIcon />
           <span class="sr-only">{m.newDrawing_edit()}</span>
         </button>
       </Show>
@@ -107,7 +107,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
           />
 
           <button type="button" class="btn btn-ghost btn-square" onClick={swap}>
-            <ArrowLeftRightIcon class="size-4" />
+            <ArrowLeftRightIcon />
             <span class="sr-only">{m.newDrawing_swapWidthHeight()}</span>
           </button>
 
@@ -132,7 +132,7 @@ export function CanvasSizeInput(props: CanvasSizeInputProps) {
               setDimension(DEFAULT_CUSTOM_SIZE);
             }}
           >
-            <RotateCcwIcon class="size-4" />
+            <RotateCcwIcon />
             <span class="sr-only">{m.newDrawing_reset()}</span>
           </button>
         </div>

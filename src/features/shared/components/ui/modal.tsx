@@ -31,6 +31,7 @@ export interface ModalProviderProps
   extends ParentProps, Pick<Partial<ModalContextValue>, "id"> {
   hotkey?: RegisterableHotkey;
   ref?: (value: ModalContextValue) => void;
+  defaultOpen?: boolean;
 }
 
 function ModalProvider(props: ModalProviderProps) {
@@ -68,6 +69,12 @@ function ModalProvider(props: ModalProviderProps) {
       openModal,
       closeModal,
     });
+  });
+
+  onMount(() => {
+    if (props.defaultOpen) {
+      openModal();
+    }
   });
 
   return (

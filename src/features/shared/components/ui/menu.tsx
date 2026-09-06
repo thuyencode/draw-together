@@ -46,7 +46,7 @@ function MenuItem(_props: BaseMenu.ItemProps) {
   return (
     <BaseMenuItem
       class={cn(
-        "btn btn-ghost btn-sm data-disabled:btn-disabled data-highlighted:btn-active border-none text-sm font-light text-ellipsis [&_svg]:size-4",
+        "btn btn-ghost btn-sm data-disabled:btn-disabled data-highlighted:btn-active border-none text-sm font-light text-ellipsis",
         props.class,
       )}
       {...rest}
@@ -140,7 +140,7 @@ function MenuRadioItem(_props: BaseMenu.RadioItemProps) {
   return (
     <BaseMenuRadioItem
       class={cn(
-        "btn btn-ghost btn-sm data-disabled:btn-disabled data-highlighted:btn-active border-none text-sm font-light text-ellipsis [&_svg]:size-4",
+        "btn btn-ghost btn-sm data-disabled:btn-disabled data-highlighted:btn-active border-none text-sm font-light text-ellipsis",
         props.class,
       )}
       {...rest}

@@ -1,6 +1,7 @@
 import { mutationOptions } from "@tanstack/solid-query";
 import { useNavigate } from "@tanstack/solid-router";
 import { sleep } from "../shared/utils";
+import { getRedirect } from "../shared/utils/url";
 import {
   createSessionListQueryOptions,
   createSessionQueryOptions,
@@ -57,7 +58,6 @@ export const createSignOutMutationOptions = () =>
 
 export const createLoginMutationOptions = () => {
   const navigate = useNavigate();
-
   return mutationOptions({
     mutationFn: async (variables: LoginForm) => {
       const { error } = await authClient.signIn.email(variables);
@@ -67,8 +67,7 @@ export const createLoginMutationOptions = () => {
       toaster.promise(
         async () => {
           await ctx.client.invalidateQueries(createSessionQueryOptions());
-          const urlParams = new URLSearchParams(window.location.search);
-          await navigate({ to: urlParams.get("redirect") ?? "/" });
+          await navigate({ to: getRedirect(window.location.search) ?? "/" });
         },
         { loading: { title: "Please wait..." } },
       );
@@ -88,8 +87,7 @@ export const createSignUpMutationOptions = () => {
       toaster.promise(
         async () => {
           await ctx.client.invalidateQueries(createSessionQueryOptions());
-          const urlParams = new URLSearchParams(window.location.search);
-          await navigate({ to: urlParams.get("redirect") ?? "/" });
+          await navigate({ to: getRedirect(window.location.search) ?? "/" });
         },
         { loading: { title: "Please wait..." } },
       );

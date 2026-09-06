@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/solid-router";
 import { createSignal } from "solid-js";
 import { useMutation } from "@tanstack/solid-query";
 import { PASSWORD_MAX_LENGTH } from "../constants";
@@ -8,7 +7,6 @@ import { useAppForm } from "~/features/shared/hooks/form";
 import { m } from "~/paraglide/messages";
 
 export function LogInForm() {
-  const navigate = useNavigate();
   const [rootError, setRootError] = createSignal<string[]>([]);
 
   const loginMutation = useMutation(() => ({

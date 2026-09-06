@@ -63,6 +63,10 @@
   }
 }
 
+@utility btn {
+  @apply [&_svg]:size-4;
+}
+
 @keyframes pulse {
   0%,
   100% {
